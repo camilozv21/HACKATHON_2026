@@ -136,3 +136,4 @@ Más en la página **Acerca de los datos** (`/about`).
 Equipo Field Shift · NASA Space Apps 2026. Datos: NASA (SMAP, GPM IMERG, MODIS/VIIRS, HLS, ECOSTRESS, POWER,
 GRACE-FO, SRTM, GIBS). Mapas: Esri/MapTiler, OpenFreeMap © colaboradores de OpenStreetMap, Terrarium (AWS Open Data).
 Búsqueda: Nominatim/OpenStreetMap.
+
