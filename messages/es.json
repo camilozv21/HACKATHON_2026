@@ -1,0 +1,2399 @@
+{
+  "meta": {
+    "title": "Field Shift · Datos de la NASA para tu finca",
+    "description": "Explora rotaciones de cultivos que cuidan tu suelo y aguantan mejor el clima, con datos satelitales de la NASA."
+  },
+  "home": {
+    "title": "Field Shift: explora tu finca desde el espacio"
+  },
+  "common": {
+    "close": "Cerrar",
+    "back": "Volver",
+    "loading": "Cargando…",
+    "retry": "Intentar de nuevo",
+    "whatIsThis": "¿Qué es esto?",
+    "cancel": "Cancelar"
+  },
+  "globe": {
+    "canvasLabel": "Globo terráqueo interactivo. Arrastra para girar, pellizca para acercar.",
+    "exploreHint": "Arrastra para explorar el planeta",
+    "unnamedPlace": "Lugar sin nombre (mar o zona remota)",
+    "locateMe": "Ir a mi ubicación",
+    "resetNorth": "Volver al norte",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "contextLost": "Recuperando el globo…",
+    "noWebgl": "Tu dispositivo no puede mostrar el globo 3D. Igual puedes buscar tu finca con la lupa y ver todos los datos de la NASA.",
+    "fallbackAlt": "Mapa plano del mundo visto desde el espacio (NASA Blue Marble)",
+    "loadingHint": "Preparando el globo con datos de la NASA…"
+  },
+  "location": {
+    "usePrecise": "Usar mi ubicación exacta",
+    "locating": "Buscando tu ubicación…",
+    "youAreHere": "Tú estás aquí",
+    "aroundHere": "Estás por aquí (aprox.)",
+    "errors": {
+      "denied": "No tenemos permiso para ver tu ubicación exacta. Si quieres activarlo: toca el candado junto a la dirección web → Ubicación → Permitir. Mientras tanto usamos tu zona aproximada.",
+      "unavailable": "No pudimos encontrar tu ubicación exacta ahora. Usamos tu zona aproximada; puedes intentarlo de nuevo.",
+      "timeout": "Tu ubicación tardó demasiado. Usamos tu zona aproximada; puedes intentarlo de nuevo.",
+      "unsupported": "Este navegador no puede compartir la ubicación. Busca tu finca con la lupa."
+    },
+    "privacy": "Usamos tu ubicación solo para mostrarte tu zona en el globo y darle contexto al asistente y a la radio. No la guardamos en nuestros servidores ni en registros.",
+    "usePreciseHint": "Usar mi ubicación exacta para ver mi finca"
+  },
+  "search": {
+    "open": "Buscar un lugar",
+    "label": "Buscar un pueblo, municipio o finca",
+    "placeholder": "Busca tu pueblo o vereda…",
+    "close": "Cerrar búsqueda",
+    "results": "Resultados de búsqueda",
+    "noResults": "No encontramos ese lugar. Prueba con el nombre del pueblo o municipio.",
+    "error": "No pudimos buscar ahora. Revisa tu conexión e intenta de nuevo."
+  },
+  "field": {
+    "myField": "Mi finca",
+    "openMyField": "Ver mi finca",
+    "chooseTitle": "¿Dónde está tu finca?",
+    "optLocation": "Usar mi ubicación",
+    "optLocationHint": "Si estás en la finca ahora mismo.",
+    "optPin": "Tocar el mapa",
+    "optPinHint": "Marca un punto en tu finca.",
+    "optDraw": "Dibujar el contorno",
+    "optDrawHint": "Toca cada esquina de tu parcela.",
+    "recent": "Tus fincas recientes",
+    "unnamedField": "Tu finca",
+    "pinInstruction": "Toca el mapa donde está tu finca, o mueve el globo y usa la mira.",
+    "pinHere": "Poner aquí (en la mira)",
+    "pinLabel": "Ubicación de tu finca",
+    "drawInstruction": "{n, plural, =0 {Toca la primera esquina de tu parcela} one {Toca la siguiente esquina} other {# esquinas · toca la siguiente (mínimo 3)}}",
+    "drawReady": "toca Terminar o el primer punto",
+    "undo": "Deshacer",
+    "finish": "Terminar",
+    "demoAria": "Finca demo: {name}, {region}. {hook}",
+    "demoBadge": "Demo",
+    "demoNote": "Finca de ejemplo con datos simulados para mostrar cómo funciona la herramienta.",
+    "analyze": "Analizar esta finca",
+    "share": "Compartir",
+    "change": "Cambiar",
+    "remove": "Quitar",
+    "shareText": "Mira {name} en Field Shift",
+    "linkCopied": "Enlace copiado. Pégalo donde quieras compartirlo.",
+    "panelLabel": "Panel de tu finca",
+    "dragHandle": "Arrastra para ver más o menos",
+    "analysisSoon": "Preparando el análisis con datos de la NASA…",
+    "analysisError": "No pudimos preparar el análisis ahora. Revisa tu conexión e intenta de nuevo.",
+    "analysisReady": "Análisis listo: {n} opciones de rotación para comparar.",
+    "powerSummary": "NASA POWER: llueven unos {mm, number} mm al año ({period})."
+  },
+  "layers": {
+    "title": "Capas de datos NASA",
+    "open": "Capas",
+    "openAria": "Abrir capas de datos NASA ({n, plural, =0 {ninguna activa} one {# activa} other {# activas}})",
+    "close": "Cerrar capas",
+    "active": "Activa",
+    "turnOn": "Activar",
+    "turnOff": "Quitar",
+    "compare": "Comparar",
+    "compareHint": "Muestra esta capa al lado derecho de la cortina",
+    "opacity": "Transparencia",
+    "play": "Ver los últimos 12 meses",
+    "pause": "Pausar animación",
+    "date": "Fecha del dato",
+    "chooseDate": "Elegir fecha",
+    "whatIsThis": "¿Qué es esto?",
+    "noData": "Sin datos para esta fecha en esta zona. Prueba otra fecha.",
+    "reliefNoData": "El relieve no está disponible en modo de ahorro de datos.",
+    "probeHint": "Toca el mapa para ver el valor aproximado en un punto.",
+    "probeLoading": "Leyendo el valor…",
+    "probeNoData": "Sin dato en ese punto (nubes, agua o fuera de cobertura).",
+    "probeError": "No pudimos leer el valor ahora.",
+    "probeValue": "En el punto tocado: ~{value} {unit}",
+    "approx": "aproximado (leído del color del mapa)",
+    "satNoteTitle": "Satélite no es lo mismo que medir en tu campo",
+    "satNote": "Cada píxel promedia un área grande (de 250 m a 50 km), puede faltar por nubes y llega con días de retraso. Úsalo para ver tendencias, no como medición exacta de tu parcela.",
+    "gotIt": "Entendido",
+    "source": "Fuente",
+    "resolution": "Resolución",
+    "frequency": "Frecuencia",
+    "dataUpTo": "Fechas disponibles hasta {date}",
+    "cadence": {
+      "daily": "diaria",
+      "monthly": "mensual",
+      "static": "fija"
+    },
+    "curtain": "Mover la cortina de comparación",
+    "items": {
+      "ndvi": {
+        "name": "Verdor de las plantas",
+        "short": "Qué tan verde y vigoroso está lo sembrado.",
+        "description": "El NDVI mide el verdor con la luz que reflejan las hojas. Cerca de 1 es muy verde; cerca de 0, suelo desnudo o seco.",
+        "forCrops": "Si tu zona se ve menos verde que otros años en el mismo mes, puede haber sequía, plagas o suelo desnudo.",
+        "low": "Suelo o seco",
+        "high": "Muy verde",
+        "res": "1 km"
+      },
+      "soil-moisture": {
+        "name": "Humedad del suelo",
+        "short": "Cuánta agua hay donde están las raíces.",
+        "description": "Agua en el primer metro del suelo, estimada con el satélite SMAP y un modelo de NASA.",
+        "forCrops": "Suelo seco antes de sembrar = mejor esperar o elegir un cultivo que aguante sequía. Muy húmedo = riesgo de encharcamiento.",
+        "low": "Seco",
+        "high": "Húmedo",
+        "res": "9 km"
+      },
+      "rain": {
+        "name": "Lluvia del día",
+        "short": "Cuánto llovió ese día.",
+        "description": "Lluvia estimada por la constelación de satélites GPM (producto IMERG), en milímetros por día.",
+        "forCrops": "Úsalo para ver tormentas fuertes (riesgo de erosión) o semanas sin lluvia (riego, siembra).",
+        "low": "Poca",
+        "high": "Muy fuerte",
+        "res": "11 km"
+      },
+      "lst-day": {
+        "name": "Calor del suelo de día",
+        "short": "Temperatura de la superficie al mediodía.",
+        "description": "Temperatura de la superficie del terreno medida por MODIS (no es la temperatura del aire). Promedio del mes.",
+        "forCrops": "Superficie muy caliente = más estrés para las plantas y más pérdida de agua. Cubrir el suelo la baja.",
+        "low": "Fresco",
+        "high": "Muy caliente",
+        "res": "5.6 km"
+      },
+      "lst-night": {
+        "name": "Frío de la noche",
+        "short": "Temperatura de la superficie por la noche.",
+        "description": "Temperatura de la superficie de noche (MODIS), promedio del mes. Ayuda a ver zonas con riesgo de helada.",
+        "forCrops": "Noches cerca de 0 °C en la superficie = riesgo de helada para cultivos sensibles.",
+        "low": "Muy frío",
+        "high": "Templado",
+        "res": "5.6 km"
+      },
+      "evap": {
+        "name": "Agua que pierde el campo",
+        "short": "Evaporación y transpiración de la tierra.",
+        "description": "Agua que sale del suelo y de las plantas hacia el aire, según el modelo MERRA-2 de NASA. ECOSTRESS (más detallado) no está como capa: llegará desde el backend.",
+        "forCrops": "Si se pierde más agua de la que llueve, el cultivo necesita riego o cobertura que guarde humedad.",
+        "low": "Poca",
+        "high": "Mucha",
+        "res": "50 km",
+        "note": "Dato de modelo (MERRA-2), no medición directa."
+      },
+      "groundwater": {
+        "name": "Agua subterránea",
+        "short": "Si el agua guardada bajo tierra sube o baja.",
+        "description": "Cambio en toda el agua almacenada (suelo, acuíferos, nieve) medido por la gravedad con los satélites GRACE y GRACE-FO, frente al promedio 2004–2009.",
+        "forCrops": "Valores negativos que crecen año tras año = pozos más profundos y riego más caro.",
+        "low": "Menos agua",
+        "high": "Más agua",
+        "res": "~300 km",
+        "note": "Datos hasta 2022 en esta capa."
+      },
+      "relief": {
+        "name": "Relieve y laderas",
+        "short": "Montañas, lomas y pendientes.",
+        "description": "Sombras calculadas con la elevación de la misión SRTM de NASA. Las zonas con sombra marcada son laderas.",
+        "forCrops": "Pendiente fuerte + lluvia intensa + suelo desnudo = erosión. Las coberturas y curvas a nivel ayudan.",
+        "low": "Plano",
+        "high": "Empinado",
+        "res": "30–90 m"
+      }
+    },
+    "overlays": "Sobre el mapa",
+    "boundaries": {
+      "name": "Departamentos y municipios",
+      "short": "Líneas de los límites. En Colombia, toca uno para ver sus datos."
+    }
+  },
+  "region": {
+    "kicker": "Región · datos NASA",
+    "kickerDpto": "Departamento · datos NASA",
+    "kickerMpio": "Municipio · datos NASA",
+    "cellNoteDpto": "Los datos vienen del cuadro punteado, no son un promedio de todo el departamento.",
+    "cellNoteMpio": "Los datos vienen del cuadro punteado, no son un promedio de todo el municipio.",
+    "mapLegend": "En el mapa",
+    "legendMpio": "Municipio: {name}",
+    "legendDpto": "Departamento: {name}",
+    "legendCell": "Cuadro punteado: zona de los datos, unos {km} km",
+    "demoRegion": "Región demo · datos NASA",
+    "unnamed": "Región sin nombre",
+    "close": "Cerrar región",
+    "loading": "Cargando datos de los satélites",
+    "updating": "Actualizando datos…",
+    "error": "No pudimos traer los datos de esta región.",
+    "retry": "Intentar de nuevo",
+    "alertsTitle": "Alertas para esta región",
+    "askAgent": "Preguntarle al asistente sobre esta región",
+    "askPrompt": "¿Cómo están las condiciones del campo en {name}? ¿Qué debería tener en cuenta este mes?",
+    "analyzeHere": "Analizar una finca aquí",
+    "openDemoFarm": "Ver la finca demo de esta región",
+    "seeOnMap": "Ver en el mapa",
+    "whatIsThis": "¿Qué es esto?",
+    "simulated": "simulado",
+    "mockNote": "Algunas tarjetas usan datos simulados mientras se conecta el backend. Lluvia y temperatura vienen de NASA POWER cuando está disponible.",
+    "cards": {
+      "soil-moisture": "Humedad del suelo",
+      "rain": "Lluvia",
+      "ndvi": "Verdor de los cultivos",
+      "heat": "Temperatura y heladas",
+      "et": "Agua que pierde el campo",
+      "groundwater": "Agua subterránea",
+      "relief": "Relieve y erosión"
+    },
+    "status": {
+      "good": "Bien",
+      "watch": "Atención",
+      "alert": "Alerta"
+    },
+    "confidence": {
+      "high": "confianza alta",
+      "medium": "confianza media",
+      "low": "confianza baja"
+    },
+    "periodBadge": "Datos de {period}",
+    "periodPartial": "mes en curso",
+    "moreData": "Ver más datos ({count})",
+    "lessData": "Ver menos datos"
+  },
+  "radio": {
+    "label": "Radio del campo",
+    "play": "Escuchar la radio del campo",
+    "pause": "Pausar la radio",
+    "next": "Siguiente segmento",
+    "expand": "Ver transcripción y próximos segmentos",
+    "collapse": "Ocultar detalles de la radio",
+    "tuning": "Sintonizando…",
+    "empty": "Aún no hay audios para esta emisora",
+    "ad": "Anuncio",
+    "transcript": "Transcripción",
+    "upNext": "A continuación",
+    "sponsor": "Patrocina: {name}",
+    "source": "Dato de: {source}",
+    "voiceFallback": "Audio IA pendiente: leído con la voz de tu dispositivo",
+    "seeOnMap": "Ver en el mapa",
+    "stationAria": "Emisora {name}, {freq}",
+    "types": {
+      "ad": "Anuncio",
+      "alert": "Alerta",
+      "tip": "Consejo"
+    }
+  },
+  "agent": {
+    "placeholder": "Pregúntale al campo…",
+    "openAria": "Abrir el asistente del campo",
+    "title": "Asistente del campo",
+    "intro": "Pregúntame por la lluvia, la humedad del suelo o el verdor de cualquier zona. Puedo mover el globo y mostrarte los datos de la NASA.",
+    "voice": "Preguntar hablando",
+    "stopVoice": "Dejar de escuchar",
+    "listening": "Te escucho…",
+    "send": "Enviar pregunta",
+    "inputLabel": "Tu pregunta",
+    "newChat": "Nueva conversación",
+    "minimize": "Minimizar el chat",
+    "thinking": "Pensando…",
+    "suggestions": "Preguntas sugeridas",
+    "suggest1": "¿Cómo estará la lluvia en mi zona este mes?",
+    "suggest2": "Muéstrame la humedad del suelo en el Valle del Cauca",
+    "suggest3": "¿Qué rotación me conviene si hay sequía?",
+    "goBack": "Volver a donde estaba",
+    "noField": "Primero marca tu finca con el botón «Mi finca» para ver opciones de rotación.",
+    "disclaimer": "Respuestas generadas por IA con datos NASA. Verifica decisiones importantes con un técnico local.",
+    "errorGeneric": "No pude responder ahora. Intenta de nuevo en un momento.",
+    "errorTimeout": "La respuesta tardó demasiado. Intenta con una pregunta más corta.",
+    "errorRate": "Hiciste muchas preguntas seguidas. Espera un minuto y vuelve a intentar.",
+    "errorNetwork": "Parece que no hay conexión. Revisa tu internet e intenta de nuevo."
+  },
+  "crops": {
+    "maize": "Maíz",
+    "soybean": "Soya",
+    "wheat": "Trigo",
+    "rice": "Arroz",
+    "coffee": "Café",
+    "beans": "Frijol",
+    "sorghum": "Sorgo",
+    "millet": "Mijo",
+    "cowpea": "Caupí",
+    "groundnut": "Maní",
+    "chickpea": "Garbanzo",
+    "mungbean": "Frijol mungo",
+    "barley": "Cebada",
+    "oats": "Avena",
+    "potato": "Papa",
+    "cassava": "Yuca",
+    "plantain": "Plátano",
+    "sugarcane": "Caña de azúcar",
+    "cotton": "Algodón",
+    "sunflower": "Girasol",
+    "alfalfa": "Alfalfa",
+    "clover": "Trébol",
+    "vetch": "Vicia",
+    "rye": "Centeno",
+    "radish": "Rábano forrajero",
+    "pasture": "Pasto",
+    "forage-peanut": "Maní forrajero",
+    "shade-trees": "Árboles de sombra",
+    "vegetables": "Hortalizas",
+    "fallow": "Descanso",
+    "squash": "Calabaza (ahuyama)",
+    "pigeonpea": "Guandul"
+  },
+  "panel": {
+    "tabsLabel": "Partes del análisis",
+    "tabs": {
+      "conditions": "Tu finca",
+      "priorities": "Prioridades",
+      "rotations": "Opciones",
+      "plan": "Tu plan"
+    },
+    "loading": "Cargando el análisis de tu finca…",
+    "error": "No pudimos preparar el análisis ahora. Revisa tu conexión.",
+    "retry": "Intentar de nuevo",
+    "mockNote": "Verdor, hallazgos y estrategias usan datos de ejemplo mientras se conecta el backend. El clima viene de NASA POWER.",
+    "needs": {
+      "title": "Faltan datos para completar tu análisis",
+      "intro": "Los satélites no ven todo. Responde lo que sepas: cada dato sube la confianza.",
+      "left": "{count, plural, one {Falta # dato} other {Faltan # datos}}",
+      "why": "Por qué te lo preguntamos:",
+      "later": "Ahora no",
+      "back": "Volver",
+      "impact": {
+        "high": "Cambia mucho la recomendación",
+        "medium": "Mejora la recomendación",
+        "low": "Afina detalles"
+      },
+      "updating": "Actualizando tu análisis con tus datos…",
+      "updated": "Listo: tu análisis ya usa lo que nos contaste.",
+      "skippedTitle": "{count, plural, one {Dejaste # dato para después} other {Dejaste # datos para después}}",
+      "skippedText": "Tu análisis los marca como vacíos de información.",
+      "answerNow": "Responder ahora",
+      "doneTitle": "Tu análisis usa tus datos",
+      "doneText": "Toca un dato para cambiarlo.",
+      "edit": "Cambiar: {item}",
+      "soilType": {
+        "q": "¿Cómo es la tierra de tu parcela?",
+        "tip": "¿No estás seguro? Moja un puñado de tierra y apriétalo en la mano.",
+        "reason": "El tipo de tierra cambia cuánta agua guarda y qué cultivos le van mejor.",
+        "sandy": {
+          "title": "Arenosa",
+          "hint": "Áspera, se desmorona y no forma bola"
+        },
+        "loam": {
+          "title": "Franca",
+          "hint": "Forma una bola que se rompe fácil"
+        },
+        "clay": {
+          "title": "Arcillosa",
+          "hint": "Pegajosa, se estira como una cinta"
+        },
+        "silt": {
+          "title": "Limosa",
+          "hint": "Suave como talco o harina"
+        },
+        "unknown": {
+          "title": "No sé",
+          "hint": "Usamos el dato general de la zona"
+        }
+      },
+      "drainage": {
+        "q": "Después de un aguacero, ¿el agua se queda en tu parcela?",
+        "reason": "Si tu parcela se encharca, algunas raíces se pudren y cambia qué sembrar.",
+        "poor": {
+          "title": "Sí, varios días",
+          "hint": "Quedan charcos o la tierra sigue empapada",
+          "short": "se queda varios días"
+        },
+        "moderate": {
+          "title": "Un día, más o menos",
+          "hint": "Al día siguiente ya está seca",
+          "short": "tarda un día en irse"
+        },
+        "good": {
+          "title": "No, se va rápido",
+          "hint": "En unas horas ya no hay charcos",
+          "short": "se va rápido"
+        }
+      },
+      "soilTest": {
+        "q": "¿Tienes un análisis de suelo de laboratorio?",
+        "hint": "Copia lo que dice el papel. Puedes dejar uno vacío.",
+        "reason": "Con el pH y la materia orgánica ajustamos el nitrógeno y la cal.",
+        "ph": "pH",
+        "om": "Materia orgánica (%)",
+        "save": "Usar estos datos",
+        "none": "No tengo análisis",
+        "phError": "El pH suele estar entre 3 y 10.",
+        "omError": "La materia orgánica suele estar entre 0 y 30 %.",
+        "empty": "Escribe al menos uno de los dos valores.",
+        "phValue": "pH {value}",
+        "omValue": "materia orgánica {value} %"
+      },
+      "rotation": {
+        "q": "¿Esto es lo que siembras hoy?",
+        "hint": "Es la rotación típica de tu zona.",
+        "reason": "Comparamos las opciones con lo que haces hoy. Si no es tu rotación, la comparación no te sirve.",
+        "yes": "Sí, es lo que siembro",
+        "change": "No, la cambio"
+      },
+      "irrigation": {
+        "q": "¿Puedes regar tu parcela?",
+        "reason": "Algunas rotaciones solo funcionan con riego."
+      },
+      "summary": {
+        "soilType": "Tierra: {value}",
+        "drainage": "Después de llover, el agua {value}",
+        "soilTest": "Análisis: {value}",
+        "noTest": "Sin análisis de suelo",
+        "rotation": "Rotación: la tuya",
+        "irrigation": "Riego: {value}"
+      },
+      "nudge": "{count, plural, one {Estas opciones tienen vacíos: falta # dato de tu finca.} other {Estas opciones tienen vacíos: faltan # datos de tu finca.}}",
+      "nudgeCta": "Completar datos"
+    },
+    "sections": {
+      "summary": "Resumen de tu finca",
+      "year": "Tu año en el campo",
+      "trends": "Cómo ha cambiado",
+      "terrain": "Riesgos del terreno",
+      "rotation": "Tu rotación actual"
+    },
+    "status": {
+      "good": "Bien",
+      "watch": "Atención",
+      "alert": "Alerta"
+    },
+    "level": {
+      "low": "bajo",
+      "medium": "medio",
+      "high": "alto"
+    },
+    "confidence": {
+      "high": "confianza alta",
+      "medium": "confianza media",
+      "low": "confianza baja"
+    },
+    "stress": {
+      "heat": "Calor",
+      "drought": "Sequía",
+      "frost": "Helada",
+      "waterlogging": "Encharcamiento"
+    },
+    "summary": {
+      "rain": "Lluvia",
+      "rainLess": "{pct} % menos que hace 20 años",
+      "rainMore": "{pct} % más que hace 20 años",
+      "rainSame": "Parecida a hace 20 años",
+      "temp": "Temperatura",
+      "tempUp": "{c} más caliente que hace 20 años",
+      "tempSame": "Parecida a hace 20 años",
+      "frost": "Riesgo de heladas",
+      "frostLevel": {
+        "low": "Bajo: casi no hiela",
+        "medium": "Medio: unas {days} noches con helada al año",
+        "high": "Alto: unas {days} noches con helada al año"
+      },
+      "groundwater": "Agua subterránea",
+      "water": {
+        "down": "Bajando: {cm} cm por año",
+        "stable": "Estable",
+        "up": "Subiendo un poco"
+      }
+    },
+    "calendar": {
+      "bare": "Suelo desnudo: {months}",
+      "noBare": "Tu suelo está cubierto todo el año.",
+      "stress": "Meses difíciles — {list}",
+      "noStress": "Sin meses de estrés fuerte.",
+      "bareShort": "Desnudo",
+      "rainShort": "lluvia",
+      "tmaxShort": "máxima",
+      "legendRain": "Lluvia del mes (la barra más alta ≈ {max})",
+      "legendTmax": "Temp. máxima",
+      "legendTmin": "Temp. mínima",
+      "legendBare": "Suelo desnudo",
+      "sourceReal": "Clima: NASA POWER, promedio {period}. Verdor y estrés: MODIS y SMAP.",
+      "sourceAnalysis": "Clima del análisis (NASA POWER no respondió)."
+    },
+    "trends": {
+      "tempTitle": "Temperatura media del año",
+      "rainTitle": "Lluvia de cada año",
+      "tempWarmer": "Hoy hace unos {c} más que al inicio de la serie.",
+      "tempStable": "La temperatura casi no ha cambiado.",
+      "rainBelow": "En {year} llovió {pct} % menos de lo normal.",
+      "rainAbove": "En {year} llovió {pct} % más de lo normal.",
+      "rainNormal": "En {year} llovió lo normal.",
+      "rainLegend": "Línea punteada: promedio ({mean}). Barras amarillas: años secos.",
+      "tempA11y": "Temperatura media anual de {first} a {last}: de {a} a {b}, cambio de {change}.",
+      "rainA11y": "Lluvia anual de {first} a {last}: promedio {mean}, último año {latest}.",
+      "whatIsAnomaly": "¿qué es «menos de lo normal»?",
+      "notEnough": "No hay suficientes años de datos para mostrar la tendencia."
+    },
+    "terrain": {
+      "erosion": "Erosión",
+      "waterlogging": "Encharcamiento",
+      "slope": "Pendiente media {pct} %",
+      "extremeRain": "{days} días al año con lluvia muy fuerte",
+      "noZones": "Aún no tenemos un mapa de zonas dentro de tu parcela."
+    },
+    "rotation": {
+      "defaultNote": "Mostramos la rotación típica de tu zona. Cámbiala para que el análisis sea de tu finca.",
+      "change": "Tocar para cambiar el cultivo",
+      "remove": "Quitar {crop}",
+      "searchCrop": "Buscar cultivo",
+      "sow": "Siembra (aprox.)",
+      "harvest": "Cosecha (aprox.)",
+      "add": "Agregar cultivo",
+      "save": "Guardar mi rotación",
+      "saved": "Guardada"
+    },
+    "nextPriorities": "Siguiente: ¿qué es lo más importante para ti?",
+    "unnamedField": "Tu finca"
+  },
+  "glossary": {
+    "kicker": "Glosario",
+    "close": "Cerrar",
+    "example": "En el campo",
+    "whatIs": "¿Qué es {term}?",
+    "terms": {
+      "ndvi": {
+        "title": "NDVI (verdor)",
+        "simple": "Un número de 0 a 1 que dice qué tan verdes y vigorosas están las plantas, medido por satélite.",
+        "example": "Si tu maíz en julio marca 0.8 es que está frondoso; si marca 0.3, puede faltar agua o haber plaga."
+      },
+      "et": {
+        "title": "Evapotranspiración",
+        "simple": "El agua que sale del campo hacia el aire: la que se evapora del suelo más la que “sudan” las plantas.",
+        "example": "En un mes caliente y con viento el campo puede perder 5 mm de agua por día, más de lo que llueve."
+      },
+      "soil-moisture": {
+        "title": "Humedad del suelo",
+        "simple": "Cuánta agua hay en la tierra donde están las raíces. El satélite SMAP la estima cada día.",
+        "example": "Si el suelo está seco antes de sembrar, conviene esperar una lluvia o elegir un cultivo que aguante la sequía."
+      },
+      "anomaly": {
+        "title": "Anomalía (más o menos de lo normal)",
+        "simple": "La diferencia entre lo que pasa este año y el promedio de muchos años en el mismo mes.",
+        "example": "“Llovió 20 % menos de lo normal en agosto” quiere decir que cayó menos agua que en un agosto típico."
+      },
+      "frost": {
+        "title": "Riesgo de helada",
+        "simple": "La posibilidad de que la temperatura baje de 0 °C y el agua de las hojas se congele.",
+        "example": "Si hay noches con helada en abril, una siembra temprana de frijol puede quemarse."
+      },
+      "water-balance": {
+        "title": "Balance de agua",
+        "simple": "La cuenta entre el agua que llega (lluvia, riego) y la que se va (evaporación, plantas).",
+        "example": "Si en un mes llueven 40 mm y el campo pierde 120 mm, el balance es negativo: hay sequía."
+      },
+      "grace": {
+        "title": "Agua subterránea (GRACE)",
+        "simple": "Los satélites GRACE miden cambios en la gravedad para saber si el agua guardada bajo tierra sube o baja.",
+        "example": "Si baja cada año, los pozos se hacen más profundos y regar cuesta más."
+      },
+      "satellite-vs-field": {
+        "title": "Satélite vs. medición en campo",
+        "simple": "El satélite ve un área grande y a veces lo tapan las nubes; una medición en tu finca es exacta pero de un solo punto.",
+        "example": "El satélite puede decir “zona seca” aunque tu lote junto al río esté húmedo."
+      },
+      "confidence": {
+        "title": "Confianza e incertidumbre",
+        "simple": "Qué tan seguros estamos de un dato o una recomendación. Baja confianza = úsalo con cuidado.",
+        "example": "“Confianza baja” puede ser porque no tenemos análisis de suelo de tu finca."
+      },
+      "rain": {
+        "title": "Lluvia por satélite",
+        "simple": "La lluvia estimada por la constelación de satélites GPM, cada media hora en todo el mundo.",
+        "example": "Sirve para saber si tu zona tuvo tormentas fuertes o semanas sin lluvia."
+      },
+      "lst": {
+        "title": "Temperatura de la superficie",
+        "simple": "Qué tan caliente está el suelo o las plantas por encima, no el aire. La mide el satélite MODIS.",
+        "example": "Un suelo desnudo al mediodía puede pasar de 50 °C; uno cubierto queda mucho más fresco."
+      },
+      "heat": {
+        "title": "Estrés por calor",
+        "simple": "Cuando hace tanto calor que la planta deja de crecer bien o pierde flores.",
+        "example": "Más de 35 °C durante la floración del maíz puede bajar la cosecha."
+      },
+      "slope": {
+        "title": "Pendiente y erosión",
+        "simple": "Qué tan inclinado está el terreno. Con mucha pendiente, la lluvia fuerte arrastra la tierra.",
+        "example": "En una ladera del 30 % sin cobertura, una tormenta puede llevarse la capa fértil."
+      },
+      "legume": {
+        "title": "Leguminosa",
+        "simple": "Plantas como el frijol, la soya o el trébol que toman nitrógeno del aire y lo dejan en el suelo.",
+        "example": "Después de una cosecha de frijol, el maíz necesita menos abono."
+      },
+      "cover-crop": {
+        "title": "Cultivo de cobertura",
+        "simple": "Un cultivo que se siembra para proteger y alimentar el suelo, no para vender.",
+        "example": "Sembrar avena o centeno después de cosechar evita que el suelo quede desnudo en invierno."
+      },
+      "deep-roots": {
+        "title": "Raíces profundas",
+        "simple": "Plantas cuyas raíces bajan mucho y sacan agua y nutrientes de abajo, además de aflojar la tierra.",
+        "example": "El rábano forrajero rompe la capa dura y deja canales para el agua."
+      },
+      "drought-tolerant": {
+        "title": "Cultivo tolerante a sequía",
+        "simple": "Un cultivo que aguanta semanas con poca agua sin perder toda la cosecha.",
+        "example": "El sorgo y el mijo resisten mejor un verano seco que el maíz."
+      },
+      "ph": {
+        "title": "pH del suelo",
+        "simple": "Qué tan ácida o alcalina es la tierra, de 0 a 14. La mayoría de cultivos crece bien entre 5,5 y 7,5.",
+        "example": "Con pH 5 el frijol fija poco nitrógeno; un poco de cal lo mejora."
+      },
+      "organic-matter": {
+        "title": "Materia orgánica",
+        "simple": "Restos de plantas y animales que ya son parte de la tierra. Guarda agua y alimenta el suelo.",
+        "example": "Pasar de 2 % a 3 % de materia orgánica ayuda a que la tierra aguante mejor una sequía corta."
+      },
+      "intercropping": {
+        "title": "Cultivos asociados",
+        "simple": "Sembrar dos o más cultivos juntos, en el mismo terreno y al mismo tiempo, para que se ayuden: uno sostiene, otro abona, otro cubre el suelo.",
+        "example": "En la milpa, el frijol trepa por el maíz y la calabaza cubre el suelo entre las matas."
+      },
+      "strata": {
+        "title": "Pisos de las plantas",
+        "simple": "Cada planta ocupa una altura y una profundidad de raíces distinta. Si combinas pisos, aprovechas mejor la luz, el agua y el espacio, y compiten menos.",
+        "example": "El maíz arriba, el frijol trepando y la calabaza a ras del suelo; abajo, la yuca saca agua más honda."
+      },
+      "workday": {
+        "title": "Jornal",
+        "simple": "Un día de trabajo de una persona en la finca. Sirve para comparar cuánto trabajo pide cada cultivo.",
+        "example": "Si el fríjol pide 85 jornales por hectárea, son 85 días de trabajo de una persona (o 17 días de 5 personas)."
+      },
+      "break-even": {
+        "title": "Recuperar lo invertido",
+        "simple": "El año en que lo que ganaste con el cambio iguala lo que habrías ganado siguiendo igual. Antes de ese año, el cambio todavía te debe.",
+        "example": "Si el primer año ganas menos por aprender y comprar semilla, pero después ganas más, hacia el año 3 quedas a la par."
+      },
+      "soil-loss": {
+        "title": "Suelo perdido (erosión)",
+        "simple": "La tierra de arriba, la más fértil, que la lluvia arrastra cuando el suelo queda desnudo. Se forma muy despacio: lo que se va en un aguacero tarda años en volver.",
+        "example": "Perder 1 mm de suelo en una hectárea son unas 13 toneladas de tierra."
+      },
+      "wholesale-price": {
+        "title": "Precio mayorista",
+        "simple": "Lo que pagan los comerciantes en las centrales de abastos, como Corabastos. A la finca suele llegar menos, porque falta el transporte y el intermediario.",
+        "example": "Si el plátano está a $2.000 el kilo en la central, en la finca te pueden pagar $1.200 o $1.400."
+      },
+      "price-volatility": {
+        "title": "Volatilidad del precio",
+        "simple": "Cuánto sube y baja el precio de un mes a otro. Un precio muy volátil es más riesgoso: puedes cosechar justo cuando está bajo.",
+        "example": "El tomate puede valer el doble en marzo que en julio; el arroz cambia mucho menos."
+      },
+      "oversupply": {
+        "title": "Sobreoferta",
+        "simple": "Cuando llega más producto del que la gente compra, y el precio cae. Pasa cuando muchos siembran lo mismo porque el año anterior estuvo caro.",
+        "example": "Si todos en la vereda siembran cebolla porque se vendió bien, al cosechar a la vez el precio puede caer a la mitad."
+      },
+      "gross-income": {
+        "title": "Ingreso bruto",
+        "simple": "Lo que entra por vender la cosecha antes de pagar semillas, abonos, jornales y transporte. No es la ganancia.",
+        "example": "10 toneladas de plátano a $1.500 el kilo son $15 millones de ingreso bruto; la ganancia es lo que queda después de los costos."
+      }
+    }
+  },
+  "priorities": {
+    "stepOf": "Paso {n} de {total}",
+    "steps": {
+      "priorities": {
+        "title": "¿Qué es lo más importante para ti?",
+        "hint": "Toca mucho, algo o poco en cada una. Lo puedes cambiar después."
+      },
+      "constraints": {
+        "title": "Lo que tienes a mano",
+        "hint": "Así dejamos de lado opciones que no puedes hacer."
+      },
+      "confirm": {
+        "title": "Revisa y listo",
+        "hint": "Con esto ordenamos las opciones de rotación para tu finca."
+      }
+    },
+    "keys": {
+      "waterSaving": {
+        "title": "Ahorrar agua",
+        "hint": "Gastar menos riego y aprovechar la lluvia"
+      },
+      "soilHealth": {
+        "title": "Mejorar el suelo",
+        "hint": "Más materia orgánica y vida en la tierra"
+      },
+      "income": {
+        "title": "Más ingresos",
+        "hint": "Vender más o a mejor precio"
+      },
+      "forage": {
+        "title": "Forraje para animales",
+        "hint": "Pasto o heno para tu ganado"
+      },
+      "erosionControl": {
+        "title": "Frenar la erosión",
+        "hint": "Que la lluvia no se lleve la tierra"
+      },
+      "laborEquipment": {
+        "title": "Menos trabajo y maquinaria",
+        "hint": "Menos siembras y pasadas de tractor"
+      }
+    },
+    "levels": {
+      "high": "Mucho",
+      "mid": "Algo",
+      "low": "Poco"
+    },
+    "irrigation": {
+      "label": "¿Tienes riego?",
+      "none": {
+        "title": "No tengo riego",
+        "hint": "Dependo de la lluvia"
+      },
+      "limited": {
+        "title": "Riego limitado",
+        "hint": "Solo en algunos meses o en parte de la finca"
+      },
+      "full": {
+        "title": "Riego suficiente",
+        "hint": "Puedo regar cuando lo necesito"
+      }
+    },
+    "equipment": {
+      "label": "¿Qué maquinaria tienes?",
+      "hint": "Marca todas las que tengas o puedas alquilar.",
+      "tractor": "Tractor",
+      "seed-drill": "Sembradora de siembra directa",
+      "harvester": "Cosechadora",
+      "sprayer": "Fumigadora",
+      "animal": "Tracción animal",
+      "hand-tools": "Solo herramientas de mano"
+    },
+    "markets": {
+      "label": "¿Qué puedes vender cerca?",
+      "hint": "Cultivos o productos que tienen comprador en tu zona.",
+      "livestock": "Ganado o leche",
+      "otherLabel": "Otro cultivo o producto",
+      "otherPlaceholder": "Ej.: queso, cacao",
+      "add": "Agregar",
+      "remove": "Quitar {name}",
+      "added": "{name} agregado a lo que vendes.",
+      "rejected": "No se agregó: ya está en la lista, está vacío o ya tienes 12."
+    },
+    "nav": {
+      "next": "Siguiente",
+      "back": "Atrás",
+      "done": "Ver opciones de rotación",
+      "edit": "Cambiar"
+    },
+    "summary": {
+      "priorities": "Lo que más te importa",
+      "constraints": "Lo que tienes",
+      "irrigation": "Riego",
+      "equipment": "Maquinaria",
+      "markets": "Vendes cerca",
+      "none": "Nada marcado"
+    },
+    "ranking": {
+      "title": "Con esto, el orden queda así",
+      "current": "Lo que haces hoy",
+      "points": "{total} de 100",
+      "rank": "Puesto {rank}",
+      "vsCurrent": "{sign}{diff} frente a hoy",
+      "live": "Primera opción ahora: {name}, {total} de 100.",
+      "loading": "Las opciones aparecen cuando termine el análisis."
+    },
+    "formula": {
+      "title": "Así calculamos el orden",
+      "step1": "Tú eliges cuánto te importa cada cosa: mucho vale 5, algo vale 3 y poco vale 1.",
+      "step2": "Cada opción trae un puntaje de 0 a 100 por tema, calculado con datos NASA y reglas agronómicas.",
+      "step3": "Multiplicamos cada puntaje por su peso, sumamos todo y dividimos entre la suma de los pesos.",
+      "equation": "Puntaje = suma de (peso × puntaje) ÷ suma de pesos",
+      "notes": "«Mejorar el suelo» junta materia orgánica, nitrógeno y corte de plagas. «Menos trabajo» lo estimamos nosotros según cuántas siembras al año pide la opción.",
+      "local": "Cambiar prioridades no vuelve a pedir datos: la cuenta se hace en tu teléfono.",
+      "example": "La cuenta para «{name}»",
+      "cols": {
+        "priority": "Prioridad",
+        "weight": "Peso",
+        "score": "Puntaje",
+        "points": "Aporte"
+      },
+      "total": "Total"
+    }
+  },
+  "rotations": {
+    "title": "Opciones de rotación para tu finca",
+    "hint": "{n} opciones, incluida la que haces hoy, ordenadas según lo que te importa.",
+    "editPriorities": "Prioridades",
+    "nudge": "Dinos qué es lo más importante para ti y ordenamos las opciones a tu medida.",
+    "nudgeCta": "Elegir prioridades",
+    "defaultNote": "Por ahora usamos prioridades equilibradas.",
+    "loading": "Las opciones aparecen cuando termine el análisis.",
+    "carouselLabel": "Opciones de rotación",
+    "slide": "Opción {n} de {total}",
+    "position": "{n} de {total}",
+    "prev": "Opción anterior",
+    "next": "Opción siguiente",
+    "rank": "Puesto {rank}",
+    "current": "Lo que haces hoy",
+    "bestMatch": "La que mejor encaja",
+    "months": "{n} meses",
+    "ofHundred": "de 100",
+    "scoresTitle": "Puntaje por tema (más alto = mejor) y diferencia con lo de hoy",
+    "scoresTitleCurrent": "Puntaje por tema (más alto = mejor)",
+    "why": "¿Por qué te la sugerimos?",
+    "whyCurrent": "Cómo le va hoy",
+    "detail": "Ver detalle",
+    "detailFor": "Ver detalle de {name}",
+    "back": "Volver a las opciones",
+    "diffSame": "igual",
+    "diffUp": "{n, plural, one {# punto más} other {# puntos más}} que hoy",
+    "diffDown": "{n, plural, one {# punto menos} other {# puntos menos}} que hoy",
+    "estimateBanner": "Puntajes con el escenario «¿y si…?»: es una estimación, no un pronóstico.",
+    "scores": {
+      "water": "Agua",
+      "soilOrganicMatter": "Materia orgánica",
+      "nitrogen": "Nitrógeno",
+      "erosion": "Freno a la erosión",
+      "pestBreak": "Corte de plagas",
+      "income": "Ingresos",
+      "forage": "Forraje"
+    },
+    "confidence": {
+      "high": "Confianza alta",
+      "medium": "Confianza media",
+      "low": "Confianza baja"
+    },
+    "confidenceWhy": {
+      "high": "Los datos de satélite y las reglas coinciden, y faltan pocos datos.",
+      "medium": "Buenos datos de satélite, pero faltan datos de tu finca.",
+      "low": "Hay pocos datos o mucha variación: tómala como una idea para conversar."
+    },
+    "timeline": {
+      "year": "Año {n}",
+      "yearShort": "A{n}",
+      "bare": "sin cultivo",
+      "cover": "cobertura"
+    },
+    "sections": {
+      "benefits": "Beneficios",
+      "evidence": "Evidencia: qué datos la sustentan",
+      "risks": "Riesgos y qué revisar con un experto",
+      "gaps": "Lo que no sabemos",
+      "concepts": "Explicaciones cortas",
+      "market": "Mercado: precios y venta cerca"
+    },
+    "evidenceHint": "Dato de la NASA → regla agronómica que lo conecta con la recomendación.",
+    "ruleLabel": "Por eso",
+    "seeOnMap": "Ver en el mapa: {layer}",
+    "localReview": "Revisa con un técnico de tu zona",
+    "gapsHint": "Si tuviéramos estos datos, la recomendación podría cambiar.",
+    "actions": {
+      "compare": "Comparar 2",
+      "table": "Ver tabla",
+      "share": "Compartir",
+      "print": "Imprimir"
+    },
+    "shareText": "Opciones de rotación para {name} en Field Shift",
+    "shared": "Enlace copiado. Lo puedes pegar en un mensaje.",
+    "disclaimer": "Esta herramienta te ayuda a explorar opciones. Revisa cualquier cambio con tu experiencia y con un técnico agrícola de tu zona.",
+    "whatIf": {
+      "title": "¿Y si cambia el clima?",
+      "estimate": "Estimación",
+      "hint": "Mueve la lluvia y la temperatura para ver cómo cambiarían los puntajes de agua, erosión e ingresos.",
+      "rain": "Lluvia",
+      "rainValue": "{n, number} por ciento de lluvia",
+      "drier": "Más seco (−30 %)",
+      "wetter": "Más lluvioso (+30 %)",
+      "temp": "Temperatura",
+      "tempValue": "{n, number} grados más",
+      "asToday": "Como hoy",
+      "hotter": "+3 °C",
+      "activeNote": "Estimación hecha en tu teléfono con reglas simples. No es un pronóstico.",
+      "reset": "Volver a hoy",
+      "rules": "Reglas: con menos lluvia y más calor bajan más las opciones que piden más agua; con más lluvia sube la erosión donde el suelo queda desnudo; cada °C sube ~4 % el uso de agua."
+    },
+    "compare": {
+      "title": "Comparar dos opciones mes a mes",
+      "close": "Cerrar la comparación",
+      "a": "Opción A",
+      "b": "Opción B",
+      "noMonthly": "Todavía no tenemos datos mes a mes para estas opciones.",
+      "waterYear": "Agua que usa el cultivo al año",
+      "coveredMonths": "Meses con el suelo cubierto",
+      "waterUse": "Uso de agua por mes",
+      "soilCovered": "Suelo cubierto (lleno) o desnudo (rayas)",
+      "legend": "A: verde lleno · B: celeste con puntos · rayas: suelo desnudo.",
+      "tableCaption": "Mes a mes: {a} (A) y {b} (B)",
+      "month": "Mes",
+      "waterA": "Agua A",
+      "waterB": "Agua B",
+      "coverA": "Suelo cubierto A",
+      "coverB": "Suelo cubierto B",
+      "yes": "sí",
+      "no": "no"
+    },
+    "table": {
+      "title": "Comparación lado a lado",
+      "close": "Cerrar la tabla",
+      "hint": "Puntajes de 0 a 100: más alto es mejor para ti en todos los temas. La flecha muestra la diferencia con lo de hoy.",
+      "caption": "Comparación de las opciones de rotación por tema",
+      "topic": "Tema",
+      "total": "Total según tus prioridades",
+      "duration": "Duración",
+      "confidence": "Confianza",
+      "chartTitle": "Los mismos puntajes en barras",
+      "chartLabel": "Barras agrupadas por tema con el puntaje de cada opción. Los mismos datos están en la tabla.",
+      "chartNote": "Toca una barra para ver su valor."
+    },
+    "nextPlan": "Siguiente: tu plan con cultivos asociados",
+    "outlook": {
+      "title": "Tu finca en {n} años",
+      "hint": "No solo este año: cómo cambia cada opción con el tiempo. Toca la gráfica para ver cada año.",
+      "error": "No pudimos calcular cómo cambian las opciones en el tiempo. Inténtalo de nuevo en un momento.",
+      "today": "Hoy",
+      "todayLabel": "Lo que haces hoy",
+      "thisOption": "Esta opción",
+      "yearN": "Año {n}",
+      "yearShort": "A{n}",
+      "yearsRange": "Años {from}–{to}",
+      "yearCol": "Año",
+      "inYears": "en {n} años:",
+      "chartKeys": "Usa las flechas izquierda y derecha para recorrer los años.",
+      "chartLabel": "{indicator} de hoy a {n} años, por opción",
+      "seeData": "Ver los datos año por año",
+      "assumptions": "Lo que supusimos",
+      "sources": "Fuentes ({n})",
+      "citeLabel": "Ver la fuente {n}",
+      "openSource": "Abrir la fuente",
+      "bare": "sin cultivo",
+      "days": "{n, plural, one {# jornal} other {# jornales}}",
+      "allYear": "todo el año",
+      "noMonths": "ningún mes",
+      "adopted": "rotación nueva en el {pct} % del lote",
+      "hasMilestone": "hay un hito este año",
+      "wheelLabel": "La rotación como un ciclo que se repite {years, plural, one {cada año} other {cada # años}}",
+      "wheelRun": "{name} de {from} a {to}",
+      "wheelRunYear": "{name} de {from} a {to} del año {year}",
+      "wheelCenter": "Vuelve a empezar {years, plural, one {cada año} other {cada # años}}",
+      "cycleTitle": "Una vuelta: {years, plural, one {1 año} other {# años}}",
+      "detailTitle": "En el tiempo: {n} años",
+      "detailHint": "La rotación se repite. Así se ve su vuelta y lo que pasa año por año desde que empiezas.",
+      "breakEven": "Recuperas lo invertido",
+      "noDipShort": "Sin bache",
+      "notInHorizon": "Después de 10 años",
+      "soilSavedLabel": "Suelo que salvas en {n} años",
+      "milestones": "Hitos",
+      "bandNote": "La franja muestra un año malo y uno bueno típicos (no un pronóstico).",
+      "markerNote": "El rombo marca el año en que recuperas lo invertido.",
+      "socialTitle": "Contexto social: lo que pide a tu familia",
+      "socialHint": "Una rotación también cambia quién trabaja, cuándo hay comida y dinero, y quién se beneficia del suelo.",
+      "laborTitle": "Trabajo mes a mes",
+      "laborHint": "Jornales de toda la finca al mes, para {area} y {workers, plural, one {# persona} other {# personas}} de la familia.",
+      "assumedMark": "(supuesto: cuéntanos abajo)",
+      "familyCapacity": "Tu familia: {n}",
+      "familyLegend": "Lo que da tu familia en un mes",
+      "laborChart": "Jornales por mes: el mes de más trabajo pide {peak} y la familia da {family}. Los meses con «!» pasan de lo que da la familia.",
+      "foodTitle": "Meses con comida de la finca para la casa",
+      "cashTitle": "Meses con algo para vender",
+      "stripLegend": "Lleno = sí · rayas = no.",
+      "contextCo": "Contexto en Colombia",
+      "contextGlobal": "Contexto",
+      "talkAbout": "Para conversar en familia o con el técnico",
+      "phase": {
+        "transition": "Transición",
+        "building": "El suelo se va armando",
+        "stable": "Rotación andando"
+      },
+      "phaseHint": {
+        "transition": "Se aprende y se invierte; el ingreso puede bajar.",
+        "building": "El nitrógeno y el corte de plagas se empiezan a notar.",
+        "stable": "Cada vuelta repite lo aprendido; el suelo sigue mejorando despacio."
+      },
+      "status": {
+        "good": "A favor",
+        "watch": "Para revisar",
+        "alert": "Ojo"
+      },
+      "indicators": {
+        "label": "Qué mostrar en la gráfica",
+        "income": "Ingreso",
+        "som": "Materia orgánica",
+        "soilLost": "Suelo perdido",
+        "labor": "Trabajo"
+      },
+      "indicatorHint": {
+        "income": "Ingreso neto al año: 100 = lo que deja hoy tu rotación. Incluye el bache de aprender y lo que ahorras en abono.",
+        "som": "Materia orgánica del suelo (%): sube despacio, en años, no en una cosecha.",
+        "soilLost": "Capa de suelo que se lava, sumada desde hoy: se va en unos aguaceros y tarda siglos en volver a formarse.",
+        "labor": "Jornales al año por unidad de área, incluidos los de sembrar árboles o coberturas nuevas."
+      },
+      "units": {
+        "income": "100 = hoy",
+        "som": "%",
+        "soilLostMm": "mm",
+        "soilLostIn": "in",
+        "labor": "jornales/ha",
+        "laborAc": "jornales/ac"
+      },
+      "pace": {
+        "label": "¿Cómo harías el cambio?",
+        "all": "Todo de una vez",
+        "allHint": "todo el lote el año 1",
+        "gradual": "Poco a poco",
+        "gradualHint": "¼ → ½ → todo"
+      },
+      "takeaway": {
+        "title": "Con «{name}»:",
+        "noDip": "El ingreso no baja: desde el año 1 deja igual o más que hoy.",
+        "dip": "El primer año deja menos (es el año de aprender) y recuperas lo invertido hacia el año {year}.",
+        "noRecover": "El ingreso acumulado no alcanza al de hoy en {n} años: aquí gana el suelo más que el bolsillo.",
+        "soilSaved": "En {n} años se lavarían {depth} menos de suelo que siguiendo igual.",
+        "som": "La materia orgánica pasaría de {from} % a {to} % en {n} años."
+      },
+      "household": {
+        "title": "Cuéntanos de tu familia.",
+        "hint": "Cambia lo que conviene. Se guarda solo en este teléfono.",
+        "workers": "¿Cuántas personas de la familia trabajan la finca?",
+        "workersMore": "5 o más",
+        "tenure": "La tierra es…",
+        "tenures": {
+          "own": "Propia",
+          "rent": "Arrendada",
+          "shared": "En compañía",
+          "unknown": "Prefiero no decir"
+        },
+        "association": "¿Están en una asociación o cooperativa?",
+        "yes": "Sí",
+        "no": "No"
+      }
+    },
+    "marketChip": "Mercado"
+  },
+  "print": {
+    "title": "Resumen de opciones de rotación",
+    "subtitle": "Para revisar con tu técnico agrícola",
+    "generated": "Generado el {date}",
+    "farm": "Finca",
+    "unnamed": "Tu finca",
+    "area": "{area}",
+    "mock": "Datos simulados de demostración.",
+    "priorities": "Lo que más te importa",
+    "scenario": "Escenario «¿y si…?»: lluvia {rain} %, temperatura +{temp}. Los puntajes son una estimación.",
+    "ranking": "Opciones ordenadas según tus prioridades",
+    "option": "Opción",
+    "vsToday": "frente a hoy",
+    "formula": "Total = suma de (peso × puntaje) ÷ suma de pesos; mucho = 5, algo = 3, poco = 1.",
+    "printBtn": "Imprimir o guardar PDF",
+    "back": "Volver",
+    "loading": "Preparando el resumen…",
+    "error": "No pudimos preparar el resumen. Vuelve a intentarlo.",
+    "noField": "Este enlace no trae una finca. Vuelve a la app y toca «Imprimir» desde las opciones.",
+    "sources": "Datos: NASA POWER (clima diario), SMAP (humedad del suelo), GPM/IMERG (lluvia), MODIS/VIIRS (verdor), ECOSTRESS (evapotranspiración y temperatura), GRACE-FO (agua subterránea), SRTM (relieve).",
+    "link": "Enlace"
+  },
+  "settings": {
+    "open": "Ajustes",
+    "title": "Ajustes",
+    "close": "Cerrar ajustes",
+    "contrast": {
+      "title": "Modo sol (alto contraste)",
+      "auto": "Automático",
+      "autoHint": "Sigue la configuración de tu teléfono",
+      "high": "Activado",
+      "highHint": "Fondo claro y letra más grande para usar bajo el sol",
+      "normal": "Apagado",
+      "normalHint": "Fondo oscuro, como el espacio"
+    },
+    "units": {
+      "title": "Unidades",
+      "metric": "Métricas",
+      "metricHint": "Milímetros, °C y hectáreas",
+      "imperial": "Imperiales",
+      "imperialHint": "Pulgadas, °F y acres"
+    },
+    "markers": {
+      "title": "En el globo",
+      "label": "Mostrar fincas de ejemplo y emisoras",
+      "hint": "Los puntos verdes son fincas de ejemplo y los amarillos, emisoras de la radio del campo. Si los ocultas, igual llegas a ellos con la búsqueda, el asistente y el reproductor."
+    },
+    "language": "Idioma",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "replayIntro": "Responder las preguntas de inicio otra vez",
+    "glossary": "Glosario: qué significa cada término",
+    "install": "Instalar la app en este teléfono",
+    "about": "Acerca de los datos",
+    "mode": {
+      "title": "Cómo ver la app",
+      "lite": "Sencillo",
+      "liteHint": "Lo más importante primero, con menos números",
+      "full": "Completo",
+      "fullHint": "Todos los datos, gráficas y fuentes"
+    },
+    "narrator": {
+      "title": "Locutor",
+      "label": "Voz que lee en voz alta",
+      "hint": "Lee el panel de la región y las respuestas del asistente con la voz de tu teléfono.",
+      "unsupported": "Este navegador no puede leer en voz alta."
+    },
+    "profile": {
+      "title": "Tu perfil",
+      "farmer": "Agricultor o agricultora",
+      "technician": "Técnico o técnica",
+      "none": "Sin responder"
+    }
+  },
+  "onboarding": {
+    "brand": "Field Shift · datos de la NASA",
+    "step": "{n} de {total}",
+    "skip": "Saltar",
+    "start": "Empezar",
+    "preparing": "Preparando…",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "welcome": {
+      "title": "Hola, te damos la bienvenida",
+      "text": "Te ayudamos a cuidar tu suelo y a escoger qué sembrar, con datos de los satélites de la NASA.",
+      "find": "Busca tu finca",
+      "climate": "Mira tu clima",
+      "compare": "Compara cultivos",
+      "hint": "Te haremos 3 preguntas cortas para mostrarte lo que te sirve.",
+      "spokenEnd": "Toca el botón verde de abajo para empezar."
+    },
+    "voice": {
+      "listen": "Escuchar con voz",
+      "on": "Voz encendida",
+      "toggle": "Voz que lee en voz alta",
+      "note": "Usa la voz de tu teléfono.",
+      "unsupported": "Este navegador no puede leer en voz alta."
+    },
+    "questions": {
+      "spokenEnd": "Después toca la flecha verde para seguir.",
+      "selected": "Elegiste: {option}. Toca la flecha verde para seguir.",
+      "role": {
+        "title": "¿Quién eres?",
+        "farmer": {
+          "label": "Agricultor o agricultora",
+          "hint": "Trabajo la tierra en mi finca.",
+          "spoken": "Si trabajas la tierra, toca el tractor."
+        },
+        "technician": {
+          "label": "Técnico o técnica",
+          "hint": "Agrónomo, extensionista o asesor.",
+          "spoken": "Si eres agrónomo, extensionista o asesor, toca la tabla de notas."
+        }
+      },
+      "goal": {
+        "title": "¿Qué quieres hacer hoy?",
+        "climate": {
+          "label": "Ver el clima de mi zona",
+          "hint": "Lluvia, humedad del suelo y calor.",
+          "spoken": "Para ver la lluvia y el suelo de tu zona, toca la nube con sol."
+        },
+        "rotations": {
+          "label": "Escoger qué sembrar",
+          "hint": "Comparar rotaciones para mi finca.",
+          "spoken": "Para escoger qué sembrar en tu finca, toca la plantita."
+        },
+        "satellite": {
+          "label": "Ver datos de satélite",
+          "hint": "Capas de la NASA sobre el mapa.",
+          "spoken": "Para ver los mapas de los satélites, toca el satélite."
+        }
+      },
+      "reading": {
+        "title": "¿Cómo prefieres la información?",
+        "listen": {
+          "label": "Escucharla",
+          "hint": "Una voz me lee lo importante.",
+          "spoken": "Si prefieres escuchar, toca la oreja."
+        },
+        "little": {
+          "label": "Leer poco",
+          "hint": "Frases cortas y dibujos.",
+          "spoken": "Si prefieres leer poco, toca el dibujo."
+        },
+        "detail": {
+          "label": "Leer todo con detalle",
+          "hint": "Números, gráficas y fuentes.",
+          "spoken": "Si quieres todos los detalles, toca el libro."
+        }
+      }
+    },
+    "thinking": {
+      "title": "Preparando la app para ti…",
+      "text": "Estamos mirando tus respuestas."
+    },
+    "suggestion": {
+      "kickerClaude": "Sugerencia de la IA",
+      "kickerRules": "Sugerencia automática",
+      "title": "Así te mostramos la app",
+      "lite": {
+        "title": "Modo sencillo",
+        "text": "Lo más importante primero, con frases cortas y menos números."
+      },
+      "full": {
+        "title": "Modo completo",
+        "text": "Todos los datos de los satélites, con gráficas, fuentes y fechas."
+      },
+      "voice": "Voz que lee en voz alta",
+      "voiceOn": "Sí",
+      "voiceOff": "No",
+      "voiceSpoken": "La voz te leerá lo importante.",
+      "why": "Por qué",
+      "note": "Puedes cambiarlo cuando quieras en Ajustes. La app te apoya: no reemplaza tu criterio ni a los expertos de tu zona.",
+      "accept": "Usar así",
+      "switchToLite": "Prefiero el modo sencillo",
+      "switchToFull": "Prefiero el modo completo",
+      "spokenEnd": "Si te sirve, toca el botón verde."
+    },
+    "rules": {
+      "welcome": {
+        "farmer": "Hola. Te mostramos cómo están la lluvia, el suelo y tus cultivos, con palabras sencillas.",
+        "technician": "Hola. Tienes los datos de los satélites de la NASA con su fuente, fecha y resolución."
+      },
+      "reason": {
+        "voice": "Elegiste escuchar: la voz te leerá lo importante.",
+        "lite": "Verás lo más importante primero, con menos números.",
+        "full": "Verás todos los datos, con gráficas y fuentes.",
+        "climate": "Empezamos por el clima de tu zona.",
+        "rotations": "Empezamos por tu finca, para comparar qué sembrar.",
+        "satellite": "Empezamos por las capas de los satélites."
+      },
+      "suggest": {
+        "climate1": "¿Cómo está la lluvia en mi zona?",
+        "climate2": "¿Está seco el suelo en mi zona?",
+        "rotations1": "¿Qué me conviene sembrar después del maíz?",
+        "rotations2": "¿Qué rotación me conviene si hay sequía?",
+        "satellite1": "Muéstrame la humedad del suelo en mi zona",
+        "satellite2": "¿Qué mide el NDVI y de qué satélite viene?",
+        "common": "¿Qué datos de la NASA hay para mi zona?"
+      }
+    }
+  },
+  "glossaryPage": {
+    "title": "Glosario",
+    "intro": "Las palabras técnicas de la app explicadas en una frase, con un ejemplo del campo.",
+    "back": "Volver al globo",
+    "index": "Términos",
+    "note": "Los datos de satélite muestran tendencias de una zona; tu experiencia y un técnico local completan la foto."
+  },
+  "a11y": {
+    "skipToPlaces": "Saltar a la lista de lugares (sin mapa)",
+    "placesTitle": "Explorar sin mapa",
+    "placesIntro": "El globo es visual. Desde aquí puedes abrir las fincas de ejemplo o usar la búsqueda de arriba.",
+    "openFarm": "Abrir {name}"
+  },
+  "offline": {
+    "banner": "Estás sin conexión. Ves tu último análisis guardado.",
+    "bannerNoData": "Estás sin conexión. Algunas partes no se pueden cargar.",
+    "savedOn": "Análisis guardado el {date}."
+  },
+  "demo": {
+    "label": "Recorrido guiado",
+    "title": "Recorrido guiado de Field Shift",
+    "intro": "En poco más de un minuto: tu zona, los sensores de la NASA, la radio del campo, el agente, tu finca y las rotaciones.",
+    "start": "Empezar",
+    "notNow": "Ahora no",
+    "step": "Paso {n} de {total}",
+    "pause": "Pausa",
+    "resume": "Seguir",
+    "next": "Siguiente",
+    "exit": "Salir del recorrido",
+    "print": "Ver resumen imprimible",
+    "finish": "Terminar",
+    "steps": {
+      "location": {
+        "title": "Tu zona",
+        "text": "El globo vuela a donde estás (aproximado por tu conexión; más preciso si das permiso)."
+      },
+      "region": {
+        "title": "Sensores de la NASA en tu región",
+        "text": "Humedad del suelo (SMAP), lluvia (GPM), verdor (MODIS) y más, en tarjetas fáciles de leer."
+      },
+      "radio": {
+        "title": "Radio del campo",
+        "text": "Anuncios con voz para la región: cuándo sembrar, alertas de lluvia y consejos."
+      },
+      "agent": {
+        "title": "Pregúntale al campo",
+        "text": "El agente responde y mueve el globo: vuela al Punjab y activa la humedad del suelo."
+      },
+      "farm": {
+        "title": "Tu finca",
+        "text": "Una finca de ejemplo en Iowa con su clima real de NASA POWER."
+      },
+      "calendar": {
+        "title": "Tu año en el campo",
+        "text": "Los meses con suelo desnudo aparecen con rayas: ahí se pierde tierra y nitrógeno."
+      },
+      "rotations": {
+        "title": "Tres rotaciones, incluida la de hoy",
+        "text": "Cada opción con su puntaje, evidencia, riesgos y nivel de confianza."
+      },
+      "priorities": {
+        "title": "Cambia lo que te importa",
+        "text": "Con ahorrar agua y frenar la erosión primero, el orden se recalcula en tu teléfono."
+      },
+      "print": {
+        "title": "Llévalo a tu técnico",
+        "text": "Un resumen imprimible con las opciones, la evidencia y lo que hay que revisar en campo."
+      },
+      "plan": {
+        "title": "Cultivos que se ayudan",
+        "text": "Tu plan combina asociaciones como las tres hermanas (maíz, frijol y calabaza) con el clima de NASA POWER, las alturas y raíces de cada planta y lo que nos cuentas."
+      }
+    }
+  },
+  "about": {
+    "title": "Acerca de los datos",
+    "intro": "Field Shift combina observaciones de la Tierra de la NASA con reglas agronómicas simples. Aquí está qué usamos, qué tan seguido se actualiza y qué no puede decirte.",
+    "back": "Volver al globo",
+    "datasetsTitle": "Datos de la NASA que usamos",
+    "cols": {
+      "data": "Dato",
+      "what": "Qué mide",
+      "resolution": "Detalle",
+      "latency": "Llega con",
+      "link": "Fuente oficial"
+    },
+    "harmonizeTitle": "Cómo los combinamos",
+    "harmonize": "Cada dataset tiene su propia grilla y su propio ritmo. Para tu finca tomamos el valor del píxel que la cubre (o el promedio si es grande), lo pasamos a valores mensuales y lo comparamos con su propio promedio de 20–25 años. Así una anomalía de humedad significa \"más seco o más húmedo que lo normal en ese lugar\", no un número absoluto.",
+    "limitsTitle": "Lo que estos datos no pueden decirte",
+    "limits": [
+      "Un píxel promedia un área grande (de 30 m a 50 km): no ve diferencias dentro de tu parcela.",
+      "Las nubes, la nieve o la vegetación densa dejan vacíos o bajan la calidad.",
+      "Llegan con días o semanas de retraso: sirven para tendencias, no para decidir el riego de hoy.",
+      "No reemplazan un análisis de suelo ni la experiencia de quien trabaja la tierra."
+    ],
+    "privacyTitle": "Tu ubicación",
+    "privacy": "Usamos tu conexión para ubicar tu zona de forma aproximada y, si das permiso, el GPS del teléfono para ser más precisos. No guardamos tu ubicación en nuestros servidores; tus fincas y preferencias quedan solo en este teléfono.",
+    "creditsTitle": "Créditos y atribuciones",
+    "credits": "Hecho por el equipo de Field Shift para NASA Space Apps 2026 (reto Field Shift: Adapting Farms with NASA Data). Mapas: imágenes satelitales de Esri/MapTiler, etiquetas de OpenFreeMap © colaboradores de OpenStreetMap, capas de NASA GIBS, relieve Terrarium (AWS Open Data), límites de departamentos y municipios del DANE (Marco Geoestadístico Nacional, vía OCHA HDX). Búsqueda de lugares: Nominatim/OpenStreetMap.",
+    "disclaimer": "Esta herramienta apoya, no reemplaza, el criterio del agricultor ni a los técnicos locales.",
+    "rows": {
+      "smap": {
+        "what": "Humedad del suelo superficial",
+        "resolution": "9 km",
+        "latency": "~2 días"
+      },
+      "gpm": {
+        "what": "Lluvia (IMERG)",
+        "resolution": "10 km",
+        "latency": "~1 día (temprano) / 3,5 meses (final)"
+      },
+      "modis": {
+        "what": "Verdor de las plantas (NDVI)",
+        "resolution": "250 m – 1 km",
+        "latency": "16 días (compuesto)"
+      },
+      "hls": {
+        "what": "Verdor a detalle (Landsat/Sentinel armonizado)",
+        "resolution": "30 m",
+        "latency": "2–4 días"
+      },
+      "ecostress": {
+        "what": "Evapotranspiración y temperatura de la superficie",
+        "resolution": "70 m",
+        "latency": "Irregular (órbita de la estación espacial)"
+      },
+      "power": {
+        "what": "Clima diario: lluvia, temperatura, radiación",
+        "resolution": "0,5° × 0,625°",
+        "latency": "~2 días"
+      },
+      "grace": {
+        "what": "Agua almacenada en el subsuelo",
+        "resolution": "~300 km",
+        "latency": "~2 meses"
+      },
+      "srtm": {
+        "what": "Elevación y pendiente",
+        "resolution": "30 m",
+        "latency": "Fijo (2000)"
+      }
+    }
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "text": "Puede que el enlace esté incompleto. Vuelve al globo para buscar tu finca.",
+    "home": "Volver al globo"
+  },
+  "time": {
+    "chip": "Ver otra fecha",
+    "viewing": "Viendo {period}",
+    "backToToday": "Volver a hoy",
+    "change": "Cambiar",
+    "reviewPast": "Revisar una fecha pasada",
+    "title": "¿Qué fecha quieres revisar?",
+    "hint": "Mira cómo estuvieron la lluvia, el calor y el campo en un mes o un día pasado.",
+    "close": "Cerrar",
+    "quick": "Atajos",
+    "presets": {
+      "lastMonth": "Mes pasado",
+      "thisMonth": "Este mes",
+      "sameMonthLastYear": "Hace un año"
+    },
+    "prevYear": "Año anterior",
+    "nextYear": "Año siguiente",
+    "monthLabel": "Meses de {year}",
+    "modeLabel": "Mes completo o un día",
+    "mode": {
+      "month": "Mes completo",
+      "day": "Un día"
+    },
+    "dayLabel": "Días de {period}",
+    "pickDay": "Elige un día",
+    "apply": "Ver {period}",
+    "dataNote": "Datos diarios de NASA POWER desde 1981, con unos 3 días de retraso. Cada capa del mapa tiene su propio rango de fechas.",
+    "layerNoData": "La capa «{layer}» no tiene datos para {period}: sigue mostrando su fecha más cercana.",
+    "past": {
+      "title": "Lo que pasó en {period}",
+      "partial": "El mes todavía no termina: datos hasta el {end}.",
+      "error": "No pudimos traer los datos diarios de NASA POWER para esa fecha.",
+      "retry": "Reintentar",
+      "rainTotal": "Lluvia del mes",
+      "nearNormal": "Parecida a lo normal ({normal})",
+      "lessThanNormal": "{pct} % menos que lo normal ({normal})",
+      "moreThanNormal": "{pct} % más que lo normal ({normal})",
+      "rainyDays": "Días con lluvia",
+      "daysOf": "{n} de {total}",
+      "wettest": "El más lluvioso: {day}, {rain}",
+      "extremes": "Temperaturas extremas",
+      "hottest": "Máx. {temp} ({day})",
+      "coldest": "Mín. {temp} ({day})",
+      "soil": "Humedad de las raíces",
+      "soilHint": "Promedio del mes (0 % seco, 100 % encharcado)",
+      "chartTitle": "Lluvia día a día",
+      "tapHint": "Toca la gráfica para ver cada día.",
+      "readout": "{day}: lluvia {rain} · máx. {tmax} · mín. {tmin}",
+      "chartLegend": "Barras: lluvia de cada día. Más fuertes en celeste intenso.",
+      "chartLegendNormal": "Barras: lluvia de cada día · línea punteada: un día normal ({normal}).",
+      "tableCaption": "Lluvia y temperatura de cada día de {period}",
+      "cols": {
+        "day": "Día",
+        "rain": "Lluvia",
+        "tmax": "Máxima",
+        "tmin": "Mínima"
+      },
+      "eventsTitle": "Eventos reconstruidos",
+      "noEvents": "No hubo lluvias fuertes, rachas secas, calor extremo ni heladas en este periodo.",
+      "range": "{from} – {to}",
+      "seeOnMap": "Ver en el mapa",
+      "events": {
+        "heavyRain": {
+          "title": "Lluvia fuerte",
+          "detail": "{rain} en {days, plural, one {un día} other {# días seguidos}}."
+        },
+        "drySpell": {
+          "title": "Racha seca",
+          "detail": "{days} días seguidos casi sin lluvia."
+        },
+        "heat": {
+          "title": "Calor extremo",
+          "detail": "Hasta {temp} durante {days, plural, one {un día} other {# días}}."
+        },
+        "frost": {
+          "title": "Helada",
+          "detail": "La mínima bajó a {temp} durante {days, plural, one {una noche} other {# noches}}."
+        }
+      },
+      "rulesTitle": "Cómo detectamos los eventos",
+      "rules": {
+        "heavyRain": "Lluvia fuerte: un día con {mm} o más, o {factor} veces la lluvia de un día normal (desde {min}).",
+        "drySpell": "Racha seca: {days} días o más seguidos con menos de {mm}.",
+        "heat": "Calor extremo: máxima de {temp} o más.",
+        "frost": "Helada: mínima de {temp} o menos (aire a 2 m; en el suelo puede helar antes)."
+      },
+      "source": "NASA POWER diario · celda de ~55 km · \"normal\" = promedio {baseline} de ese mes. Muestra la zona, no cada rincón de tu parcela.",
+      "gaps": "Faltan datos de {pct} % de los días."
+    },
+    "changeDate": "Cambiar la fecha"
+  },
+  "events": {
+    "layerName": "Eventos y emergencias",
+    "layerShort": "Deslizamientos, inundaciones, incendios y más (NASA, UNGRD y la comunidad)",
+    "report": "Reportar",
+    "reportEvent": "Reportar un evento",
+    "chip": "{count, plural, =0 {Sin eventos} one {# evento} other {# eventos}} · {period}",
+    "chipAria": "Ver la lista de eventos y emergencias",
+    "loading": "Cargando eventos…",
+    "error": "No se pudieron cargar los eventos.",
+    "retry": "Intentar de nuevo",
+    "recent": "últimos 90 días",
+    "title": "Eventos y emergencias",
+    "close": "Cerrar",
+    "sources": "Fuentes",
+    "source": {
+      "eonet": "NASA EONET",
+      "ungrd": "UNGRD Colombia",
+      "community": "Comunidad"
+    },
+    "sourceHint": {
+      "eonet": "Eventos seguidos con satélites y agencias en todo el mundo",
+      "ungrd": "Registro oficial de emergencias de Colombia, por municipio",
+      "community": "Reportes de personas de la zona, sin verificar"
+    },
+    "sourceCount": "{count, plural, =0 {ningún evento} one {# evento} other {# eventos}}",
+    "sourceError": "no respondió",
+    "ungrdNotYet": "La UNGRD publica sus registros con retraso: el último es del {date}.",
+    "ungrdSeeLatest": "Ver {month}",
+    "kindFilter": "Tipo de evento",
+    "allKinds": "Todos",
+    "kind": {
+      "landslide": "Deslizamiento",
+      "flood": "Inundación o creciente",
+      "storm": "Vendaval o tormenta",
+      "wildfire": "Incendio",
+      "drought": "Sequía",
+      "frost": "Helada",
+      "erosion": "Erosión",
+      "earthquake": "Sismo",
+      "volcano": "Volcán",
+      "other": "Otro evento"
+    },
+    "group": {
+      "water": "Agua y tormentas",
+      "earth": "Tierra: deslizamientos, erosión, sismos",
+      "fire": "Fuego y sequía",
+      "other": "Otros: heladas, calor, polvo"
+    },
+    "legend": "Colores del mapa",
+    "legendShape": "Punto lleno: dato oficial o de satélite. Anillo: reporte de la comunidad.",
+    "nearCenter": "Cerca del centro del mapa",
+    "none": "No hay eventos en este periodo con estos filtros.",
+    "km": "a {km} km",
+    "unverified": "Sin verificar",
+    "sample": "Ejemplo",
+    "by": {
+      "eonet": "Seguido por la NASA",
+      "ungrd": "Registro oficial UNGRD",
+      "community": "Reporte de la comunidad"
+    },
+    "unverifiedHint": "Lo reportó alguien de la comunidad. Ninguna entidad lo ha confirmado todavía.",
+    "sampleHint": "Es un reporte de ejemplo para la demostración, no un hecho real.",
+    "approx": {
+      "ungrd": "Ubicación aproximada: centro del municipio. La UNGRD no publica el punto exacto.",
+      "community": "Ubicación aproximada, con unos 100 m de margen.",
+      "eonet": "Ubicación aproximada: centro del área afectada."
+    },
+    "impact": {
+      "deaths": "{n, plural, one {# fallecido} other {# fallecidos}}",
+      "injured": "{n, plural, one {# herido} other {# heridos}}",
+      "missing": "{n, plural, one {# desaparecido} other {# desaparecidos}}",
+      "people": "{n, plural, one {# persona afectada} other {# personas afectadas}}",
+      "families": "{n, plural, one {# familia afectada} other {# familias afectadas}}",
+      "homesDestroyed": "{n, plural, one {# vivienda destruida} other {# viviendas destruidas}}",
+      "homesDamaged": "{n, plural, one {# vivienda averiada} other {# viviendas averiadas}}",
+      "roads": "{n, plural, one {# vía afectada} other {# vías afectadas}}",
+      "hectares": "{area} afectadas"
+    },
+    "magnitude": "Tamaño: {value}",
+    "impacts": {
+      "crops": "Cultivos",
+      "animals": "Animales",
+      "road": "Vías",
+      "water": "Agua o acueducto",
+      "homes": "Viviendas",
+      "people": "Personas"
+    },
+    "affected": "Afectó:",
+    "here": "{count, plural, one {# evento aquí} other {# eventos aquí}}",
+    "seeRegion": "Ver sensores de la zona",
+    "seeMonth": "Ver ese mes",
+    "openSource": "Ver en la fuente",
+    "openWorldview": "Ver en NASA Worldview",
+    "emergency": "¿Hay personas en peligro? Llama ya al 123 (Colombia) o a la línea de emergencias de tu país.",
+    "call": "Llamar al 123",
+    "form": {
+      "title": "Reportar un evento",
+      "intro": "Tu reporte ayuda a tus vecinos y a las entidades a saber qué está pasando en el campo.",
+      "what": "¿Qué pasó?",
+      "when": "¿Cuándo?",
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "otherDay": "Otro día",
+      "date": "Fecha del evento",
+      "where": "¿Dónde?",
+      "whereCenter": "Centro del mapa",
+      "useMyLocation": "Usar mi ubicación",
+      "locating": "Buscando tu ubicación…",
+      "locationDenied": "No pudimos usar tu ubicación. Elige el punto en el mapa.",
+      "pickOnMap": "Elegir en el mapa",
+      "affected": "¿Qué afectó? Puedes marcar varias.",
+      "note": "Cuéntanos qué viste (opcional)",
+      "noteHint": "No escribas nombres, teléfonos ni correos. Te quedan {left} caracteres.",
+      "privacy": "No guardamos tu nombre ni tus datos de contacto. El punto se guarda con unos 100 m de margen y tu reporte se verá como “sin verificar” hasta que una entidad lo confirme.",
+      "landslideReporter": "¿Fue un deslizamiento? También puedes reportarlo a la NASA en Landslide Reporter.",
+      "send": "Enviar reporte",
+      "sending": "Enviando…",
+      "needKind": "Elige qué pasó.",
+      "sent": "Gracias. Tu reporte ya está en el mapa como “sin verificar”.",
+      "rate": "Ya enviaste varios reportes. Intenta de nuevo en unos minutos.",
+      "failed": "No se pudo enviar el reporte. Revisa tu conexión e inténtalo otra vez.",
+      "cancel": "Cancelar",
+      "mockNote": "Demostración: los reportes se guardan en el servidor de prueba y en este dispositivo."
+    },
+    "pick": {
+      "hint": "Mueve el mapa hasta que la mira quede sobre el lugar del evento.",
+      "use": "Usar este punto",
+      "cancel": "Volver"
+    },
+    "nearby": {
+      "title": "Eventos y emergencias",
+      "history": "La UNGRD registró {count, plural, =0 {ninguna emergencia} one {# emergencia} other {# emergencias}} de clima o terreno en {place} entre {from} y {to}.",
+      "outside": "El registro oficial de la UNGRD solo cubre Colombia.",
+      "error": "No pudimos consultar el registro de la UNGRD.",
+      "recentOfficial": "Últimas emergencias oficiales",
+      "recentNearby": "A menos de 50 km · {period}",
+      "noneNearby": "Ningún evento de la NASA ni de la comunidad a menos de 50 km en este periodo.",
+      "showOnMap": "Ver eventos en el mapa",
+      "report": "Reportar algo aquí",
+      "sourceLine": "Fuentes: UNGRD (datos.gov.co), NASA EONET y reportes de la comunidad."
+    }
+  },
+  "survey": {
+    "title": "Cuéntanos de tu terreno",
+    "intro": "{n} preguntas rápidas (1 minuto). Con tus respuestas afinamos el plan de siembra.",
+    "cta": "Responder",
+    "progress": "Pregunta {n} de {total}",
+    "skip": "Saltar",
+    "next": "Siguiente",
+    "back": "Pregunta anterior",
+    "finish": "Guardar respuestas",
+    "saveClose": "Guardar y cerrar",
+    "edit": "Cambiar",
+    "doneTitle": "Lo que nos contaste de tu terreno",
+    "answered": "{n} de {total} respondidas",
+    "saved": "Respuestas guardadas. Ajustamos tu plan.",
+    "privacy": "Tus respuestas se guardan solo en este teléfono y se usan para el análisis de esta finca.",
+    "notAnswered": "Sin responder",
+    "short": {
+      "usualCrops": "Sueles sembrar",
+      "lastCrop": "Lo último",
+      "fertilization": "Abono",
+      "residues": "Rastrojo",
+      "pests": "Problemas",
+      "purpose": "Cosecha para"
+    },
+    "q": {
+      "usualCrops": {
+        "title": "¿Qué sueles sembrar aquí?",
+        "hint": "Toca todos los que quieras.",
+        "more": "Ver todos los cultivos",
+        "fewer": "Ver menos",
+        "search": "Buscar cultivo"
+      },
+      "lastCrop": {
+        "title": "¿Qué sembraste la última vez?",
+        "hint": "Así evitamos repetir la misma familia de plantas y sus plagas.",
+        "fallow": "Lo dejé descansar",
+        "other": "Otro cultivo"
+      },
+      "fertilization": {
+        "title": "¿Abonas o fertilizas este terreno?",
+        "hint": "Nos dice cuánto alimento le llega al suelo.",
+        "options": {
+          "none": {
+            "title": "No",
+            "hint": "El terreno no recibe abono."
+          },
+          "organic": {
+            "title": "Abono orgánico",
+            "hint": "Estiércol, compost, gallinaza."
+          },
+          "synthetic": {
+            "title": "Fertilizante químico",
+            "hint": "Urea, triple 15, DAP."
+          },
+          "both": {
+            "title": "Los dos",
+            "hint": "Orgánico y químico."
+          }
+        }
+      },
+      "residues": {
+        "title": "¿Qué haces con lo que queda después de cosechar?",
+        "hint": "Los tallos y hojas que sobran (el rastrojo).",
+        "options": {
+          "leave": {
+            "title": "Lo dejo sobre el suelo",
+            "hint": "Cubre y alimenta la tierra."
+          },
+          "burn": {
+            "title": "Lo quemo",
+            "hint": "El suelo queda desnudo."
+          },
+          "graze": {
+            "title": "Se lo comen los animales",
+            "hint": "Pastoreo después de la cosecha."
+          },
+          "remove": {
+            "title": "Lo saco del terreno",
+            "hint": "Para forraje, venta u otro uso."
+          }
+        }
+      },
+      "pests": {
+        "title": "¿Qué problema se repite en tu terreno?",
+        "hint": "Toca todos los que pasen.",
+        "none": "Ninguno",
+        "options": {
+          "armyworm": "Gusanos y orugas en las hojas",
+          "soil-pests": "Plagas en la raíz (chizas, gallina ciega)",
+          "fungus": "Hongos y pudrición",
+          "weeds": "Muchas malezas",
+          "animals": "Pájaros o roedores"
+        }
+      },
+      "purpose": {
+        "title": "¿Para qué es tu cosecha?",
+        "hint": "Cambia qué combinación te conviene más.",
+        "options": {
+          "home": {
+            "title": "Para comer en casa",
+            "hint": "Comida para la familia."
+          },
+          "sale": {
+            "title": "Para vender",
+            "hint": "En el mercado o a un comprador."
+          },
+          "both": {
+            "title": "Las dos",
+            "hint": "Una parte para la casa y otra para vender."
+          }
+        }
+      }
+    }
+  },
+  "mixed": {
+    "title": "Tu plan de siembra",
+    "hint": "Cultivos que crecen bien juntos según el clima de tu finca, la altura y las raíces de cada planta, lo que nos contaste y lo que te importa.",
+    "elevationNote": "Ajustamos la temperatura de NASA POWER a la altura de tu finca: la celda de datos está a {cell} y tu finca a unos {farm}, así que allí la temperatura es {shift} {dir, select, warmer {más alta} other {más baja}}.",
+    "loading": "El plan aparece cuando cargue el clima de tu finca.",
+    "noRec": "Todavía no encontramos una mezcla que se dé bien con tu clima.",
+    "back": "Volver al plan",
+    "ofHundred": "de 100",
+    "rank": "Puesto {rank}",
+    "seeFor": "Ver cómo sembrar {name}",
+    "mixName": "{main} con {others}",
+    "notViable": "Esta mezcla no se da bien con el clima de tu finca: revisa las notas de frío o lluvia.",
+    "dimsTitle": "Puntaje por tema (más alto = mejor)",
+    "whyTitle": "Por qué te la sugerimos",
+    "careTitle": "Qué cuidar y qué revisar con un experto",
+    "careNone": "No vemos problemas fuertes en esta combinación.",
+    "localReview": "Variedades, distancias de siembra y fechas exactas para tu zona.",
+    "howTo": "Cómo sembrarla",
+    "howToGeneric": "Siembra primero la planta más alta. Los trepadores van al pie de ella unas 3 semanas después, y las rastreras entre los surcos para cubrir el suelo.",
+    "disclaimer": "Es un plan para conversar, no una receta. Revísalo con tu experiencia y con un técnico agrícola de tu zona.",
+    "goodLabel": "A favor",
+    "warnLabel": "Cuidado",
+    "sourceYou": "Tú",
+    "sourceModel": "Reglas agronómicas",
+    "kickers": {
+      "rec": "Nuestra recomendación",
+      "year2": "Año 2 del plan",
+      "guild": "Cultivos asociados"
+    },
+    "recommend": {
+      "kicker": "Para tu próxima siembra te recomendamos",
+      "sow": "Primera siembra: {month}",
+      "allYear": "Cultivo de todo el año",
+      "why": "¿Por qué?",
+      "basedOn": {
+        "survey": "Según lo que nos contaste, el clima de NASA POWER y tus prioridades.",
+        "rotation": "Según tu rotación actual, el clima de NASA POWER y tus prioridades.",
+        "zone": "Según el clima de tu zona (NASA POWER). Responde la encuesta del terreno para afinarla."
+      },
+      "seePlan": "Ver cómo sembrarlo",
+      "alternatives": "Otras buenas opciones",
+      "altScore": "{n} de 100 · principal: {crop}"
+    },
+    "plan": {
+      "title": "Plan de 2 años: asociar y rotar",
+      "titlePerennial": "Tu plan durante el año",
+      "hint": "El año 1 siembras juntos los que se ayudan; el año 2 cambias de familia para cortar plagas y aprovechar el nitrógeno que quedó.",
+      "perennial": "Es un cultivo de varios años: el plan se repite cada año, con el suelo siempre cubierto.",
+      "year": "Año {n}",
+      "coverNote": "Las rayas son una cobertura entre cosechas: protege el suelo cuando quedaría desnudo.",
+      "seeYear2": "Ver el año 2",
+      "why": "Rotar familias (gramíneas, leguminosas, raíces) corta el ciclo de plagas y enfermedades del suelo."
+    },
+    "guilds": {
+      "title": "Cultivos que crecen bien juntos",
+      "hint": "Asociaciones conocidas, ordenadas para tu finca.",
+      "more": "Ver {n} más",
+      "fewer": "Ver menos",
+      "notHere": "No se dan bien con tu clima ({n})",
+      "items": {
+        "three-sisters": {
+          "name": "Tres hermanas (milpa)",
+          "story": "Asociación de los pueblos de Mesoamérica y Norteamérica: el maíz sostiene, el frijol abona y la calabaza cubre el suelo.",
+          "layout": "Siembra el maíz en surcos o montículos. Cuando mida unos 15 cm (unas 3 semanas), siembra 2 o 3 frijoles al pie de cada mata y la calabaza entre los surcos, cada 1 a 2 m."
+        },
+        "milpa-cassava": {
+          "name": "Milpa con yuca",
+          "story": "Variante del trópico: la yuca sigue creciendo meses después de cosechar el maíz, el frijol y la calabaza.",
+          "layout": "Siembra yuca y maíz el mismo día, en surcos alternos. A las 3 semanas, frijol al pie del maíz y calabaza en los espacios libres. La yuca se cosecha al final."
+        },
+        "cassava-groundnut": {
+          "name": "Yuca con maní",
+          "story": "Común en el trópico de América y África: el maní cubre el suelo y lo abona mientras la yuca crece despacio.",
+          "layout": "Yuca cada metro; entre los surcos, 2 líneas de maní. El maní se cosecha a los 4 meses y la yuca sigue."
+        },
+        "maize-pigeonpea": {
+          "name": "Maíz con guandul",
+          "story": "Usado en India y África oriental: el guandul crece despacio bajo el maíz, sigue después de la cosecha y sus raíces bajan hondo.",
+          "layout": "Alterna 2 surcos de maíz y 1 de guandul. Después de cosechar el maíz, el guandul queda cubriendo el suelo."
+        },
+        "millet-cowpea": {
+          "name": "Mijo con caupí",
+          "story": "Clásico del Sahel: el caupí rastrero cubre el suelo entre el mijo y lo abona.",
+          "layout": "Siembra el mijo con las primeras lluvias; unas 2 semanas después, caupí entre las matas."
+        },
+        "sorghum-pigeonpea": {
+          "name": "Sorgo con guandul",
+          "story": "Muy usado en zonas secas de India: dos cultivos que aguantan la sequía, con raíces a distinta profundidad.",
+          "layout": "2 surcos de sorgo y 1 de guandul. El sorgo se cosecha primero y el guandul sigue."
+        },
+        "coffee-agroforestry": {
+          "name": "Café con plátano y sombrío",
+          "story": "Sistema agroforestal: los árboles y el plátano dan sombra, y el maní forrajero cubre el suelo todo el año.",
+          "layout": "Plátano cada 2 o 3 surcos de café y árboles de sombra leguminosos (guamo, cachimbo) cada 10 a 12 m. Maní forrajero en las calles."
+        },
+        "maize-soybean-strips": {
+          "name": "Maíz y soya en franjas",
+          "story": "Franjas alternas: la soya abona y el maíz no le quita tanta luz si las franjas son anchas.",
+          "layout": "Franjas de 4 a 6 surcos de maíz y 4 a 6 de soya, de norte a sur."
+        },
+        "winter-cover-mix": {
+          "name": "Cobertura de centeno, vicia y rábano",
+          "story": "Para la época fresca entre cosechas: el centeno protege, la vicia abona y el rábano afloja la tierra.",
+          "layout": "Siémbrala al voleo o con sembradora después de cosechar. Termínala 2 o 3 semanas antes de la siguiente siembra."
+        },
+        "oats-vetch": {
+          "name": "Avena con vicia",
+          "story": "Forraje o cobertura de época fresca: la vicia trepa por la avena y le deja nitrógeno.",
+          "layout": "Mezcla 2 partes de avena por 1 de vicia y siémbralas juntas."
+        },
+        "wheat-clover": {
+          "name": "Trigo con trébol",
+          "story": "El trébol se siembra dentro del trigo y queda cubriendo el suelo después de la cosecha.",
+          "layout": "Unas 12 semanas después de sembrar el trigo, esparce trébol sobre el terreno."
+        }
+      }
+    },
+    "dims": {
+      "climate": "Se da con tu clima",
+      "synergy": "Se ayudan entre sí",
+      "space": "Aprovechan alturas y raíces",
+      "soil": "Cuidan el suelo",
+      "fit": "Encaja con tu finca"
+    },
+    "strata": {
+      "title": "Alturas y raíces",
+      "hint": "Cada planta usa un piso distinto, arriba y abajo: así no se roban luz ni agua.",
+      "typical": "Valores típicos: tu variedad puede ser más alta, más baja o de raíz distinta.",
+      "diagramTitle": "Perfil de {name}",
+      "diagramLabel": "Dibujo de perfil: altura de cada planta sobre el suelo y profundidad de sus raíces.",
+      "up": "Altura",
+      "down": "Raíces",
+      "row": "{crop}: {height} de alto, raíces hasta {depth} ({level}; {roots})",
+      "climbsOn": "trepa por {crop}",
+      "needsSupport": "necesita tutor",
+      "levels": {
+        "ground": "a ras del suelo",
+        "low": "piso bajo",
+        "mid": "piso medio",
+        "high": "piso alto",
+        "canopy": "dosel"
+      },
+      "rootLayers": {
+        "shallow": "raíces poco profundas",
+        "mid": "raíces medias",
+        "deep": "raíces profundas"
+      }
+    },
+    "relations": {
+      "title": "Cómo se llevan",
+      "helps": "Se ayudan",
+      "careful": "Cuidado",
+      "neutral": "Conviven",
+      "known": "Asociación conocida",
+      "single": "Agrega otro cultivo para ver cómo se llevan.",
+      "noReasons": "No se ayudan mucho, pero tampoco se estorban.",
+      "and": "y"
+    },
+    "reasons": {
+      "support": "Tutor: {b} trepa por {a}.",
+      "nitrogen": "Abono natural: con {a}, {b} recibe nitrógeno del aire.",
+      "groundCover": "Suelo cubierto: {a} tapa el suelo bajo {b}; menos malezas y más humedad.",
+      "shade": "Sombra para {b}: con {a} hay menos calor y menos estrés en los meses secos.",
+      "roots": "Raíces a distinta profundidad: {a} toma agua de arriba y {b}, de más abajo.",
+      "time": "Cosechas escalonadas: primero se cosecha {a} y después {b}; el terreno produce más tiempo.",
+      "sharedPests": "Misma familia: {a} y {b} comparten plagas y enfermedades.",
+      "light": "Competencia por luz: {b} recibe menos sol cuando crece con {a}.",
+      "nutrients": "Mucho abono: {a} y {b} compiten por él.",
+      "allelopathy": "Raíces que frenan: {b} crece peor con {a}, que suelta sustancias por la raíz.",
+      "water": "Agua distinta: {a} necesita suelo inundado y {b} no lo aguanta."
+    },
+    "notes": {
+      "fixer": "Abona el suelo con nitrógeno del aire: {crops}.",
+      "cover": "Cubre el suelo (menos malezas y más humedad): {crops}.",
+      "coverErosion": "Tu terreno tiene riesgo alto de erosión y esta mezcla lo cubre: {crops}.",
+      "layers": "Usan las alturas: hay hojas en el {pct} % del espacio entre el suelo y {height}.",
+      "roots": "Raíces a distintas profundidades (hasta {depth}): compiten poco por el agua.",
+      "familiar": "Ya sabes cómo se siembra: {crops}.",
+      "common": "Ya se siembra en tu finca o en tu zona: {crops}.",
+      "rotationBreak": "Cambia de familia respecto a tu última siembra ({crops}): corta el ciclo de plagas.",
+      "noFertilizer": "Como no abonas, la leguminosa te ahorra fertilizante: {crops}.",
+      "weeds": "Al cubrir el suelo frena las malezas que nos contaste.",
+      "armyworm": "Mezclar familias distintas confunde a gusanos y orugas.",
+      "home": "Varios alimentos para la casa: {crops}.",
+      "market": "Puedes venderlo cerca: {crops}.",
+      "repeat": "Repite la familia de tu última siembra ({crops}): sus plagas siguen en el suelo. Rota el año siguiente.",
+      "heavyNoN": "Piden mucho abono y la mezcla no tiene leguminosa: {crops}.",
+      "needsSupport": "Es trepador y no tiene en qué subir: {crops}. Siémbralo junto al maíz o pon tutores.",
+      "wet": "No aguanta el encharcamiento de tu terreno: {crops}.",
+      "dry": "La lluvia de esos meses puede no alcanzar: {crops}.",
+      "cold": "Sufre con el frío o las heladas de tu zona: {crops}.",
+      "moreWork": "Más trabajo: siembras y cosechas en fechas distintas."
+    },
+    "roles": {
+      "pillar": "Sostiene",
+      "climber": "Trepa",
+      "cover": "Cubre el suelo",
+      "fixer": "Abona",
+      "long": "Ciclo largo",
+      "shade": "Da sombra",
+      "main": "Principal",
+      "roots": "Afloja la tierra"
+    },
+    "calendar": {
+      "title": "Cuándo sembrar cada uno",
+      "first": "Primero",
+      "weeksAfter": "{n, plural, one {# semana después} other {# semanas después}}",
+      "sowIn": "siembra en {month}",
+      "perennialOnly": "Son cultivos de varios años: se mantienen todo el año.",
+      "source": "Meses según el clima promedio de NASA POWER (temperatura, heladas y lluvia).",
+      "a11yRow": "{crop}: siembra en {sow}, cosecha en {harvest}",
+      "a11yCover": "{crop} de cobertura: de {sow} a {harvest}",
+      "a11yAllYear": "{crop}: todo el año"
+    },
+    "builder": {
+      "title": "Arma tu mezcla",
+      "hint": "Elige de 2 a 4 cultivos y mira cómo se llevan, qué pisos ocupan y qué te conviene agregar.",
+      "selected": "Cultivos de tu mezcla",
+      "remove": "Quitar {crop}",
+      "add": "Agregar cultivo",
+      "full": "Máximo 4 cultivos",
+      "search": "Buscar cultivo",
+      "pickTwo": "Elige al menos 2 cultivos para ver cómo se llevan.",
+      "live": "Tu mezcla tiene {score} de 100.",
+      "diagramTitle": "Perfil de tu mezcla",
+      "suggest": "Te sugerimos agregar {crop}",
+      "addSuggested": "Agregar {crop}",
+      "fitGood": "se da aquí",
+      "fitSoso": "con cuidado",
+      "fitBad": "difícil aquí",
+      "why": {
+        "cover": "Tu mezcla deja el suelo descubierto: con {crop} queda cubierto.",
+        "fixer": "A tu mezcla le falta una leguminosa: con {crop} el suelo recibe nitrógeno del aire.",
+        "support": "Tu trepador no tiene en qué subir: {crop} le sirve de tutor.",
+        "deep": "Tus raíces se quedan arriba: con {crop} se aprovecha el agua de más abajo.",
+        "climate": "Con {crop} la mezcla sube de puntaje y se da bien con tu clima."
+      }
+    },
+    "gaps": {
+      "soilTest": "No tenemos un análisis de suelo: con él ajustaríamos el abono.",
+      "varieties": "Las alturas, raíces y ciclos son valores típicos: tu variedad puede ser distinta.",
+      "survey": "Faltan respuestas de la encuesta del terreno: con ellas el plan se ajusta a tu historia.",
+      "climateMock": "El clima es de ejemplo (NASA POWER no respondió).",
+      "prices": "No conocemos tus precios: el valor para vender es aproximado."
+    },
+    "formula": {
+      "title": "¿Cómo calculamos esto?",
+      "climate": "Se da con tu clima: buscamos el mejor mes de siembra con la temperatura, las heladas y la lluvia de NASA POWER. Cuenta más el cultivo al que peor le va.",
+      "synergy": "Se ayudan: cada pareja suma si una sostiene, abona, cubre o da sombra a la otra, y resta si comparten plagas, se quitan luz o compiten por abono. Las asociaciones conocidas (como la milpa) pesan el doble.",
+      "space": "Alturas y raíces: qué parte del espacio, del suelo hasta la planta más alta, tiene hojas; qué parte del suelo exploran las raíces; y si los ciclos son de largos distintos.",
+      "soil": "Cuidan el suelo: suma si hay leguminosa, si cubre el suelo (más si tu terreno tiene riesgo de erosión) y si hay raíces profundas.",
+      "fit": "Encaja con tu finca: lo que nos contaste (lo último que sembraste, el abono, las plagas, para qué es la cosecha), tus mercados y el trabajo.",
+      "total": "Total: promedio con pesos. El clima pesa 3 (4 si ahorrar agua te importa mucho), se ayudan y alturas pesan 2, el suelo pesa más si te importa el suelo o la erosión, y tu finca pesa 2 si respondiste la encuesta.",
+      "limits": "Son reglas generales con valores típicos de cada cultivo. No conocen tu variedad, tu suelo exacto ni tus precios."
+    },
+    "article": {
+      "maize": "el",
+      "soybean": "la",
+      "wheat": "el",
+      "rice": "el",
+      "coffee": "el",
+      "beans": "el",
+      "sorghum": "el",
+      "millet": "el",
+      "cowpea": "el",
+      "groundnut": "el",
+      "chickpea": "el",
+      "mungbean": "el",
+      "barley": "la",
+      "oats": "la",
+      "potato": "la",
+      "cassava": "la",
+      "plantain": "el",
+      "sugarcane": "la",
+      "cotton": "el",
+      "sunflower": "el",
+      "alfalfa": "la",
+      "clover": "el",
+      "vetch": "la",
+      "rye": "el",
+      "radish": "el",
+      "pasture": "el",
+      "forage-peanut": "el",
+      "shade-trees": "los",
+      "vegetables": "las",
+      "squash": "la",
+      "pigeonpea": "el",
+      "fallow": "el"
+    }
+  },
+  "report": {
+    "metaTitle": "Informe agroclimático",
+    "title": "Informe agroclimático",
+    "kicker": "Field Shift · NASA Space Apps",
+    "noPlace": "Falta la zona del informe. Ábrelo desde una región del mapa o pídeselo al asistente.",
+    "backHome": "Ir al mapa",
+    "print": "Imprimir o guardar PDF",
+    "csv": "Descargar datos (CSV)",
+    "copy": "Copiar enlace",
+    "copied": "Enlace copiado",
+    "back": "Volver al mapa",
+    "place": "Zona",
+    "coords": "Coordenadas",
+    "municipality": "Municipio más cercano",
+    "period": "Periodo",
+    "recent": "Últimos 30 días con datos",
+    "range": "del {start} al {end}",
+    "partial": "El mes todavía no termina: datos hasta el {end}.",
+    "generated": "Generado el {date}",
+    "disclaimer": "Este informe resume datos de satélites y modelos de la NASA para una zona de unos 50 km. Apoya, no reemplaza, el criterio del agricultor ni a la asistencia técnica local.",
+    "loading": "Preparando el informe con datos de la NASA…",
+    "error": "No pudimos traer los datos de NASA POWER. Revisa tu conexión.",
+    "retry": "Intentar de nuevo",
+    "summaryTitle": "Resumen",
+    "sRain": "Llovieron {total} en {days, plural, one {# día con lluvia} other {# días con lluvia}}.",
+    "sRainLess": "Es {pct} % menos de lo normal para estas fechas ({normal}).",
+    "sRainMore": "Es {pct} % más de lo normal para estas fechas ({normal}).",
+    "sRainNear": "Es parecido a lo normal para estas fechas ({normal}).",
+    "sTemp": "Temperatura media {tmean} (lo normal: {normal}). Máxima promedio {tmax} y mínima promedio {tmin}.",
+    "sSoil": "Humedad en la zona de raíces: {soil} en promedio (lo normal: {normal}).",
+    "sSoilNoNormal": "Humedad en la zona de raíces: {soil} en promedio.",
+    "sEvents": "{count, plural, =0 {Sin lluvias fuertes, rachas secas, calor extremo ni heladas.} one {Hubo # evento del clima (detalle abajo).} other {Hubo # eventos del clima (detalle abajo).}}",
+    "sEmergencies": "{count, plural, =0 {No hay emergencias registradas a menos de 50 km en el periodo.} one {Hay # emergencia o evento registrado a menos de 50 km (detalle abajo).} other {Hay # emergencias o eventos registrados a menos de 50 km (detalle abajo).}}",
+    "indicatorsTitle": "Indicadores",
+    "iRain": "Lluvia total",
+    "iRainyDays": "Días con lluvia",
+    "iTmax": "Máxima promedio",
+    "iTmin": "Mínima promedio",
+    "iSoil": "Humedad de raíces",
+    "iNormal": "Normal: {value}",
+    "iNoNormal": "Sin dato normal",
+    "rainChartTitle": "Lluvia de cada día",
+    "rainChartNote": "Barras: lluvia del día. Línea punteada: lluvia de un día normal en esas fechas.",
+    "normalLine": "normal",
+    "tempChartTitle": "Temperatura de cada día",
+    "tMaxLabel": "Máxima",
+    "tMinLabel": "Mínima",
+    "weatherEventsTitle": "Eventos del clima en el periodo",
+    "noWeatherEvents": "No hubo lluvias fuertes, rachas secas, calor extremo ni heladas según las reglas de abajo.",
+    "eventDates": "{start} – {end}",
+    "emergenciesTitle": "Emergencias y eventos registrados (50 km)",
+    "emergenciesNone": "Ninguno en el periodo.",
+    "emergenciesError": "No pudimos consultar los registros de emergencias.",
+    "historyLine": "Historial oficial de la UNGRD en {place}: {count, plural, =0 {ninguna emergencia} one {# emergencia} other {# emergencias}} de clima o terreno entre {from} y {to}.",
+    "historyOutside": "El registro oficial de la UNGRD solo cubre Colombia.",
+    "watchTitle": "Qué vigilar",
+    "watch": {
+      "dry": "Lluvia por debajo de lo normal o racha seca: revisa la humedad del suelo antes de sembrar o abonar, prioriza el riego y mantén el suelo cubierto.",
+      "wet": "Lluvias fuertes: revisa drenajes, zanjas y laderas. Hay más riesgo de encharcamiento, erosión y deslizamientos.",
+      "frost": "Heladas: protege semilleros y cultivos sensibles en las noches despejadas.",
+      "heat": "Calor extremo: riega en las horas frescas y vigila el estrés de cultivos y animales.",
+      "calm": "Sin señales fuertes en el periodo: sigue el calendario habitual y revisa el pronóstico local."
+    },
+    "watchAdvice": "Antes de decisiones importantes, consúltalo con la asistencia técnica local (UMATA o EPSEA) o con un agrónomo de la zona.",
+    "dailyTitle": "Datos diarios",
+    "colDate": "Fecha",
+    "colRain": "Lluvia ({unit})",
+    "colNormal": "Normal ({unit})",
+    "colTmax": "Máx. ({unit})",
+    "colTmin": "Mín. ({unit})",
+    "colSoil": "Raíces (%)",
+    "sourcesTitle": "Fuentes, método y límites",
+    "srcPower": "NASA POWER (diario): lluvia corregida (PRECTOTCORR), temperatura máxima y mínima a 2 m y humedad de la zona de raíces (GWETROOT). Celda de unos 50 km; llega con unos 3 días de retraso.",
+    "srcNormal": "Lo normal: promedio mensual de NASA POWER en el mismo punto ({period}).",
+    "srcEvents": "Emergencias: UNGRD (datos.gov.co, ubicadas en el centro del municipio), NASA EONET y reportes de la comunidad (sin verificar).",
+    "srcCoverage": "Días con dato: {have} de {total}.",
+    "srcLimits": "No es un pronóstico. Un valor de satélite o modelo promedia un área grande: úsalo como tendencia y compáralo con lo que ves en tu finca.",
+    "rulesTitle": "Reglas de los eventos del clima",
+    "openApp": "Ver esta zona en Field Shift",
+    "ask": "Generar informe",
+    "askHint": "Informe agroclimático imprimible y en CSV",
+    "chatOpen": "Abrir el informe",
+    "sTempNoNormal": "Temperatura media {tmean}. Máxima promedio {tmax} y mínima promedio {tmin}.",
+    "iTmean": "Temperatura media",
+    "iNormalPct": "Normal: {value} ({pct})"
+  },
+  "narrator": {
+    "listen": "Escuchar",
+    "stop": "Detener",
+    "listenRegion": "Escuchar el resumen",
+    "listenReply": "Escuchar la respuesta"
+  },
+  "products": {
+    "cafe": "Café",
+    "cacao": "Cacao",
+    "platano": "Plátano",
+    "banano": "Banano",
+    "yuca": "Yuca",
+    "papa": "Papa",
+    "papa-criolla": "Papa criolla",
+    "maiz": "Maíz",
+    "frijol": "Fríjol",
+    "arroz": "Arroz",
+    "panela": "Panela",
+    "arveja": "Arveja",
+    "aguacate": "Aguacate",
+    "mango": "Mango",
+    "naranja": "Naranja",
+    "limon": "Limón",
+    "mandarina": "Mandarina",
+    "mora": "Mora",
+    "lulo": "Lulo",
+    "tomate-arbol": "Tomate de árbol",
+    "granadilla": "Granadilla",
+    "maracuya": "Maracuyá",
+    "pina": "Piña",
+    "papaya": "Papaya",
+    "guayaba": "Guayaba",
+    "uchuva": "Uchuva",
+    "tomate": "Tomate",
+    "cebolla-cabezona": "Cebolla cabezona",
+    "cebolla-larga": "Cebolla larga",
+    "zanahoria": "Zanahoria",
+    "ahuyama": "Ahuyama",
+    "arracacha": "Arracacha",
+    "hortalizas": "Hortalizas",
+    "huevos": "Huevos",
+    "miel": "Miel",
+    "otro": "Otro producto"
+  },
+  "units": {
+    "kg": "kg",
+    "t": "tonelada",
+    "arroba": "arroba (12,5 kg)",
+    "bulto": "bulto (50 kg)",
+    "carga": "carga (125 kg)",
+    "racimo": "racimo",
+    "canastilla": "canastilla",
+    "unidad": "unidad"
+  },
+  "unitsShort": {
+    "kg": "kg",
+    "t": "t",
+    "arroba": "arroba",
+    "bulto": "bulto",
+    "carga": "carga",
+    "racimo": "racimo",
+    "canastilla": "canastilla",
+    "unidad": "unidad"
+  },
+  "market": {
+    "section": "Mercado: precios y venta cerca",
+    "hint": "Precios mayoristas de DANE SIPSA y rendimientos de tu departamento (EVA). Te ayudan a decidir: no son lo que te pagarán en la finca.",
+    "priceAt": "{price} por kg en {market}",
+    "distance": "a {km} km",
+    "median": "mediana de 12 meses",
+    "noPrice": "Sin precio mayorista público cerca",
+    "trend": {
+      "up": "Precio subiendo",
+      "down": "Precio bajando",
+      "flat": "Precio estable"
+    },
+    "trendPct": "{pct} en un año",
+    "volatility": {
+      "low": "Cambia poco de un mes a otro",
+      "medium": "Cambia algo de un mes a otro",
+      "high": "Sube y baja mucho de un mes a otro"
+    },
+    "supply": {
+      "up": "Llega más producto a la central",
+      "down": "Llega menos producto a la central",
+      "flat": "Llega lo mismo a la central"
+    },
+    "yieldDept": "Rinde ~{value} t/ha en tu departamento",
+    "yieldNational": "Rinde ~{value} t/ha (promedio del país)",
+    "revenue": "Ingreso bruto aprox.: {value} por hectárea y cosecha",
+    "firstHarvest": "Primera cosecha en unos {months} meses",
+    "credit": "{count, plural, one {# crédito Finagro} other {# créditos Finagro}} para la cadena {chain} en tu departamento ({small} a pequeños productores)",
+    "outlook": {
+      "favorable": "A favor",
+      "neutral": "Estable",
+      "unfavorable": "En contra"
+    },
+    "aiBadge": "Análisis IA",
+    "rulesBadge": "Reglas",
+    "aiNote": "Conclusión redactada por IA a partir de estas cifras. Revísala con tu experiencia.",
+    "rulesNote": "Conclusión calculada con reglas simples a partir de estas cifras.",
+    "factor": "Ajuste del puntaje de ingresos por el mercado: ×{factor}",
+    "risks": "Riesgos del mercado",
+    "gaps": "Lo que no sabemos del mercado",
+    "sources": "Fuentes: DANE SIPSA (precios hasta {month}), EVA (rendimientos), Finagro (créditos).",
+    "chipLabel": "Mercado",
+    "compareRow": "Mercado (precio en la central)",
+    "nearbyTitle": "Mercado en esta zona",
+    "nearestMarket": "Central más cercana: {name}, a {km} km",
+    "loading": "Cargando precios…",
+    "error": "No pudimos traer los precios.",
+    "retry": "Intentar de nuevo",
+    "empty": "Sin datos de mercado para este punto (por ahora solo Colombia).",
+    "trm": "Dólar (TRM): {value} · {pct} en un año",
+    "fertilizers": "Fertilizantes: {pct} en un año (índice UPRA)",
+    "seedNote": "copia guardada",
+    "more": "Ver más productos",
+    "less": "Ver menos"
+  },
+  "listings": {
+    "layerName": "Fincas que venden",
+    "layerShort": "Cosechas de agricultores de Colombia, con contacto por WhatsApp",
+    "publish": "Publicar mi finca",
+    "publishHint": "Ofrece tu cosecha a compradores. Es gratis.",
+    "myListing": "Mi publicación",
+    "onlyColombia": "Por ahora solo para fincas en Colombia.",
+    "count": "{count, plural, =0 {Ninguna finca vende aquí} one {# finca vende aquí} other {# fincas venden aquí}}",
+    "dialog": {
+      "title": "Publicar mi finca",
+      "step": "Paso {n} de 3",
+      "steps": {
+        "products": "¿Qué vendes?",
+        "contact": "Contacto y privacidad",
+        "review": "Revisa y publica"
+      },
+      "prefilled": "Lo llenamos con los cultivos de tu rotación. Cámbialo si quieres.",
+      "product": "Producto",
+      "productName": "Variedad o presentación (opcional)",
+      "productNamePlaceholder": "Ej: pergamino seco, hartón, Hass",
+      "quantity": "Cantidad",
+      "unit": "Unidad",
+      "price": "Precio por {unit} (opcional)",
+      "priceHint": "Vacío = a convenir.",
+      "reference": "Referencia mayorista en {market} ({month}): {price} por {unit}",
+      "referenceKg": "Referencia mayorista en {market} ({month}): {price} por kg",
+      "available": "¿Cuándo lo tienes?",
+      "availableNow": "Ya",
+      "availableLater": "En cosecha",
+      "from": "Desde",
+      "to": "Hasta",
+      "addProduct": "Agregar otro producto",
+      "removeProduct": "Quitar {product}",
+      "farmName": "Nombre de la finca",
+      "description": "Cuéntale al comprador (opcional)",
+      "descriptionHint": "Cómo entregas, días de recogida, cómo cultivas. Máximo 280 letras. No pongas teléfonos ni enlaces.",
+      "certifications": "Sellos (los declaras tú)",
+      "whatsapp": "Tu celular con WhatsApp",
+      "whatsappHint": "Ej: 300 123 4567. No aparece en la página: el comprador te escribe con un botón.",
+      "privacy": "Mostramos solo tu municipio y un punto aproximado (a unos 5 km), nunca el contorno de tu finca.",
+      "consent": "Acepto que Field Shift muestre esta publicación al público y que los compradores me escriban por WhatsApp. Puedo borrarla cuando quiera y vence a los 60 días (Ley 1581 de 2012).",
+      "consentRequired": "Necesitamos tu permiso para publicar.",
+      "next": "Siguiente",
+      "back": "Atrás",
+      "publish": "Publicar",
+      "publishing": "Publicando…",
+      "close": "Cerrar",
+      "preview": "Así la verán los compradores",
+      "errors": {
+        "invalid": "Revisa los datos: falta algo o está muy largo.",
+        "phone": "Ese número no parece un celular colombiano (10 dígitos que empiezan por 3).",
+        "outside": "Por ahora solo publicamos fincas en Colombia.",
+        "rate": "Ya publicaste varias veces en esta hora. Intenta más tarde.",
+        "storage": "No pudimos guardar tu publicación. Intenta de nuevo.",
+        "network": "Sin conexión. Intenta de nuevo."
+      },
+      "done": "¡Tu finca está publicada!",
+      "doneHint": "Guardamos en este teléfono la llave para pausarla o borrarla. Vence el {date}.",
+      "view": "Ver mi publicación",
+      "share": "Compartir",
+      "shareText": "Mira lo que vendo en mi finca {name}",
+      "copied": "Enlace copiado"
+    },
+    "manage": {
+      "pause": "Pausar",
+      "resume": "Reactivar",
+      "remove": "Borrar",
+      "removeConfirm": "¿Borrar la publicación? No se puede deshacer.",
+      "renew": "Renovar 60 días",
+      "paused": "Pausada: los compradores no la ven.",
+      "removed": "Publicación borrada",
+      "updated": "Publicación actualizada",
+      "error": "No se pudo cambiar. Intenta de nuevo.",
+      "expires": "Vence el {date}"
+    },
+    "card": {
+      "whatsapp": "Escribir por WhatsApp",
+      "viewFarm": "Ver finca",
+      "sample": "Ejemplo",
+      "sampleNote": "Es una publicación de ejemplo: no tiene contacto real.",
+      "priceUnit": "{price} / {unit}",
+      "priceAgree": "Precio a convenir",
+      "quantity": "{quantity} {unit}",
+      "availableNow": "Disponible ya",
+      "availableRange": "Cosecha: {from} a {to}",
+      "area": "{area} ha",
+      "approx": "Ubicación aproximada (~5 km)",
+      "close": "Cerrar",
+      "report": "Reportar publicación",
+      "reported": "Gracias. La revisaremos.",
+      "certNote": "Sellos declarados por el agricultor; no los verificamos."
+    },
+    "certs": {
+      "organico": "Orgánico",
+      "bpa": "Buenas Prácticas Agrícolas",
+      "comercio-justo": "Comercio justo",
+      "rainforest": "Rainforest Alliance",
+      "transicion": "En transición agroecológica"
+    },
+    "nearby": {
+      "title": "Fincas que venden aquí",
+      "empty": "Nadie ha publicado en este municipio todavía.",
+      "seeAll": "Ver todas en {place}"
+    },
+    "suggest": {
+      "title": "¿Vendes tu cosecha?",
+      "body": "Publica tu finca para que los compradores te encuentren y te escriban por WhatsApp.",
+      "cta": "Publicar mi finca"
+    },
+    "page": {
+      "title": "Fincas que venden",
+      "subtitle": "Cosechas de agricultores de Colombia. Contacto directo por WhatsApp, sin comisiones.",
+      "dept": "Departamento",
+      "product": "Producto",
+      "all": "Todos",
+      "filter": "Filtrar",
+      "empty": "No hay fincas publicadas con ese filtro.",
+      "backToGlobe": "Volver al globo",
+      "seeOnGlobe": "Ver en el globo",
+      "satellite": "Vista satelital de la zona",
+      "satelliteCredit": "Imagen: Esri World Imagery. Ubicación aproximada (~5 km).",
+      "ndvi": "Verdor de la zona (NASA MODIS NDVI, {month})",
+      "ndviNote": "Cada cuadrito mide ~1 km: muestra la zona, no la finca. Más verde = más vegetación activa.",
+      "products": "Lo que vende",
+      "about": "Sobre la finca",
+      "marketTitle": "Precios de referencia en la zona",
+      "published": "Publicada el {date}",
+      "expires": "Vigente hasta el {date}",
+      "sampleBanner": "Esta es una publicación de ejemplo para la demo: no tiene contacto real.",
+      "disclaimer": "Field Shift no vende ni cobra comisiones: conecta a quien compra con quien produce. Acuerda precio, calidad y entrega directamente con el agricultor.",
+      "notFound": "Esta publicación ya no está disponible.",
+      "count": "{count, plural, =0 {Ninguna finca} one {# finca} other {# fincas}}"
+    }
+  }
+}

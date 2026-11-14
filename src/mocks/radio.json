@@ -1,0 +1,195 @@
+{
+  "stations": [
+    {
+      "id": "campo-nacional",
+      "name": "Radio del Campo Nacional",
+      "region": "Nacional",
+      "lat": null,
+      "lon": null,
+      "frequencyLabel": "Online",
+      "language": "es"
+    },
+    {
+      "id": "quindio",
+      "name": "Radio Campo Quindío",
+      "region": "Quindío, Colombia",
+      "lat": 4.5339,
+      "lon": -75.6811,
+      "frequencyLabel": "96.4 FM",
+      "language": "es"
+    },
+    {
+      "id": "cornbelt",
+      "name": "Corn Belt Farm Radio",
+      "region": "Iowa, USA",
+      "lat": 42.0308,
+      "lon": -93.6319,
+      "frequencyLabel": "1040 AM",
+      "language": "en"
+    },
+    {
+      "id": "punjab",
+      "name": "Kisan Radio Ludhiana",
+      "region": "Punjab, India",
+      "lat": 30.901,
+      "lon": 75.8573,
+      "frequencyLabel": "102.1 FM",
+      "language": "en"
+    },
+    {
+      "id": "sahel",
+      "name": "Radio Sahel Maradi",
+      "region": "Maradi, Níger",
+      "lat": 13.5,
+      "lon": 7.1017,
+      "frequencyLabel": "88.7 FM",
+      "language": "es"
+    },
+    {
+      "id": "pampa",
+      "name": "Radio Pampa Pergamino",
+      "region": "Buenos Aires, Argentina",
+      "lat": -33.8899,
+      "lon": -60.5736,
+      "frequencyLabel": "99.3 FM",
+      "language": "es"
+    }
+  ],
+  "segments": [
+    {
+      "id": "destacado-1",
+      "type": "tip",
+      "title": "Mensaje de la Radio del Campo",
+      "audioUrl": "/audio/radio-campo-1.mp3",
+      "durationSec": 89,
+      "transcript": "Transcripción pendiente: el equipo debe agregar aquí el texto exacto de este audio (es la alternativa accesible para quien no puede escucharlo).",
+      "regionId": "destacado"
+    },
+    {
+      "id": "nac-1",
+      "type": "tip",
+      "title": "Cubre el suelo después de cosechar",
+      "audioUrl": "/audio/ejemplo-nacional-1.mp3",
+      "durationSec": 28,
+      "transcript": "Consejo del campo: después de cosechar, no dejes el suelo desnudo. Una cobertura como avena, centeno o frijol protege de la lluvia fuerte y guarda humedad. Los satélites MODIS muestran que los campos cubiertos se mantienen verdes más meses.",
+      "regionId": "campo-nacional",
+      "relatedLayerId": "ndvi",
+      "dataSource": "MODIS"
+    },
+    {
+      "id": "nac-2",
+      "type": "ad",
+      "title": "Semillas de cobertura Tierra Viva",
+      "sponsor": "Tierra Viva (anunciante de ejemplo)",
+      "audioUrl": "/audio/ejemplo-nacional-2.mp3",
+      "durationSec": 20,
+      "transcript": "Anuncio. Semillas de cobertura Tierra Viva: mezclas de leguminosas y gramíneas para proteger tu suelo entre cosechas. Pregunta en tu tienda agrícola. Este es un anuncio de ejemplo para la demostración.",
+      "regionId": "campo-nacional"
+    },
+    {
+      "id": "qui-1",
+      "type": "alert",
+      "title": "Lluvias fuertes en octubre y noviembre",
+      "audioUrl": "/audio/ejemplo-quindio-1.mp3",
+      "durationSec": 30,
+      "transcript": "Alerta para el Quindío: los datos del satélite GPM muestran que octubre y noviembre traen las lluvias más fuertes del año. En laderas, mantén las calles del cafetal cubiertas con maní forrajero o arvenses nobles para frenar la erosión.",
+      "regionId": "quindio",
+      "relatedLayerId": "rain",
+      "dataSource": "GPM"
+    },
+    {
+      "id": "qui-2",
+      "type": "tip",
+      "title": "Sombra para los meses secos",
+      "audioUrl": "/audio/ejemplo-quindio-2.mp3",
+      "durationSec": 26,
+      "transcript": "Consejo cafetero: el satélite SMAP muestra el suelo más seco en julio y agosto. Árboles de sombra como el guamo bajan el calor sobre el café y ayudan a conservar la humedad. Consulta con tu técnico el porcentaje de sombra para tu altura.",
+      "regionId": "quindio",
+      "relatedLayerId": "soil-moisture",
+      "dataSource": "SMAP"
+    },
+    {
+      "id": "qui-3",
+      "type": "ad",
+      "title": "Cooperativa de caficultores",
+      "sponsor": "Cooperativa La Montaña (anunciante de ejemplo)",
+      "audioUrl": "/audio/ejemplo-quindio-3.mp3",
+      "durationSec": 18,
+      "transcript": "Anuncio. Cooperativa La Montaña: compra de café pergamino y asistencia técnica en renovación de cafetales. Este es un anuncio de ejemplo para la demostración.",
+      "regionId": "quindio"
+    },
+    {
+      "id": "corn-1",
+      "type": "tip",
+      "title": "Winter cover crops",
+      "audioUrl": "/audio/ejemplo-cornbelt-1.mp3",
+      "durationSec": 27,
+      "transcript": "Farm tip: MODIS satellite data shows fields here stay bare from November to April. Seeding cereal rye right after harvest keeps living roots in the soil, catches leftover nitrogen and protects against spring storms.",
+      "regionId": "cornbelt",
+      "relatedLayerId": "ndvi",
+      "dataSource": "MODIS"
+    },
+    {
+      "id": "corn-2",
+      "type": "ad",
+      "title": "Prairie Seed Co.",
+      "sponsor": "Prairie Seed Co. (sample sponsor)",
+      "audioUrl": "/audio/ejemplo-cornbelt-2.mp3",
+      "durationSec": 18,
+      "transcript": "Advertisement. Prairie Seed Co.: cover crop blends for corn and soybean rotations. This is a sample ad for the demo.",
+      "regionId": "cornbelt"
+    },
+    {
+      "id": "pun-1",
+      "type": "alert",
+      "title": "Groundwater keeps falling",
+      "audioUrl": "/audio/ejemplo-punjab-1.mp3",
+      "durationSec": 30,
+      "transcript": "Water alert for Punjab: the GRACE-FO satellites show stored water in the region dropping about one and a half centimeters every year. Direct-seeded rice or maize in the summer season can save a lot of pumping.",
+      "regionId": "punjab",
+      "relatedLayerId": "groundwater",
+      "dataSource": "GRACE"
+    },
+    {
+      "id": "pun-2",
+      "type": "tip",
+      "title": "Do not burn the straw",
+      "audioUrl": "/audio/ejemplo-punjab-2.mp3",
+      "durationSec": 24,
+      "transcript": "Farm tip: leaving rice straw on the field instead of burning it feeds the soil and keeps the air clean. A happy seeder can sow wheat right through the straw.",
+      "regionId": "punjab"
+    },
+    {
+      "id": "sah-1",
+      "type": "alert",
+      "title": "Calor extremo en abril y mayo",
+      "audioUrl": "/audio/ejemplo-sahel-1.mp3",
+      "durationSec": 26,
+      "transcript": "Alerta del Sahel: NASA POWER registra más de veinte días sobre treinta y cinco grados en abril y mayo. El mantillo y los árboles Faidherbia bajan la temperatura del suelo antes de la siembra de mijo.",
+      "regionId": "sahel",
+      "relatedLayerId": "lst-day",
+      "dataSource": "NASA POWER"
+    },
+    {
+      "id": "pam-1",
+      "type": "tip",
+      "title": "Vicia antes del maíz",
+      "audioUrl": "/audio/ejemplo-pampa-1.mp3",
+      "durationSec": 25,
+      "transcript": "Consejo pampeano: SMAP muestra humedad estable en otoño e invierno. Una cobertura de vicia antes del maíz deja nitrógeno gratis y protege el suelo. Secala a tiempo si el año viene seco.",
+      "regionId": "pampa",
+      "relatedLayerId": "soil-moisture",
+      "dataSource": "SMAP"
+    },
+    {
+      "id": "pam-2",
+      "type": "ad",
+      "title": "Agro Servicios del Oeste",
+      "sponsor": "Agro Servicios del Oeste (anunciante de ejemplo)",
+      "audioUrl": "/audio/ejemplo-pampa-2.mp3",
+      "durationSec": 17,
+      "transcript": "Anuncio. Agro Servicios del Oeste: siembra de coberturas y análisis de suelo para tu campo. Este es un anuncio de ejemplo para la demostración.",
+      "regionId": "pampa"
+    }
+  ]
+}

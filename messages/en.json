@@ -1,0 +1,2399 @@
+{
+  "meta": {
+    "title": "Field Shift · NASA data for your farm",
+    "description": "Explore crop rotations that protect your soil and cope better with climate, using NASA satellite data."
+  },
+  "home": {
+    "title": "Field Shift: explore your farm from space"
+  },
+  "common": {
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading…",
+    "retry": "Try again",
+    "whatIsThis": "What is this?",
+    "cancel": "Cancel"
+  },
+  "globe": {
+    "canvasLabel": "Interactive globe. Drag to spin, pinch to zoom.",
+    "exploreHint": "Drag to explore the planet",
+    "unnamedPlace": "Unnamed place (sea or remote area)",
+    "locateMe": "Go to my location",
+    "resetNorth": "Reset to north",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "contextLost": "Recovering the globe…",
+    "noWebgl": "Your device can’t show the 3D globe. You can still search for your farm with the magnifier and see all the NASA data.",
+    "fallbackAlt": "Flat map of the world seen from space (NASA Blue Marble)",
+    "loadingHint": "Preparing the globe with NASA data…"
+  },
+  "location": {
+    "usePrecise": "Use my exact location",
+    "locating": "Finding your location…",
+    "youAreHere": "You are here",
+    "aroundHere": "You are around here (approx.)",
+    "errors": {
+      "denied": "We don’t have permission to see your exact location. To turn it on: tap the lock next to the web address → Location → Allow. Meanwhile we use your approximate area.",
+      "unavailable": "We couldn’t find your exact location right now. We use your approximate area; you can try again.",
+      "timeout": "Your location took too long. We use your approximate area; you can try again.",
+      "unsupported": "This browser can’t share your location. Search for your farm with the magnifier."
+    },
+    "privacy": "We use your location only to show your area on the globe and to give context to the assistant and the radio. We don’t store it on our servers or in logs.",
+    "usePreciseHint": "Use my exact location to see my farm"
+  },
+  "search": {
+    "open": "Search a place",
+    "label": "Search a town, municipality or farm",
+    "placeholder": "Search your town or village…",
+    "close": "Close search",
+    "results": "Search results",
+    "noResults": "We couldn’t find that place. Try the town or municipality name.",
+    "error": "We couldn’t search right now. Check your connection and try again."
+  },
+  "field": {
+    "myField": "My farm",
+    "openMyField": "See my farm",
+    "chooseTitle": "Where is your farm?",
+    "optLocation": "Use my location",
+    "optLocationHint": "If you are at the farm right now.",
+    "optPin": "Tap the map",
+    "optPinHint": "Mark a point on your farm.",
+    "optDraw": "Draw the outline",
+    "optDrawHint": "Tap each corner of your plot.",
+    "recent": "Your recent farms",
+    "unnamedField": "Your farm",
+    "pinInstruction": "Tap the map where your farm is, or move the globe and use the crosshair.",
+    "pinHere": "Place here (crosshair)",
+    "pinLabel": "Your farm location",
+    "drawInstruction": "{n, plural, =0 {Tap the first corner of your plot} one {Tap the next corner} other {# corners · tap the next one (at least 3)}}",
+    "drawReady": "tap Finish or the first point",
+    "undo": "Undo",
+    "finish": "Finish",
+    "demoAria": "Demo farm: {name}, {region}. {hook}",
+    "demoBadge": "Demo",
+    "demoNote": "Example farm with simulated data to show how the tool works.",
+    "analyze": "Analyze this farm",
+    "share": "Share",
+    "change": "Change",
+    "remove": "Remove",
+    "shareText": "Look at {name} on Field Shift",
+    "linkCopied": "Link copied. Paste it wherever you want to share it.",
+    "panelLabel": "Your farm panel",
+    "dragHandle": "Drag to see more or less",
+    "analysisSoon": "Preparing the analysis with NASA data…",
+    "analysisError": "We couldn’t prepare the analysis right now. Check your connection and try again.",
+    "analysisReady": "Analysis ready: {n} rotation options to compare.",
+    "powerSummary": "NASA POWER: about {mm, number} mm of rain a year ({period})."
+  },
+  "layers": {
+    "title": "NASA data layers",
+    "open": "Layers",
+    "openAria": "Open NASA data layers ({n, plural, =0 {none active} one {# active} other {# active}})",
+    "close": "Close layers",
+    "active": "On",
+    "turnOn": "Turn on",
+    "turnOff": "Remove",
+    "compare": "Compare",
+    "compareHint": "Shows this layer on the right side of the curtain",
+    "opacity": "Transparency",
+    "play": "Play the last 12 months",
+    "pause": "Pause animation",
+    "date": "Data date",
+    "chooseDate": "Choose date",
+    "whatIsThis": "What is this?",
+    "noData": "No data for this date in this area. Try another date.",
+    "reliefNoData": "Relief is not available in data-saver mode.",
+    "probeHint": "Tap the map to see the approximate value at a point.",
+    "probeLoading": "Reading the value…",
+    "probeNoData": "No data at that point (clouds, water or outside coverage).",
+    "probeError": "We could not read the value right now.",
+    "probeValue": "At the tapped point: ~{value} {unit}",
+    "approx": "approximate (read from the map color)",
+    "satNoteTitle": "Satellite is not the same as measuring your field",
+    "satNote": "Each pixel averages a large area (250 m to 50 km), can be missing because of clouds and arrives days late. Use it to see trends, not as an exact measurement of your plot.",
+    "gotIt": "Got it",
+    "source": "Source",
+    "resolution": "Resolution",
+    "frequency": "Frequency",
+    "dataUpTo": "Dates available up to {date}",
+    "cadence": {
+      "daily": "daily",
+      "monthly": "monthly",
+      "static": "fixed"
+    },
+    "curtain": "Move the comparison curtain",
+    "items": {
+      "ndvi": {
+        "name": "Plant greenness",
+        "short": "How green and vigorous the crops are.",
+        "description": "NDVI measures greenness from the light leaves reflect. Near 1 is very green; near 0 is bare or dry soil.",
+        "forCrops": "If your area looks less green than other years in the same month, there may be drought, pests or bare soil.",
+        "low": "Soil or dry",
+        "high": "Very green",
+        "res": "1 km"
+      },
+      "soil-moisture": {
+        "name": "Soil moisture",
+        "short": "How much water there is where the roots are.",
+        "description": "Water in the top meter of soil, estimated with the SMAP satellite and a NASA model.",
+        "forCrops": "Dry soil before planting = better to wait or pick a drought-tolerant crop. Very wet = waterlogging risk.",
+        "low": "Dry",
+        "high": "Wet",
+        "res": "9 km"
+      },
+      "rain": {
+        "name": "Daily rain",
+        "short": "How much it rained that day.",
+        "description": "Rain estimated by the GPM satellite constellation (IMERG product), in millimeters per day.",
+        "forCrops": "Use it to spot heavy storms (erosion risk) or weeks without rain (irrigation, planting).",
+        "low": "Little",
+        "high": "Very heavy",
+        "res": "11 km"
+      },
+      "lst-day": {
+        "name": "Daytime ground heat",
+        "short": "Surface temperature around midday.",
+        "description": "Land surface temperature measured by MODIS (not air temperature). Monthly average.",
+        "forCrops": "A very hot surface = more plant stress and more water loss. Covering the soil lowers it.",
+        "low": "Cool",
+        "high": "Very hot",
+        "res": "5.6 km"
+      },
+      "lst-night": {
+        "name": "Night cold",
+        "short": "Surface temperature at night.",
+        "description": "Night-time land surface temperature (MODIS), monthly average. Helps spot frost-prone areas.",
+        "forCrops": "Nights near 0 °C at the surface = frost risk for sensitive crops.",
+        "low": "Very cold",
+        "high": "Mild",
+        "res": "5.6 km"
+      },
+      "evap": {
+        "name": "Water the field loses",
+        "short": "Evaporation and transpiration from land.",
+        "description": "Water leaving soil and plants into the air, from the NASA MERRA-2 model. ECOSTRESS (more detailed) is not available as a layer: it will come from the backend.",
+        "forCrops": "If more water is lost than rains, the crop needs irrigation or cover that keeps moisture.",
+        "low": "Little",
+        "high": "A lot",
+        "res": "50 km",
+        "note": "Model data (MERRA-2), not a direct measurement."
+      },
+      "groundwater": {
+        "name": "Groundwater",
+        "short": "Whether stored underground water goes up or down.",
+        "description": "Change in all stored water (soil, aquifers, snow) measured through gravity by GRACE and GRACE-FO, versus the 2004–2009 average.",
+        "forCrops": "Negative values growing year after year = deeper wells and more expensive irrigation.",
+        "low": "Less water",
+        "high": "More water",
+        "res": "~300 km",
+        "note": "Data up to 2022 in this layer."
+      },
+      "relief": {
+        "name": "Relief and slopes",
+        "short": "Mountains, hills and slopes.",
+        "description": "Shading computed from NASA SRTM elevation. Strongly shaded areas are slopes.",
+        "forCrops": "Steep slope + intense rain + bare soil = erosion. Cover crops and contour lines help.",
+        "low": "Flat",
+        "high": "Steep",
+        "res": "30–90 m"
+      }
+    },
+    "overlays": "On the map",
+    "boundaries": {
+      "name": "Departments and municipalities",
+      "short": "Boundary lines. In Colombia, tap one to see its data."
+    }
+  },
+  "region": {
+    "kicker": "Region · NASA data",
+    "kickerDpto": "Department · NASA data",
+    "kickerMpio": "Municipality · NASA data",
+    "cellNoteDpto": "The data come from the dashed square, not an average of the whole department.",
+    "cellNoteMpio": "The data come from the dashed square, not an average of the whole municipality.",
+    "mapLegend": "On the map",
+    "legendMpio": "Municipality: {name}",
+    "legendDpto": "Department: {name}",
+    "legendCell": "Dashed square: data area, about {km} km",
+    "demoRegion": "Demo region · NASA data",
+    "unnamed": "Unnamed region",
+    "close": "Close region",
+    "loading": "Loading satellite data",
+    "updating": "Updating data…",
+    "error": "We could not get the data for this region.",
+    "retry": "Try again",
+    "alertsTitle": "Alerts for this region",
+    "askAgent": "Ask the assistant about this region",
+    "askPrompt": "How are field conditions in {name}? What should I keep in mind this month?",
+    "analyzeHere": "Analyze a farm here",
+    "openDemoFarm": "See the demo farm in this region",
+    "seeOnMap": "See on the map",
+    "whatIsThis": "What is this?",
+    "simulated": "simulated",
+    "mockNote": "Some cards use simulated data while the backend is connected. Rain and temperature come from NASA POWER when available.",
+    "cards": {
+      "soil-moisture": "Soil moisture",
+      "rain": "Rain",
+      "ndvi": "Crop greenness",
+      "heat": "Temperature and frost",
+      "et": "Water the field loses",
+      "groundwater": "Groundwater",
+      "relief": "Relief and erosion"
+    },
+    "status": {
+      "good": "Good",
+      "watch": "Watch",
+      "alert": "Alert"
+    },
+    "confidence": {
+      "high": "high confidence",
+      "medium": "medium confidence",
+      "low": "low confidence"
+    },
+    "periodBadge": "Data for {period}",
+    "periodPartial": "month in progress",
+    "moreData": "See more data ({count})",
+    "lessData": "See less data"
+  },
+  "radio": {
+    "label": "Farm radio",
+    "play": "Listen to the farm radio",
+    "pause": "Pause the radio",
+    "next": "Next segment",
+    "expand": "Show transcript and upcoming segments",
+    "collapse": "Hide radio details",
+    "tuning": "Tuning…",
+    "empty": "No audio for this station yet",
+    "ad": "Ad",
+    "transcript": "Transcript",
+    "upNext": "Up next",
+    "sponsor": "Sponsored by: {name}",
+    "source": "Data from: {source}",
+    "voiceFallback": "AI audio pending: read by your device voice",
+    "seeOnMap": "See on the map",
+    "stationAria": "Station {name}, {freq}",
+    "types": {
+      "ad": "Ad",
+      "alert": "Alert",
+      "tip": "Tip"
+    }
+  },
+  "agent": {
+    "placeholder": "Ask the field…",
+    "openAria": "Open the field assistant",
+    "title": "Field assistant",
+    "intro": "Ask me about rain, soil moisture or greenness anywhere. I can move the globe and show you NASA data.",
+    "voice": "Ask by voice",
+    "stopVoice": "Stop listening",
+    "listening": "Listening…",
+    "send": "Send question",
+    "inputLabel": "Your question",
+    "newChat": "New conversation",
+    "minimize": "Minimize the chat",
+    "thinking": "Thinking…",
+    "suggestions": "Suggested questions",
+    "suggest1": "How will rain be in my area this month?",
+    "suggest2": "Show me soil moisture in Valle del Cauca",
+    "suggest3": "Which rotation suits me if there is drought?",
+    "goBack": "Go back to where I was",
+    "noField": "First mark your farm with the “My farm” button to see rotation options.",
+    "disclaimer": "AI-generated answers using NASA data. Check important decisions with a local advisor.",
+    "errorGeneric": "I could not answer right now. Try again in a moment.",
+    "errorTimeout": "The answer took too long. Try a shorter question.",
+    "errorRate": "You asked many questions in a row. Wait a minute and try again.",
+    "errorNetwork": "There seems to be no connection. Check your internet and try again."
+  },
+  "crops": {
+    "maize": "Maize",
+    "soybean": "Soybean",
+    "wheat": "Wheat",
+    "rice": "Rice",
+    "coffee": "Coffee",
+    "beans": "Beans",
+    "sorghum": "Sorghum",
+    "millet": "Millet",
+    "cowpea": "Cowpea",
+    "groundnut": "Groundnut",
+    "chickpea": "Chickpea",
+    "mungbean": "Mungbean",
+    "barley": "Barley",
+    "oats": "Oats",
+    "potato": "Potato",
+    "cassava": "Cassava",
+    "plantain": "Plantain",
+    "sugarcane": "Sugarcane",
+    "cotton": "Cotton",
+    "sunflower": "Sunflower",
+    "alfalfa": "Alfalfa",
+    "clover": "Clover",
+    "vetch": "Vetch",
+    "rye": "Rye",
+    "radish": "Forage radish",
+    "pasture": "Pasture",
+    "forage-peanut": "Forage peanut",
+    "shade-trees": "Shade trees",
+    "vegetables": "Vegetables",
+    "fallow": "Fallow",
+    "squash": "Squash (pumpkin)",
+    "pigeonpea": "Pigeon pea"
+  },
+  "panel": {
+    "tabsLabel": "Parts of the analysis",
+    "tabs": {
+      "conditions": "Your farm",
+      "priorities": "Priorities",
+      "rotations": "Options",
+      "plan": "Your plan"
+    },
+    "loading": "Loading your farm analysis…",
+    "error": "We could not prepare the analysis right now. Check your connection.",
+    "retry": "Try again",
+    "mockNote": "Greenness, findings and strategies use example data while the backend is connected. Climate comes from NASA POWER.",
+    "needs": {
+      "title": "Some data is missing to complete your analysis",
+      "intro": "Satellites don’t see everything. Answer what you know: each answer raises the confidence.",
+      "left": "{count, plural, one {# answer missing} other {# answers missing}}",
+      "why": "Why we ask:",
+      "later": "Not now",
+      "back": "Back",
+      "impact": {
+        "high": "Changes the advice a lot",
+        "medium": "Improves the advice",
+        "low": "Fine-tunes details"
+      },
+      "updating": "Updating your analysis with your data…",
+      "updated": "Done: your analysis now uses what you told us.",
+      "skippedTitle": "{count, plural, one {You left # answer for later} other {You left # answers for later}}",
+      "skippedText": "Your analysis marks them as information gaps.",
+      "answerNow": "Answer now",
+      "doneTitle": "Your analysis uses your data",
+      "doneText": "Tap an answer to change it.",
+      "edit": "Change: {item}",
+      "soilType": {
+        "q": "What is the soil like on your plot?",
+        "tip": "Not sure? Wet a handful of soil and squeeze it in your hand.",
+        "reason": "Soil type changes how much water it holds and which crops suit it best.",
+        "sandy": {
+          "title": "Sandy",
+          "hint": "Gritty, crumbles and won’t form a ball"
+        },
+        "loam": {
+          "title": "Loamy",
+          "hint": "Forms a ball that breaks easily"
+        },
+        "clay": {
+          "title": "Clay",
+          "hint": "Sticky, stretches into a ribbon"
+        },
+        "silt": {
+          "title": "Silty",
+          "hint": "Smooth like talc or flour"
+        },
+        "unknown": {
+          "title": "I don’t know",
+          "hint": "We use the general data for the area"
+        }
+      },
+      "drainage": {
+        "q": "After a heavy rain, does water stay on your plot?",
+        "reason": "If your plot gets waterlogged, some roots rot and it changes what to plant.",
+        "poor": {
+          "title": "Yes, for days",
+          "hint": "Puddles stay or the soil stays soaked",
+          "short": "stays for days"
+        },
+        "moderate": {
+          "title": "About a day",
+          "hint": "It is dry the next day",
+          "short": "takes about a day to go"
+        },
+        "good": {
+          "title": "No, it drains fast",
+          "hint": "Puddles are gone in a few hours",
+          "short": "drains fast"
+        }
+      },
+      "soilTest": {
+        "q": "Do you have a lab soil test?",
+        "hint": "Copy what the report says. You can leave one empty.",
+        "reason": "With pH and organic matter we fine-tune nitrogen and lime.",
+        "ph": "pH",
+        "om": "Organic matter (%)",
+        "save": "Use these values",
+        "none": "I don’t have one",
+        "phError": "pH is usually between 3 and 10.",
+        "omError": "Organic matter is usually between 0 and 30%.",
+        "empty": "Enter at least one of the two values.",
+        "phValue": "pH {value}",
+        "omValue": "organic matter {value}%"
+      },
+      "rotation": {
+        "q": "Is this what you plant today?",
+        "hint": "It is the typical rotation for your area.",
+        "reason": "We compare the options with what you do today. If this is not your rotation, the comparison won’t help you.",
+        "yes": "Yes, this is what I plant",
+        "change": "No, let me change it"
+      },
+      "irrigation": {
+        "q": "Can you irrigate your plot?",
+        "reason": "Some rotations only work with irrigation."
+      },
+      "summary": {
+        "soilType": "Soil: {value}",
+        "drainage": "After rain, water {value}",
+        "soilTest": "Soil test: {value}",
+        "noTest": "No soil test",
+        "rotation": "Rotation: yours",
+        "irrigation": "Irrigation: {value}"
+      },
+      "nudge": "{count, plural, one {These options have gaps: # answer about your farm is missing.} other {These options have gaps: # answers about your farm are missing.}}",
+      "nudgeCta": "Complete data"
+    },
+    "sections": {
+      "summary": "Your farm at a glance",
+      "year": "Your year in the field",
+      "trends": "How it has changed",
+      "terrain": "Terrain risks",
+      "rotation": "Your current rotation"
+    },
+    "status": {
+      "good": "Good",
+      "watch": "Watch",
+      "alert": "Alert"
+    },
+    "level": {
+      "low": "low",
+      "medium": "medium",
+      "high": "high"
+    },
+    "confidence": {
+      "high": "high confidence",
+      "medium": "medium confidence",
+      "low": "low confidence"
+    },
+    "stress": {
+      "heat": "Heat",
+      "drought": "Drought",
+      "frost": "Frost",
+      "waterlogging": "Waterlogging"
+    },
+    "summary": {
+      "rain": "Rain",
+      "rainLess": "{pct}% less than 20 years ago",
+      "rainMore": "{pct}% more than 20 years ago",
+      "rainSame": "Similar to 20 years ago",
+      "temp": "Temperature",
+      "tempUp": "{c} warmer than 20 years ago",
+      "tempSame": "Similar to 20 years ago",
+      "frost": "Frost risk",
+      "frostLevel": {
+        "low": "Low: it hardly freezes",
+        "medium": "Medium: about {days} frosty nights a year",
+        "high": "High: about {days} frosty nights a year"
+      },
+      "groundwater": "Groundwater",
+      "water": {
+        "down": "Falling: {cm} cm per year",
+        "stable": "Stable",
+        "up": "Rising slightly"
+      }
+    },
+    "calendar": {
+      "bare": "Bare soil: {months}",
+      "noBare": "Your soil is covered all year.",
+      "stress": "Hard months — {list}",
+      "noStress": "No months with strong stress.",
+      "bareShort": "Bare",
+      "rainShort": "rain",
+      "tmaxShort": "max",
+      "legendRain": "Monthly rain (tallest bar ≈ {max})",
+      "legendTmax": "Max temp.",
+      "legendTmin": "Min temp.",
+      "legendBare": "Bare soil",
+      "sourceReal": "Climate: NASA POWER, {period} average. Greenness and stress: MODIS and SMAP.",
+      "sourceAnalysis": "Climate from the analysis (NASA POWER did not respond)."
+    },
+    "trends": {
+      "tempTitle": "Average yearly temperature",
+      "rainTitle": "Rain each year",
+      "tempWarmer": "It is about {c} warmer than at the start of the series.",
+      "tempStable": "Temperature has barely changed.",
+      "rainBelow": "In {year} it rained {pct}% less than normal.",
+      "rainAbove": "In {year} it rained {pct}% more than normal.",
+      "rainNormal": "In {year} rain was normal.",
+      "rainLegend": "Dotted line: average ({mean}). Yellow bars: dry years.",
+      "tempA11y": "Average yearly temperature from {first} to {last}: from {a} to {b}, change of {change}.",
+      "rainA11y": "Yearly rain from {first} to {last}: average {mean}, last year {latest}.",
+      "whatIsAnomaly": "what is “less than normal”?",
+      "notEnough": "There are not enough years of data to show the trend."
+    },
+    "terrain": {
+      "erosion": "Erosion",
+      "waterlogging": "Waterlogging",
+      "slope": "Average slope {pct}%",
+      "extremeRain": "{days} days a year with very heavy rain",
+      "noZones": "We do not have a map of zones inside your plot yet."
+    },
+    "rotation": {
+      "defaultNote": "We show the typical rotation of your area. Change it so the analysis is about your farm.",
+      "change": "Tap to change the crop",
+      "remove": "Remove {crop}",
+      "searchCrop": "Search crop",
+      "sow": "Planting (approx.)",
+      "harvest": "Harvest (approx.)",
+      "add": "Add crop",
+      "save": "Save my rotation",
+      "saved": "Saved"
+    },
+    "nextPriorities": "Next: what matters most to you?",
+    "unnamedField": "Your farm"
+  },
+  "glossary": {
+    "kicker": "Glossary",
+    "close": "Close",
+    "example": "In the field",
+    "whatIs": "What is {term}?",
+    "terms": {
+      "ndvi": {
+        "title": "NDVI (greenness)",
+        "simple": "A number from 0 to 1 that says how green and vigorous plants are, measured by satellite.",
+        "example": "If your maize reads 0.8 in July it is lush; if it reads 0.3, it may lack water or have pests."
+      },
+      "et": {
+        "title": "Evapotranspiration",
+        "simple": "The water that leaves the field into the air: what evaporates from the soil plus what plants “sweat”.",
+        "example": "In a hot, windy month a field can lose 5 mm of water a day, more than it rains."
+      },
+      "soil-moisture": {
+        "title": "Soil moisture",
+        "simple": "How much water there is in the soil where the roots are. The SMAP satellite estimates it every day.",
+        "example": "If the soil is dry before planting, it is better to wait for rain or choose a drought-tolerant crop."
+      },
+      "anomaly": {
+        "title": "Anomaly (more or less than normal)",
+        "simple": "The difference between this year and the average of many years for the same month.",
+        "example": "“August had 20% less rain than normal” means less water fell than in a typical August."
+      },
+      "frost": {
+        "title": "Frost risk",
+        "simple": "The chance that the temperature drops below 0 °C and water on the leaves freezes.",
+        "example": "If April has frosty nights, an early bean planting can get burned."
+      },
+      "water-balance": {
+        "title": "Water balance",
+        "simple": "The account between water that arrives (rain, irrigation) and water that leaves (evaporation, plants).",
+        "example": "If 40 mm falls in a month and the field loses 120 mm, the balance is negative: there is drought."
+      },
+      "grace": {
+        "title": "Groundwater (GRACE)",
+        "simple": "The GRACE satellites measure changes in gravity to know whether stored underground water goes up or down.",
+        "example": "If it falls every year, wells get deeper and irrigation costs more."
+      },
+      "satellite-vs-field": {
+        "title": "Satellite vs. field measurement",
+        "simple": "A satellite sees a large area and clouds can block it; a measurement on your farm is exact but from one point.",
+        "example": "The satellite may say “dry area” even if your plot next to the river is moist."
+      },
+      "confidence": {
+        "title": "Confidence and uncertainty",
+        "simple": "How sure we are about a value or a recommendation. Low confidence = use it with care.",
+        "example": "“Low confidence” can be because we have no soil test from your farm."
+      },
+      "rain": {
+        "title": "Rain from satellites",
+        "simple": "Rain estimated by the GPM satellite constellation, every half hour around the world.",
+        "example": "It tells you whether your area had heavy storms or weeks without rain."
+      },
+      "lst": {
+        "title": "Surface temperature",
+        "simple": "How hot the ground or the plants are on top, not the air. The MODIS satellite measures it.",
+        "example": "Bare soil at noon can go above 50 °C; covered soil stays much cooler."
+      },
+      "heat": {
+        "title": "Heat stress",
+        "simple": "When it is so hot that the plant stops growing well or loses flowers.",
+        "example": "More than 35 °C during maize flowering can lower the harvest."
+      },
+      "slope": {
+        "title": "Slope and erosion",
+        "simple": "How steep the land is. On steep land, heavy rain washes the soil away.",
+        "example": "On a 30% slope without cover, one storm can carry off the fertile layer."
+      },
+      "legume": {
+        "title": "Legume",
+        "simple": "Plants like beans, soybean or clover that take nitrogen from the air and leave it in the soil.",
+        "example": "After a bean harvest, maize needs less fertilizer."
+      },
+      "cover-crop": {
+        "title": "Cover crop",
+        "simple": "A crop planted to protect and feed the soil, not to sell.",
+        "example": "Sowing oats or rye after harvest keeps the soil from being bare in winter."
+      },
+      "deep-roots": {
+        "title": "Deep roots",
+        "simple": "Plants whose roots go deep and bring up water and nutrients, and loosen the soil.",
+        "example": "Forage radish breaks the hard layer and leaves channels for water."
+      },
+      "drought-tolerant": {
+        "title": "Drought-tolerant crop",
+        "simple": "A crop that survives weeks with little water without losing the whole harvest.",
+        "example": "Sorghum and millet handle a dry summer better than maize."
+      },
+      "ph": {
+        "title": "Soil pH",
+        "simple": "How acidic or alkaline the soil is, from 0 to 14. Most crops grow well between 5.5 and 7.5.",
+        "example": "At pH 5 beans fix little nitrogen; a bit of lime helps."
+      },
+      "organic-matter": {
+        "title": "Organic matter",
+        "simple": "Plant and animal remains that are now part of the soil. It holds water and feeds the soil.",
+        "example": "Going from 2% to 3% organic matter helps the soil handle a short drought better."
+      },
+      "intercropping": {
+        "title": "Intercropping",
+        "simple": "Growing two or more crops together, in the same field at the same time, so they help each other: one holds up, one feeds the soil, one covers the ground.",
+        "example": "In a milpa, beans climb the maize and squash covers the soil between the plants."
+      },
+      "strata": {
+        "title": "Plant layers",
+        "simple": "Each plant uses a different height and root depth. Mixing layers makes better use of light, water and space, and plants compete less.",
+        "example": "Maize on top, beans climbing and squash at ground level; below, cassava takes water from deeper down."
+      },
+      "workday": {
+        "title": "Workday",
+        "simple": "One day of work by one person on the farm. It helps compare how much work each crop needs.",
+        "example": "If beans need 85 workdays per hectare, that is 85 days of work for one person (or 17 days for 5 people)."
+      },
+      "break-even": {
+        "title": "Recovering the investment",
+        "simple": "The year when what you earned with the change equals what you would have earned staying the same. Before that year, the change still owes you.",
+        "example": "If you earn less in year 1 while learning and buying seed, but more afterwards, around year 3 you are even."
+      },
+      "soil-loss": {
+        "title": "Soil loss (erosion)",
+        "simple": "The top layer of soil, the most fertile, that rain carries away when the ground is bare. It forms very slowly: what goes in one storm takes years to come back.",
+        "example": "Losing 1 mm of soil on one hectare is about 13 tonnes of earth."
+      },
+      "wholesale-price": {
+        "title": "Wholesale price",
+        "simple": "What traders pay at big food markets such as Corabastos. Farmers usually get less, because transport and middlemen come in between.",
+        "example": "If plantain sells for $2,000 a kilo at the market, the farm may get $1,200 or $1,400."
+      },
+      "price-volatility": {
+        "title": "Price volatility",
+        "simple": "How much the price goes up and down from month to month. A very volatile price is riskier: you may harvest right when it is low.",
+        "example": "Tomatoes can cost twice as much in March as in July; rice changes much less."
+      },
+      "oversupply": {
+        "title": "Oversupply",
+        "simple": "When more produce arrives than people buy, and the price falls. It happens when many farmers plant the same crop because it sold well the year before.",
+        "example": "If everyone in the village plants onions because they sold well, harvesting at the same time can halve the price."
+      },
+      "gross-income": {
+        "title": "Gross income",
+        "simple": "What you get for selling the harvest before paying for seed, fertilizer, labour and transport. It is not profit.",
+        "example": "10 tonnes of plantain at $1,500 a kilo is $15 million in gross income; profit is what is left after costs."
+      }
+    }
+  },
+  "priorities": {
+    "stepOf": "Step {n} of {total}",
+    "steps": {
+      "priorities": {
+        "title": "What matters most to you?",
+        "hint": "Tap a lot, some or a little on each one. You can change it later."
+      },
+      "constraints": {
+        "title": "What you have at hand",
+        "hint": "This lets us set aside options you cannot do."
+      },
+      "confirm": {
+        "title": "Check and done",
+        "hint": "We use this to rank the rotation options for your farm."
+      }
+    },
+    "keys": {
+      "waterSaving": {
+        "title": "Save water",
+        "hint": "Use less irrigation and make the most of rain"
+      },
+      "soilHealth": {
+        "title": "Improve the soil",
+        "hint": "More organic matter and life in the ground"
+      },
+      "income": {
+        "title": "More income",
+        "hint": "Sell more or at a better price"
+      },
+      "forage": {
+        "title": "Feed for animals",
+        "hint": "Grass or hay for your livestock"
+      },
+      "erosionControl": {
+        "title": "Stop erosion",
+        "hint": "Keep rain from washing the soil away"
+      },
+      "laborEquipment": {
+        "title": "Less work and machinery",
+        "hint": "Fewer plantings and tractor passes"
+      }
+    },
+    "levels": {
+      "high": "A lot",
+      "mid": "Some",
+      "low": "A little"
+    },
+    "irrigation": {
+      "label": "Do you have irrigation?",
+      "none": {
+        "title": "No irrigation",
+        "hint": "I depend on rain"
+      },
+      "limited": {
+        "title": "Limited irrigation",
+        "hint": "Only some months or part of the farm"
+      },
+      "full": {
+        "title": "Enough irrigation",
+        "hint": "I can water when I need to"
+      }
+    },
+    "equipment": {
+      "label": "What machinery do you have?",
+      "hint": "Mark everything you own or can rent.",
+      "tractor": "Tractor",
+      "seed-drill": "No-till drill",
+      "harvester": "Combine harvester",
+      "sprayer": "Sprayer",
+      "animal": "Animal traction",
+      "hand-tools": "Hand tools only"
+    },
+    "markets": {
+      "label": "What can you sell nearby?",
+      "hint": "Crops or products that have a buyer in your area.",
+      "livestock": "Livestock or milk",
+      "otherLabel": "Another crop or product",
+      "otherPlaceholder": "E.g. cheese, cocoa",
+      "add": "Add",
+      "remove": "Remove {name}",
+      "added": "{name} added to what you sell.",
+      "rejected": "Not added: it is already listed, empty, or you already have 12."
+    },
+    "nav": {
+      "next": "Next",
+      "back": "Back",
+      "done": "See rotation options",
+      "edit": "Change"
+    },
+    "summary": {
+      "priorities": "What matters most",
+      "constraints": "What you have",
+      "irrigation": "Irrigation",
+      "equipment": "Machinery",
+      "markets": "You sell nearby",
+      "none": "Nothing marked"
+    },
+    "ranking": {
+      "title": "With this, the order is",
+      "current": "What you do today",
+      "points": "{total} of 100",
+      "rank": "Rank {rank}",
+      "vsCurrent": "{sign}{diff} vs. today",
+      "live": "Top option now: {name}, {total} of 100.",
+      "loading": "Options show up when the analysis is done."
+    },
+    "formula": {
+      "title": "How we rank the options",
+      "step1": "You choose how much each thing matters: a lot counts 5, some counts 3 and a little counts 1.",
+      "step2": "Each option has a 0–100 score per topic, built from NASA data and agronomic rules.",
+      "step3": "We multiply each score by its weight, add everything up and divide by the sum of the weights.",
+      "equation": "Score = sum of (weight × score) ÷ sum of weights",
+      "notes": "“Improve the soil” combines organic matter, nitrogen and pest break. We estimate “less work” from how many plantings per year the option needs.",
+      "local": "Changing priorities does not fetch data again: the math runs on your phone.",
+      "example": "The math for “{name}”",
+      "cols": {
+        "priority": "Priority",
+        "weight": "Weight",
+        "score": "Score",
+        "points": "Points"
+      },
+      "total": "Total"
+    }
+  },
+  "rotations": {
+    "title": "Rotation options for your farm",
+    "hint": "{n} options, including what you do today, ranked by what matters to you.",
+    "editPriorities": "Priorities",
+    "nudge": "Tell us what matters most to you and we will rank the options for you.",
+    "nudgeCta": "Choose priorities",
+    "defaultNote": "For now we use balanced priorities.",
+    "loading": "Options show up when the analysis is done.",
+    "carouselLabel": "Rotation options",
+    "slide": "Option {n} of {total}",
+    "position": "{n} of {total}",
+    "prev": "Previous option",
+    "next": "Next option",
+    "rank": "Rank {rank}",
+    "current": "What you do today",
+    "bestMatch": "Best match",
+    "months": "{n} months",
+    "ofHundred": "of 100",
+    "scoresTitle": "Score per topic (higher = better) and difference from today",
+    "scoresTitleCurrent": "Score per topic (higher = better)",
+    "why": "Why do we suggest it?",
+    "whyCurrent": "How it does today",
+    "detail": "See details",
+    "detailFor": "See details of {name}",
+    "back": "Back to the options",
+    "diffSame": "same",
+    "diffUp": "{n, plural, one {# point more} other {# points more}} than today",
+    "diffDown": "{n, plural, one {# point less} other {# points less}} than today",
+    "estimateBanner": "Scores under the “what if…?” scenario: an estimate, not a forecast.",
+    "scores": {
+      "water": "Water",
+      "soilOrganicMatter": "Organic matter",
+      "nitrogen": "Nitrogen",
+      "erosion": "Erosion control",
+      "pestBreak": "Pest break",
+      "income": "Income",
+      "forage": "Forage"
+    },
+    "confidence": {
+      "high": "High confidence",
+      "medium": "Medium confidence",
+      "low": "Low confidence"
+    },
+    "confidenceWhy": {
+      "high": "Satellite data and rules agree, and little data is missing.",
+      "medium": "Good satellite data, but data from your farm is missing.",
+      "low": "Little data or a lot of variation: treat it as an idea to discuss."
+    },
+    "timeline": {
+      "year": "Year {n}",
+      "yearShort": "Y{n}",
+      "bare": "no crop",
+      "cover": "cover"
+    },
+    "sections": {
+      "benefits": "Benefits",
+      "evidence": "Evidence: which data backs it",
+      "risks": "Risks and what to check with an expert",
+      "gaps": "What we do not know",
+      "concepts": "Short explanations",
+      "market": "Market: prices and selling nearby"
+    },
+    "evidenceHint": "NASA data → the agronomic rule that links it to the recommendation.",
+    "ruleLabel": "So",
+    "seeOnMap": "See on the map: {layer}",
+    "localReview": "Check with a local advisor",
+    "gapsHint": "With this data, the recommendation could change.",
+    "actions": {
+      "compare": "Compare 2",
+      "table": "See table",
+      "share": "Share",
+      "print": "Print"
+    },
+    "shareText": "Rotation options for {name} on Field Shift",
+    "shared": "Link copied. You can paste it in a message.",
+    "disclaimer": "This tool helps you explore options. Review any change with your own experience and a local agricultural advisor.",
+    "whatIf": {
+      "title": "What if the weather changes?",
+      "estimate": "Estimate",
+      "hint": "Move rain and temperature to see how water, erosion and income scores would change.",
+      "rain": "Rain",
+      "rainValue": "{n, number} percent rain",
+      "drier": "Drier (−30%)",
+      "wetter": "Wetter (+30%)",
+      "temp": "Temperature",
+      "tempValue": "{n, number} degrees warmer",
+      "asToday": "As today",
+      "hotter": "+3 °C",
+      "activeNote": "Estimate made on your phone with simple rules. Not a forecast.",
+      "reset": "Back to today",
+      "rules": "Rules: with less rain and more heat, options that need more water drop more; with more rain, erosion rises where soil is bare; each °C adds ~4% water use."
+    },
+    "compare": {
+      "title": "Compare two options month by month",
+      "close": "Close the comparison",
+      "a": "Option A",
+      "b": "Option B",
+      "noMonthly": "We do not have month-by-month data for these options yet.",
+      "waterYear": "Crop water use per year",
+      "coveredMonths": "Months with covered soil",
+      "waterUse": "Water use per month",
+      "soilCovered": "Covered soil (solid) or bare (stripes)",
+      "legend": "A: solid green · B: dotted light blue · stripes: bare soil.",
+      "tableCaption": "Month by month: {a} (A) and {b} (B)",
+      "month": "Month",
+      "waterA": "Water A",
+      "waterB": "Water B",
+      "coverA": "Covered soil A",
+      "coverB": "Covered soil B",
+      "yes": "yes",
+      "no": "no"
+    },
+    "table": {
+      "title": "Side-by-side comparison",
+      "close": "Close the table",
+      "hint": "Scores from 0 to 100: higher is better for you on every topic. The arrow shows the difference from today.",
+      "caption": "Comparison of rotation options by topic",
+      "topic": "Topic",
+      "total": "Total by your priorities",
+      "duration": "Length",
+      "confidence": "Confidence",
+      "chartTitle": "The same scores as bars",
+      "chartLabel": "Bars grouped by topic with each option’s score. The same data is in the table.",
+      "chartNote": "Tap a bar to see its value."
+    },
+    "nextPlan": "Next: your plan with crops grown together",
+    "outlook": {
+      "title": "Your farm in {n} years",
+      "hint": "Not just this year: how each option changes over time. Tap the chart to see each year.",
+      "error": "We couldn’t work out how the options change over time. Try again in a moment.",
+      "today": "Today",
+      "todayLabel": "What you do today",
+      "thisOption": "This option",
+      "yearN": "Year {n}",
+      "yearShort": "Y{n}",
+      "yearsRange": "Years {from}–{to}",
+      "yearCol": "Year",
+      "inYears": "in {n} years:",
+      "chartKeys": "Use the left and right arrow keys to move through the years.",
+      "chartLabel": "{indicator} from today to {n} years, by option",
+      "seeData": "See the data year by year",
+      "assumptions": "What we assumed",
+      "sources": "Sources ({n})",
+      "citeLabel": "See source {n}",
+      "openSource": "Open the source",
+      "bare": "no crop",
+      "days": "{n, plural, one {# workday} other {# workdays}}",
+      "allYear": "all year",
+      "noMonths": "no months",
+      "adopted": "new rotation on {pct}% of the plot",
+      "hasMilestone": "there is a milestone this year",
+      "wheelLabel": "The rotation as a cycle that repeats {years, plural, one {every year} other {every # years}}",
+      "wheelRun": "{name} from {from} to {to}",
+      "wheelRunYear": "{name} from {from} to {to} of year {year}",
+      "wheelCenter": "Starts again {years, plural, one {every year} other {every # years}}",
+      "cycleTitle": "One turn: {years, plural, one {1 year} other {# years}}",
+      "detailTitle": "Over time: {n} years",
+      "detailHint": "The rotation repeats. This is one turn and what happens year by year from the day you start.",
+      "breakEven": "You recover the investment",
+      "noDipShort": "No dip",
+      "notInHorizon": "After 10 years",
+      "soilSavedLabel": "Soil you save in {n} years",
+      "milestones": "Milestones",
+      "bandNote": "The band shows a typical bad year and good year (not a forecast).",
+      "markerNote": "The diamond marks the year you recover the investment.",
+      "socialTitle": "Social context: what it asks of your family",
+      "socialHint": "A rotation also changes who works, when there is food and money, and who benefits from the soil.",
+      "laborTitle": "Work month by month",
+      "laborHint": "Workdays for the whole farm each month, for {area} and {workers, plural, one {# family member} other {# family members}}.",
+      "assumedMark": "(assumed: tell us below)",
+      "familyCapacity": "Your family: {n}",
+      "familyLegend": "What your family can give in a month",
+      "laborChart": "Workdays per month: the busiest month needs {peak} and the family gives {family}. Months marked “!” go beyond what the family gives.",
+      "foodTitle": "Months with food from the farm for the home",
+      "cashTitle": "Months with something to sell",
+      "stripLegend": "Filled = yes · stripes = no.",
+      "contextCo": "Context in Colombia",
+      "contextGlobal": "Context",
+      "talkAbout": "To talk over as a family or with your extension agent",
+      "phase": {
+        "transition": "Transition",
+        "building": "Soil building up",
+        "stable": "Rotation running"
+      },
+      "phaseHint": {
+        "transition": "You learn and invest; income may dip.",
+        "building": "Nitrogen and the pest break start to show.",
+        "stable": "Each turn repeats what you learned; soil keeps improving slowly."
+      },
+      "status": {
+        "good": "In favor",
+        "watch": "To check",
+        "alert": "Watch out"
+      },
+      "indicators": {
+        "label": "What to show on the chart",
+        "income": "Income",
+        "som": "Organic matter",
+        "soilLost": "Soil lost",
+        "labor": "Work"
+      },
+      "indicatorHint": {
+        "income": "Net income per year: 100 = what your rotation earns today. Includes the learning dip and what you save on fertilizer.",
+        "som": "Soil organic matter (%): it rises slowly, over years, not in one harvest.",
+        "soilLost": "Topsoil washed away, added up from today: it goes in a few storms and takes centuries to form again.",
+        "labor": "Workdays per year per unit of area, including planting new trees or cover crops."
+      },
+      "units": {
+        "income": "100 = today",
+        "som": "%",
+        "soilLostMm": "mm",
+        "soilLostIn": "in",
+        "labor": "workdays/ha",
+        "laborAc": "workdays/ac"
+      },
+      "pace": {
+        "label": "How would you make the change?",
+        "all": "All at once",
+        "allHint": "whole plot in year 1",
+        "gradual": "Step by step",
+        "gradualHint": "¼ → ½ → all"
+      },
+      "takeaway": {
+        "title": "With “{name}”:",
+        "noDip": "Income doesn’t dip: from year 1 it earns the same or more than today.",
+        "dip": "The first year earns less (it’s the learning year) and you recover the investment around year {year}.",
+        "noRecover": "Cumulative income doesn’t catch up with today’s within {n} years: here the soil gains more than the wallet.",
+        "soilSaved": "In {n} years, {depth} less soil would wash away than if nothing changes.",
+        "som": "Organic matter would go from {from}% to {to}% in {n} years."
+      },
+      "household": {
+        "title": "Tell us about your family.",
+        "hint": "It changes what makes sense. It is saved only on this phone.",
+        "workers": "How many family members work the farm?",
+        "workersMore": "5 or more",
+        "tenure": "The land is…",
+        "tenures": {
+          "own": "Owned",
+          "rent": "Rented",
+          "shared": "Sharecropped",
+          "unknown": "I’d rather not say"
+        },
+        "association": "Are you in an association or cooperative?",
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "marketChip": "Market"
+  },
+  "print": {
+    "title": "Rotation options summary",
+    "subtitle": "To review with your agricultural advisor",
+    "generated": "Generated on {date}",
+    "farm": "Farm",
+    "unnamed": "Your farm",
+    "area": "{area}",
+    "mock": "Simulated demo data.",
+    "priorities": "What matters most to you",
+    "scenario": "“What if…?” scenario: rain {rain}%, temperature +{temp}. Scores are an estimate.",
+    "ranking": "Options ranked by your priorities",
+    "option": "Option",
+    "vsToday": "vs. today",
+    "formula": "Total = sum of (weight × score) ÷ sum of weights; a lot = 5, some = 3, a little = 1.",
+    "printBtn": "Print or save as PDF",
+    "back": "Back",
+    "loading": "Preparing the summary…",
+    "error": "We could not prepare the summary. Please try again.",
+    "noField": "This link has no farm. Go back to the app and tap “Print” from the options.",
+    "sources": "Data: NASA POWER (daily weather), SMAP (soil moisture), GPM/IMERG (rain), MODIS/VIIRS (greenness), ECOSTRESS (evapotranspiration and temperature), GRACE-FO (groundwater), SRTM (terrain).",
+    "link": "Link"
+  },
+  "settings": {
+    "open": "Settings",
+    "title": "Settings",
+    "close": "Close settings",
+    "contrast": {
+      "title": "Sun mode (high contrast)",
+      "auto": "Automatic",
+      "autoHint": "Follows your phone settings",
+      "high": "On",
+      "highHint": "Light background and bigger text for use in the sun",
+      "normal": "Off",
+      "normalHint": "Dark background, like space"
+    },
+    "units": {
+      "title": "Units",
+      "metric": "Metric",
+      "metricHint": "Millimeters, °C and hectares",
+      "imperial": "Imperial",
+      "imperialHint": "Inches, °F and acres"
+    },
+    "markers": {
+      "title": "On the globe",
+      "label": "Show sample farms and stations",
+      "hint": "Green dots are sample farms and yellow dots are field radio stations. If you hide them, you can still reach them with search, the assistant and the player."
+    },
+    "language": "Language",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "replayIntro": "Answer the start-up questions again",
+    "glossary": "Glossary: what each term means",
+    "install": "Install the app on this phone",
+    "about": "About the data",
+    "mode": {
+      "title": "How to see the app",
+      "lite": "Simple",
+      "liteHint": "What matters most first, with fewer numbers",
+      "full": "Full",
+      "fullHint": "All the data, charts and sources"
+    },
+    "narrator": {
+      "title": "Narrator",
+      "label": "Voice that reads aloud",
+      "hint": "Reads the region panel and the assistant’s answers with your phone’s voice.",
+      "unsupported": "This browser cannot read aloud."
+    },
+    "profile": {
+      "title": "Your profile",
+      "farmer": "Farmer",
+      "technician": "Technician",
+      "none": "Not answered"
+    }
+  },
+  "onboarding": {
+    "brand": "Field Shift · NASA data",
+    "step": "{n} of {total}",
+    "skip": "Skip",
+    "start": "Start",
+    "preparing": "Getting ready…",
+    "next": "Next",
+    "back": "Back",
+    "welcome": {
+      "title": "Hello, welcome",
+      "text": "We help you care for your soil and choose what to plant, with data from NASA satellites.",
+      "find": "Find your farm",
+      "climate": "See your weather",
+      "compare": "Compare crops",
+      "hint": "We will ask you 3 short questions to show you what is useful.",
+      "spokenEnd": "Tap the green button below to start."
+    },
+    "voice": {
+      "listen": "Listen with voice",
+      "on": "Voice on",
+      "toggle": "Voice that reads aloud",
+      "note": "It uses your phone’s voice.",
+      "unsupported": "This browser cannot read aloud."
+    },
+    "questions": {
+      "spokenEnd": "Then tap the green arrow to continue.",
+      "selected": "You chose: {option}. Tap the green arrow to continue.",
+      "role": {
+        "title": "Who are you?",
+        "farmer": {
+          "label": "Farmer",
+          "hint": "I work the land on my farm.",
+          "spoken": "If you work the land, tap the tractor."
+        },
+        "technician": {
+          "label": "Technician",
+          "hint": "Agronomist, extension worker or adviser.",
+          "spoken": "If you are an agronomist, extension worker or adviser, tap the clipboard."
+        }
+      },
+      "goal": {
+        "title": "What do you want to do today?",
+        "climate": {
+          "label": "See the weather in my area",
+          "hint": "Rain, soil moisture and heat.",
+          "spoken": "To see the rain and the soil in your area, tap the cloud with the sun."
+        },
+        "rotations": {
+          "label": "Choose what to plant",
+          "hint": "Compare rotations for my farm.",
+          "spoken": "To choose what to plant on your farm, tap the little plant."
+        },
+        "satellite": {
+          "label": "See satellite data",
+          "hint": "NASA layers on the map.",
+          "spoken": "To see the satellite maps, tap the satellite."
+        }
+      },
+      "reading": {
+        "title": "How do you prefer the information?",
+        "listen": {
+          "label": "Listen to it",
+          "hint": "A voice reads me what matters.",
+          "spoken": "If you prefer to listen, tap the ear."
+        },
+        "little": {
+          "label": "Read a little",
+          "hint": "Short sentences and pictures.",
+          "spoken": "If you prefer to read a little, tap the picture."
+        },
+        "detail": {
+          "label": "Read everything in detail",
+          "hint": "Numbers, charts and sources.",
+          "spoken": "If you want all the details, tap the book."
+        }
+      }
+    },
+    "thinking": {
+      "title": "Getting the app ready for you…",
+      "text": "We are looking at your answers."
+    },
+    "suggestion": {
+      "kickerClaude": "AI suggestion",
+      "kickerRules": "Automatic suggestion",
+      "title": "This is how we will show you the app",
+      "lite": {
+        "title": "Simple mode",
+        "text": "What matters most first, with short sentences and fewer numbers."
+      },
+      "full": {
+        "title": "Full mode",
+        "text": "All the satellite data, with charts, sources and dates."
+      },
+      "voice": "Voice that reads aloud",
+      "voiceOn": "Yes",
+      "voiceOff": "No",
+      "voiceSpoken": "The voice will read you what matters.",
+      "why": "Why",
+      "note": "You can change it any time in Settings. The app supports you: it does not replace your judgement or the experts in your area.",
+      "accept": "Use it like this",
+      "switchToLite": "I prefer simple mode",
+      "switchToFull": "I prefer full mode",
+      "spokenEnd": "If it works for you, tap the green button."
+    },
+    "rules": {
+      "welcome": {
+        "farmer": "Hello. We show you how rain, soil and your crops are doing, in simple words.",
+        "technician": "Hello. You have NASA satellite data with its source, date and resolution."
+      },
+      "reason": {
+        "voice": "You chose to listen: the voice will read you what matters.",
+        "lite": "You will see what matters most first, with fewer numbers.",
+        "full": "You will see all the data, with charts and sources.",
+        "climate": "We start with the weather in your area.",
+        "rotations": "We start with your farm, to compare what to plant.",
+        "satellite": "We start with the satellite layers."
+      },
+      "suggest": {
+        "climate1": "How is the rain in my area?",
+        "climate2": "Is the soil dry in my area?",
+        "rotations1": "What should I plant after maize?",
+        "rotations2": "Which rotation suits me if there is drought?",
+        "satellite1": "Show me soil moisture in my area",
+        "satellite2": "What does NDVI measure and which satellite is it from?",
+        "common": "What NASA data is there for my area?"
+      }
+    }
+  },
+  "glossaryPage": {
+    "title": "Glossary",
+    "intro": "The technical words in the app explained in one sentence, with a farm example.",
+    "back": "Back to the globe",
+    "index": "Terms",
+    "note": "Satellite data shows trends for an area; your experience and a local advisor complete the picture."
+  },
+  "a11y": {
+    "skipToPlaces": "Skip to the list of places (no map)",
+    "placesTitle": "Explore without the map",
+    "placesIntro": "The globe is visual. From here you can open the example farms or use the search at the top.",
+    "openFarm": "Open {name}"
+  },
+  "offline": {
+    "banner": "You are offline. You are seeing your last saved analysis.",
+    "bannerNoData": "You are offline. Some parts cannot load.",
+    "savedOn": "Analysis saved on {date}."
+  },
+  "demo": {
+    "label": "Guided tour",
+    "title": "Field Shift guided tour",
+    "intro": "In just over a minute: your area, NASA sensors, farm radio, the agent, your farm and the rotations.",
+    "start": "Start",
+    "notNow": "Not now",
+    "step": "Step {n} of {total}",
+    "pause": "Pause",
+    "resume": "Resume",
+    "next": "Next",
+    "exit": "Leave the tour",
+    "print": "See printable summary",
+    "finish": "Finish",
+    "steps": {
+      "location": {
+        "title": "Your area",
+        "text": "The globe flies to where you are (approximate from your connection; more precise if you allow it)."
+      },
+      "region": {
+        "title": "NASA sensors in your region",
+        "text": "Soil moisture (SMAP), rain (GPM), greenness (MODIS) and more, in easy-to-read cards."
+      },
+      "radio": {
+        "title": "Farm radio",
+        "text": "Voice announcements for the region: when to plant, rain alerts and tips."
+      },
+      "agent": {
+        "title": "Ask the field",
+        "text": "The agent answers and moves the globe: it flies to Punjab and turns on soil moisture."
+      },
+      "farm": {
+        "title": "Your farm",
+        "text": "An example farm in Iowa with its real NASA POWER weather."
+      },
+      "calendar": {
+        "title": "Your year in the field",
+        "text": "Months with bare soil show stripes: that is when soil and nitrogen are lost."
+      },
+      "rotations": {
+        "title": "Three rotations, including today’s",
+        "text": "Each option with its score, evidence, risks and confidence level."
+      },
+      "priorities": {
+        "title": "Change what matters to you",
+        "text": "With saving water and stopping erosion first, the order is recalculated on your phone."
+      },
+      "print": {
+        "title": "Take it to your advisor",
+        "text": "A printable summary with the options, the evidence and what to check in the field."
+      },
+      "plan": {
+        "title": "Crops that help each other",
+        "text": "Your plan combines pairings like the three sisters (maize, beans and squash) with NASA POWER climate, each plant's height and roots, and what you tell us."
+      }
+    }
+  },
+  "about": {
+    "title": "About the data",
+    "intro": "Field Shift combines NASA Earth observations with simple agronomic rules. Here is what we use, how often it updates and what it cannot tell you.",
+    "back": "Back to the globe",
+    "datasetsTitle": "NASA data we use",
+    "cols": {
+      "data": "Data",
+      "what": "What it measures",
+      "resolution": "Detail",
+      "latency": "Arrives after",
+      "link": "Official source"
+    },
+    "harmonizeTitle": "How we combine them",
+    "harmonize": "Each dataset has its own grid and rhythm. For your farm we take the value of the pixel that covers it (or the average if it is large), turn it into monthly values and compare it with its own 20–25 year average. So a moisture anomaly means \"drier or wetter than normal at that place\", not an absolute number.",
+    "limitsTitle": "What this data cannot tell you",
+    "limits": [
+      "A pixel averages a large area (30 m to 50 km): it cannot see differences inside your field.",
+      "Clouds, snow or dense vegetation leave gaps or lower quality.",
+      "Data arrives days or weeks late: it is for trends, not for deciding today’s irrigation.",
+      "It does not replace a soil test or the experience of the people who work the land."
+    ],
+    "privacyTitle": "Your location",
+    "privacy": "We use your connection to find your approximate area and, if you allow it, your phone’s GPS to be more precise. We do not store your location on our servers; your farms and preferences stay on this phone.",
+    "creditsTitle": "Credits and attributions",
+    "credits": "Made by the Field Shift team for NASA Space Apps 2026 (Field Shift: Adapting Farms with NASA Data challenge). Maps: satellite imagery from Esri/MapTiler, labels from OpenFreeMap © OpenStreetMap contributors, NASA GIBS layers, Terrarium terrain (AWS Open Data), department and municipality boundaries from DANE (National Geostatistical Framework, via OCHA HDX). Place search: Nominatim/OpenStreetMap.",
+    "disclaimer": "This tool supports, and does not replace, the farmer’s judgment or local advisors.",
+    "rows": {
+      "smap": {
+        "what": "Surface soil moisture",
+        "resolution": "9 km",
+        "latency": "~2 days"
+      },
+      "gpm": {
+        "what": "Rain (IMERG)",
+        "resolution": "10 km",
+        "latency": "~1 day (early) / 3.5 months (final)"
+      },
+      "modis": {
+        "what": "Plant greenness (NDVI)",
+        "resolution": "250 m – 1 km",
+        "latency": "16 days (composite)"
+      },
+      "hls": {
+        "what": "Detailed greenness (harmonized Landsat/Sentinel)",
+        "resolution": "30 m",
+        "latency": "2–4 days"
+      },
+      "ecostress": {
+        "what": "Evapotranspiration and surface temperature",
+        "resolution": "70 m",
+        "latency": "Irregular (space station orbit)"
+      },
+      "power": {
+        "what": "Daily weather: rain, temperature, radiation",
+        "resolution": "0.5° × 0.625°",
+        "latency": "~2 days"
+      },
+      "grace": {
+        "what": "Water stored underground",
+        "resolution": "~300 km",
+        "latency": "~2 months"
+      },
+      "srtm": {
+        "what": "Elevation and slope",
+        "resolution": "30 m",
+        "latency": "Fixed (2000)"
+      }
+    }
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "text": "The link may be incomplete. Go back to the globe to find your farm.",
+    "home": "Back to the globe"
+  },
+  "time": {
+    "chip": "See another date",
+    "viewing": "Viewing {period}",
+    "backToToday": "Back to today",
+    "change": "Change",
+    "reviewPast": "Review a past date",
+    "title": "Which date do you want to review?",
+    "hint": "See how rain, heat and the land were in a past month or day.",
+    "close": "Close",
+    "quick": "Shortcuts",
+    "presets": {
+      "lastMonth": "Last month",
+      "thisMonth": "This month",
+      "sameMonthLastYear": "A year ago"
+    },
+    "prevYear": "Previous year",
+    "nextYear": "Next year",
+    "monthLabel": "Months of {year}",
+    "modeLabel": "Whole month or one day",
+    "mode": {
+      "month": "Whole month",
+      "day": "One day"
+    },
+    "dayLabel": "Days of {period}",
+    "pickDay": "Choose a day",
+    "apply": "See {period}",
+    "dataNote": "Daily NASA POWER data since 1981, about 3 days behind. Each map layer has its own date range.",
+    "layerNoData": "The “{layer}” layer has no data for {period}: it keeps showing its closest date.",
+    "past": {
+      "title": "What happened in {period}",
+      "partial": "The month is not over yet: data up to {end}.",
+      "error": "We could not get daily NASA POWER data for that date.",
+      "retry": "Try again",
+      "rainTotal": "Rain this month",
+      "nearNormal": "Close to normal ({normal})",
+      "lessThanNormal": "{pct}% less than normal ({normal})",
+      "moreThanNormal": "{pct}% more than normal ({normal})",
+      "rainyDays": "Rainy days",
+      "daysOf": "{n} of {total}",
+      "wettest": "Wettest: {day}, {rain}",
+      "extremes": "Extreme temperatures",
+      "hottest": "Max {temp} ({day})",
+      "coldest": "Min {temp} ({day})",
+      "soil": "Root-zone moisture",
+      "soilHint": "Monthly average (0% dry, 100% waterlogged)",
+      "chartTitle": "Rain day by day",
+      "tapHint": "Tap the chart to see each day.",
+      "readout": "{day}: rain {rain} · max {tmax} · min {tmin}",
+      "chartLegend": "Bars: rain each day. Heavy days in bright blue.",
+      "chartLegendNormal": "Bars: rain each day · dotted line: a normal day ({normal}).",
+      "tableCaption": "Rain and temperature for each day of {period}",
+      "cols": {
+        "day": "Day",
+        "rain": "Rain",
+        "tmax": "Max",
+        "tmin": "Min"
+      },
+      "eventsTitle": "Reconstructed events",
+      "noEvents": "No heavy rain, dry spells, extreme heat or frost in this period.",
+      "range": "{from} – {to}",
+      "seeOnMap": "See on the map",
+      "events": {
+        "heavyRain": {
+          "title": "Heavy rain",
+          "detail": "{rain} in {days, plural, one {one day} other {# days in a row}}."
+        },
+        "drySpell": {
+          "title": "Dry spell",
+          "detail": "{days} days in a row with almost no rain."
+        },
+        "heat": {
+          "title": "Extreme heat",
+          "detail": "Up to {temp} for {days, plural, one {one day} other {# days}}."
+        },
+        "frost": {
+          "title": "Frost",
+          "detail": "The low dropped to {temp} for {days, plural, one {one night} other {# nights}}."
+        }
+      },
+      "rulesTitle": "How we detect events",
+      "rules": {
+        "heavyRain": "Heavy rain: a day with {mm} or more, or {factor} times a normal day’s rain (from {min}).",
+        "drySpell": "Dry spell: {days} or more days in a row with less than {mm}.",
+        "heat": "Extreme heat: high of {temp} or more.",
+        "frost": "Frost: low of {temp} or less (air at 2 m; the ground can freeze earlier)."
+      },
+      "source": "Daily NASA POWER · ~55 km cell · \"normal\" = {baseline} average for that month. It shows the area, not every corner of your field.",
+      "gaps": "Data missing for {pct}% of days."
+    },
+    "changeDate": "Change the date"
+  },
+  "events": {
+    "layerName": "Events and emergencies",
+    "layerShort": "Landslides, floods, fires and more (NASA, UNGRD and the community)",
+    "report": "Report",
+    "reportEvent": "Report an event",
+    "chip": "{count, plural, =0 {No events} one {# event} other {# events}} · {period}",
+    "chipAria": "See the list of events and emergencies",
+    "loading": "Loading events…",
+    "error": "Events could not be loaded.",
+    "retry": "Try again",
+    "recent": "last 90 days",
+    "title": "Events and emergencies",
+    "close": "Close",
+    "sources": "Sources",
+    "source": {
+      "eonet": "NASA EONET",
+      "ungrd": "UNGRD Colombia",
+      "community": "Community"
+    },
+    "sourceHint": {
+      "eonet": "Events tracked by satellites and agencies worldwide",
+      "ungrd": "Official emergency record of Colombia, by municipality",
+      "community": "Reports from people in the area, not verified"
+    },
+    "sourceCount": "{count, plural, =0 {no events} one {# event} other {# events}}",
+    "sourceError": "did not respond",
+    "ungrdNotYet": "UNGRD publishes its records with a delay: the latest one is from {date}.",
+    "ungrdSeeLatest": "See {month}",
+    "kindFilter": "Event type",
+    "allKinds": "All",
+    "kind": {
+      "landslide": "Landslide",
+      "flood": "Flood or flash flood",
+      "storm": "Windstorm or storm",
+      "wildfire": "Fire",
+      "drought": "Drought",
+      "frost": "Frost",
+      "erosion": "Erosion",
+      "earthquake": "Earthquake",
+      "volcano": "Volcano",
+      "other": "Other event"
+    },
+    "group": {
+      "water": "Water and storms",
+      "earth": "Ground: landslides, erosion, earthquakes",
+      "fire": "Fire and drought",
+      "other": "Other: frost, heat, dust"
+    },
+    "legend": "Map colors",
+    "legendShape": "Filled dot: official or satellite data. Ring: community report.",
+    "nearCenter": "Near the center of the map",
+    "none": "No events in this period with these filters.",
+    "km": "{km} km away",
+    "unverified": "Not verified",
+    "sample": "Sample",
+    "by": {
+      "eonet": "Tracked by NASA",
+      "ungrd": "Official UNGRD record",
+      "community": "Community report"
+    },
+    "unverifiedHint": "Someone from the community reported it. No agency has confirmed it yet.",
+    "sampleHint": "This is a sample report for the demo, not a real event.",
+    "approx": {
+      "ungrd": "Approximate location: center of the municipality. UNGRD does not publish the exact point.",
+      "community": "Approximate location, within about 100 m.",
+      "eonet": "Approximate location: center of the affected area."
+    },
+    "impact": {
+      "deaths": "{n, plural, one {# death} other {# deaths}}",
+      "injured": "{n, plural, one {# injured} other {# injured}}",
+      "missing": "{n, plural, one {# missing} other {# missing}}",
+      "people": "{n, plural, one {# person affected} other {# people affected}}",
+      "families": "{n, plural, one {# family affected} other {# families affected}}",
+      "homesDestroyed": "{n, plural, one {# home destroyed} other {# homes destroyed}}",
+      "homesDamaged": "{n, plural, one {# home damaged} other {# homes damaged}}",
+      "roads": "{n, plural, one {# road affected} other {# roads affected}}",
+      "hectares": "{area} affected"
+    },
+    "magnitude": "Size: {value}",
+    "impacts": {
+      "crops": "Crops",
+      "animals": "Animals",
+      "road": "Roads",
+      "water": "Water supply",
+      "homes": "Homes",
+      "people": "People"
+    },
+    "affected": "Affected:",
+    "here": "{count, plural, one {# event here} other {# events here}}",
+    "seeRegion": "See sensors for this area",
+    "seeMonth": "See that month",
+    "openSource": "See the source",
+    "openWorldview": "See in NASA Worldview",
+    "emergency": "Are people in danger? Call 123 now (Colombia) or your local emergency number.",
+    "call": "Call 123",
+    "form": {
+      "title": "Report an event",
+      "intro": "Your report helps your neighbors and local agencies know what is happening in the fields.",
+      "what": "What happened?",
+      "when": "When?",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "otherDay": "Another day",
+      "date": "Date of the event",
+      "where": "Where?",
+      "whereCenter": "Center of the map",
+      "useMyLocation": "Use my location",
+      "locating": "Finding your location…",
+      "locationDenied": "We could not use your location. Pick the point on the map.",
+      "pickOnMap": "Pick on the map",
+      "affected": "What did it affect? You can pick several.",
+      "note": "Tell us what you saw (optional)",
+      "noteHint": "Do not write names, phone numbers or emails. {left} characters left.",
+      "privacy": "We do not store your name or contact details. The point is stored within about 100 m and your report shows as “not verified” until an agency confirms it.",
+      "landslideReporter": "Was it a landslide? You can also report it to NASA in Landslide Reporter.",
+      "send": "Send report",
+      "sending": "Sending…",
+      "needKind": "Choose what happened.",
+      "sent": "Thank you. Your report is on the map as “not verified”.",
+      "rate": "You already sent several reports. Try again in a few minutes.",
+      "failed": "The report could not be sent. Check your connection and try again.",
+      "cancel": "Cancel",
+      "mockNote": "Demo: reports are stored on the test server and on this device."
+    },
+    "pick": {
+      "hint": "Move the map until the crosshair is over the place of the event.",
+      "use": "Use this point",
+      "cancel": "Back"
+    },
+    "nearby": {
+      "title": "Events and emergencies",
+      "history": "UNGRD recorded {count, plural, =0 {no weather or ground emergencies} one {# weather or ground emergency} other {# weather or ground emergencies}} in {place} between {from} and {to}.",
+      "outside": "The official UNGRD record only covers Colombia.",
+      "error": "We could not check the UNGRD record.",
+      "recentOfficial": "Latest official emergencies",
+      "recentNearby": "Within 50 km · {period}",
+      "noneNearby": "No NASA or community events within 50 km in this period.",
+      "showOnMap": "See events on the map",
+      "report": "Report something here",
+      "sourceLine": "Sources: UNGRD (datos.gov.co), NASA EONET and community reports."
+    }
+  },
+  "survey": {
+    "title": "Tell us about your land",
+    "intro": "{n} quick questions (1 minute). Your answers fine-tune the planting plan.",
+    "cta": "Answer",
+    "progress": "Question {n} of {total}",
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Previous question",
+    "finish": "Save answers",
+    "saveClose": "Save and close",
+    "edit": "Change",
+    "doneTitle": "What you told us about your land",
+    "answered": "{n} of {total} answered",
+    "saved": "Answers saved. We updated your plan.",
+    "privacy": "Your answers stay on this phone and are only used for this farm's analysis.",
+    "notAnswered": "Not answered",
+    "short": {
+      "usualCrops": "You usually grow",
+      "lastCrop": "Last crop",
+      "fertilization": "Fertilizer",
+      "residues": "Crop residue",
+      "pests": "Problems",
+      "purpose": "Harvest for"
+    },
+    "q": {
+      "usualCrops": {
+        "title": "What do you usually grow here?",
+        "hint": "Tap all that apply.",
+        "more": "See all crops",
+        "fewer": "See fewer",
+        "search": "Search crop"
+      },
+      "lastCrop": {
+        "title": "What did you plant last time?",
+        "hint": "So we avoid repeating the same plant family and its pests.",
+        "fallow": "I let it rest",
+        "other": "Another crop"
+      },
+      "fertilization": {
+        "title": "Do you fertilize this field?",
+        "hint": "Tells us how much food reaches the soil.",
+        "options": {
+          "none": {
+            "title": "No",
+            "hint": "The field gets no fertilizer."
+          },
+          "organic": {
+            "title": "Organic fertilizer",
+            "hint": "Manure, compost, chicken litter."
+          },
+          "synthetic": {
+            "title": "Chemical fertilizer",
+            "hint": "Urea, NPK, DAP."
+          },
+          "both": {
+            "title": "Both",
+            "hint": "Organic and chemical."
+          }
+        }
+      },
+      "residues": {
+        "title": "What do you do with what is left after harvest?",
+        "hint": "The leftover stalks and leaves (crop residue).",
+        "options": {
+          "leave": {
+            "title": "I leave it on the ground",
+            "hint": "It covers and feeds the soil."
+          },
+          "burn": {
+            "title": "I burn it",
+            "hint": "The soil is left bare."
+          },
+          "graze": {
+            "title": "Animals eat it",
+            "hint": "Grazing after harvest."
+          },
+          "remove": {
+            "title": "I take it off the field",
+            "hint": "For feed, sale or other use."
+          }
+        }
+      },
+      "pests": {
+        "title": "What problem keeps coming back?",
+        "hint": "Tap all that happen.",
+        "none": "None",
+        "options": {
+          "armyworm": "Worms and caterpillars on the leaves",
+          "soil-pests": "Root pests (white grubs)",
+          "fungus": "Fungus and rot",
+          "weeds": "Lots of weeds",
+          "animals": "Birds or rodents"
+        }
+      },
+      "purpose": {
+        "title": "What is your harvest for?",
+        "hint": "It changes which mix suits you best.",
+        "options": {
+          "home": {
+            "title": "To eat at home",
+            "hint": "Food for the family."
+          },
+          "sale": {
+            "title": "To sell",
+            "hint": "At the market or to a buyer."
+          },
+          "both": {
+            "title": "Both",
+            "hint": "Some for home and some to sell."
+          }
+        }
+      }
+    }
+  },
+  "mixed": {
+    "title": "Your planting plan",
+    "hint": "Crops that grow well together, based on your farm's climate, each plant's height and roots, what you told us and what matters to you.",
+    "elevationNote": "We adjusted NASA POWER temperature to your farm's elevation: the data cell sits at {cell} and your farm at about {farm}, so it is {shift} {dir, select, warmer {warmer there} other {colder there}}.",
+    "loading": "The plan appears when your farm's climate loads.",
+    "noRec": "We have not found a mix that grows well in your climate yet.",
+    "back": "Back to the plan",
+    "ofHundred": "of 100",
+    "rank": "Rank {rank}",
+    "seeFor": "See how to plant {name}",
+    "mixName": "{main} with {others}",
+    "notViable": "This mix does not grow well in your farm's climate: check the cold or rain notes.",
+    "dimsTitle": "Score by topic (higher = better)",
+    "whyTitle": "Why we suggest it",
+    "careTitle": "What to watch and check with an expert",
+    "careNone": "We see no big problems with this combination.",
+    "localReview": "Varieties, plant spacing and exact dates for your area.",
+    "howTo": "How to plant it",
+    "howToGeneric": "Plant the tallest crop first. Climbers go at its base about 3 weeks later, and creeping crops between the rows to cover the soil.",
+    "disclaimer": "This plan is a starting point for a conversation, not a recipe. Review it with your own experience and a local agricultural advisor.",
+    "goodLabel": "In favor",
+    "warnLabel": "Watch out",
+    "sourceYou": "You",
+    "sourceModel": "Agronomy rules",
+    "kickers": {
+      "rec": "Our recommendation",
+      "year2": "Year 2 of the plan",
+      "guild": "Crops grown together"
+    },
+    "recommend": {
+      "kicker": "For your next planting we recommend",
+      "sow": "First planting: {month}",
+      "allYear": "Year-round crop",
+      "why": "Why?",
+      "basedOn": {
+        "survey": "Based on what you told us, NASA POWER climate and your priorities.",
+        "rotation": "Based on your current rotation, NASA POWER climate and your priorities.",
+        "zone": "Based on your area's climate (NASA POWER). Answer the land questions to fine-tune it."
+      },
+      "seePlan": "See how to plant it",
+      "alternatives": "Other good options",
+      "altScore": "{n} of 100 · main crop: {crop}"
+    },
+    "plan": {
+      "title": "2-year plan: mix and rotate",
+      "titlePerennial": "Your plan through the year",
+      "hint": "In year 1 you grow together the crops that help each other; in year 2 you switch family to break pest cycles and use the nitrogen left behind.",
+      "perennial": "It is a multi-year crop: the plan repeats every year, with the soil always covered.",
+      "year": "Year {n}",
+      "coverNote": "Stripes are a cover crop between harvests: it protects the soil when it would be bare.",
+      "seeYear2": "See year 2",
+      "why": "Rotating families (grasses, legumes, roots) breaks the cycle of soil pests and diseases."
+    },
+    "guilds": {
+      "title": "Crops that grow well together",
+      "hint": "Well-known pairings, ranked for your farm.",
+      "more": "See {n} more",
+      "fewer": "See fewer",
+      "notHere": "Do not grow well in your climate ({n})",
+      "items": {
+        "three-sisters": {
+          "name": "Three sisters (milpa)",
+          "story": "A pairing from the peoples of Mesoamerica and North America: maize holds up, beans feed the soil and squash covers the ground.",
+          "layout": "Plant maize in rows or mounds. When it is about 15 cm tall (about 3 weeks), sow 2 or 3 beans at the base of each plant and squash between the rows, every 1 to 2 m."
+        },
+        "milpa-cassava": {
+          "name": "Milpa with cassava",
+          "story": "A tropical version: cassava keeps growing for months after the maize, beans and squash are harvested.",
+          "layout": "Plant cassava and maize on the same day, in alternating rows. After 3 weeks, beans at the base of the maize and squash in the open spaces. Cassava is harvested last."
+        },
+        "cassava-groundnut": {
+          "name": "Cassava with groundnut",
+          "story": "Common in tropical America and Africa: groundnut covers and feeds the soil while cassava grows slowly.",
+          "layout": "Cassava every meter; between rows, 2 lines of groundnut. Groundnut is harvested at 4 months and cassava stays."
+        },
+        "maize-pigeonpea": {
+          "name": "Maize with pigeon pea",
+          "story": "Used in India and East Africa: pigeon pea grows slowly under the maize, stays after harvest and its roots go deep.",
+          "layout": "Alternate 2 rows of maize and 1 of pigeon pea. After the maize harvest, pigeon pea keeps the soil covered."
+        },
+        "millet-cowpea": {
+          "name": "Millet with cowpea",
+          "story": "A Sahel classic: creeping cowpea covers the soil between the millet and feeds it.",
+          "layout": "Sow millet with the first rains; about 2 weeks later, cowpea between the plants."
+        },
+        "sorghum-pigeonpea": {
+          "name": "Sorghum with pigeon pea",
+          "story": "Common in dry parts of India: two drought-tolerant crops with roots at different depths.",
+          "layout": "2 rows of sorghum and 1 of pigeon pea. Sorghum is harvested first and pigeon pea stays."
+        },
+        "coffee-agroforestry": {
+          "name": "Coffee with plantain and shade trees",
+          "story": "An agroforestry system: trees and plantain give shade, and forage peanut covers the soil all year.",
+          "layout": "Plantain every 2 or 3 rows of coffee and leguminous shade trees (such as Inga) every 10 to 12 m. Forage peanut between the rows."
+        },
+        "maize-soybean-strips": {
+          "name": "Maize and soybean strips",
+          "story": "Alternating strips: soybean feeds the soil and maize does not shade it too much if the strips are wide.",
+          "layout": "Strips of 4 to 6 rows of maize and 4 to 6 of soybean, running north to south."
+        },
+        "winter-cover-mix": {
+          "name": "Rye, vetch and radish cover mix",
+          "story": "For the cool season between harvests: rye protects, vetch feeds the soil and radish loosens it.",
+          "layout": "Broadcast or drill it after harvest. End it 2 or 3 weeks before the next planting."
+        },
+        "oats-vetch": {
+          "name": "Oats with vetch",
+          "story": "Cool-season forage or cover: vetch climbs the oats and leaves nitrogen behind.",
+          "layout": "Mix 2 parts oats to 1 part vetch and sow them together."
+        },
+        "wheat-clover": {
+          "name": "Wheat with clover",
+          "story": "Clover is sown into the wheat and keeps covering the soil after harvest.",
+          "layout": "About 12 weeks after sowing the wheat, spread clover seed over the field."
+        }
+      }
+    },
+    "dims": {
+      "climate": "Fits your climate",
+      "synergy": "Help each other",
+      "space": "Use heights and roots",
+      "soil": "Care for the soil",
+      "fit": "Fits your farm"
+    },
+    "strata": {
+      "title": "Heights and roots",
+      "hint": "Each plant uses a different layer, above and below ground, so they do not steal each other's light or water.",
+      "typical": "Typical values: your variety may be taller, shorter or root differently.",
+      "diagramTitle": "Profile of {name}",
+      "diagramLabel": "Side view: each plant's height above the ground and the depth of its roots.",
+      "up": "Height",
+      "down": "Roots",
+      "row": "{crop}: {height} tall, roots down to {depth} ({level}; {roots})",
+      "climbsOn": "climbs {crop}",
+      "needsSupport": "needs a stake",
+      "levels": {
+        "ground": "ground level",
+        "low": "low layer",
+        "mid": "middle layer",
+        "high": "high layer",
+        "canopy": "canopy"
+      },
+      "rootLayers": {
+        "shallow": "shallow roots",
+        "mid": "medium roots",
+        "deep": "deep roots"
+      }
+    },
+    "relations": {
+      "title": "How they get along",
+      "helps": "Help each other",
+      "careful": "Careful",
+      "neutral": "Get along",
+      "known": "Well-known pairing",
+      "single": "Add another crop to see how they get along.",
+      "noReasons": "They do not help each other much, but they do not get in the way either.",
+      "and": "and"
+    },
+    "reasons": {
+      "support": "Support: {b} climbs {a}.",
+      "nitrogen": "Natural fertilizer: with {a}, {b} gets nitrogen from the air.",
+      "groundCover": "Covered soil: {a} shades the ground under {b}; fewer weeds and more moisture.",
+      "shade": "Shade for {b}: with {a} there is less heat and stress in dry months.",
+      "roots": "Roots at different depths: {a} takes water near the top and {b} from deeper down.",
+      "time": "Staggered harvests: first {a} comes out, then {b}; the field produces for longer.",
+      "sharedPests": "Same family: {a} and {b} share pests and diseases.",
+      "light": "Competing for light: {b} gets less sun when it grows with {a}.",
+      "nutrients": "Hungry crops: {a} and {b} compete for fertilizer.",
+      "allelopathy": "Roots that hold back: {b} grows worse with {a}, which releases substances from its roots.",
+      "water": "Different water needs: {a} needs flooded soil and {b} cannot stand it."
+    },
+    "notes": {
+      "fixer": "Feeds the soil with nitrogen from the air: {crops}.",
+      "cover": "Covers the soil (fewer weeds, more moisture): {crops}.",
+      "coverErosion": "Your field has a high erosion risk and this mix covers it: {crops}.",
+      "layers": "They use the heights: there are leaves in {pct}% of the space between the ground and {height}.",
+      "roots": "Roots at different depths (down to {depth}): little competition for water.",
+      "familiar": "You already know how to grow: {crops}.",
+      "common": "Already grown on your farm or in your area: {crops}.",
+      "rotationBreak": "A different family from your last crop ({crops}): it breaks the pest cycle.",
+      "noFertilizer": "Since you do not fertilize, the legume saves you fertilizer: {crops}.",
+      "weeds": "Covering the soil holds back the weeds you told us about.",
+      "armyworm": "Mixing different families confuses worms and caterpillars.",
+      "home": "Several foods for the household: {crops}.",
+      "market": "You can sell it nearby: {crops}.",
+      "repeat": "Same family as your last crop ({crops}): its pests are still in the soil. Rotate next year.",
+      "heavyNoN": "They need a lot of fertilizer and the mix has no legume: {crops}.",
+      "needsSupport": "It is a climber with nothing to climb: {crops}. Plant it next to maize or add stakes.",
+      "wet": "Cannot stand your field's waterlogging: {crops}.",
+      "dry": "Rain in those months may not be enough: {crops}.",
+      "cold": "Suffers from your area's cold or frost: {crops}.",
+      "moreWork": "More work: planting and harvesting on different dates."
+    },
+    "roles": {
+      "pillar": "Holds up",
+      "climber": "Climbs",
+      "cover": "Covers soil",
+      "fixer": "Feeds soil",
+      "long": "Long cycle",
+      "shade": "Gives shade",
+      "main": "Main crop",
+      "roots": "Loosens soil"
+    },
+    "calendar": {
+      "title": "When to plant each one",
+      "first": "First",
+      "weeksAfter": "{n, plural, one {# week later} other {# weeks later}}",
+      "sowIn": "plant in {month}",
+      "perennialOnly": "These are multi-year crops: they stay all year.",
+      "source": "Months based on NASA POWER average climate (temperature, frost and rain).",
+      "a11yRow": "{crop}: plant in {sow}, harvest in {harvest}",
+      "a11yCover": "{crop} as cover: from {sow} to {harvest}",
+      "a11yAllYear": "{crop}: all year"
+    },
+    "builder": {
+      "title": "Build your mix",
+      "hint": "Pick 2 to 4 crops and see how they get along, which layers they use and what is worth adding.",
+      "selected": "Crops in your mix",
+      "remove": "Remove {crop}",
+      "add": "Add crop",
+      "full": "Up to 4 crops",
+      "search": "Search crop",
+      "pickTwo": "Pick at least 2 crops to see how they get along.",
+      "live": "Your mix scores {score} of 100.",
+      "diagramTitle": "Profile of your mix",
+      "suggest": "We suggest adding {crop}",
+      "addSuggested": "Add {crop}",
+      "fitGood": "grows here",
+      "fitSoso": "with care",
+      "fitBad": "hard here",
+      "why": {
+        "cover": "Your mix leaves the soil bare: with {crop} it stays covered.",
+        "fixer": "Your mix has no legume: with {crop} the soil gets nitrogen from the air.",
+        "support": "Your climber has nothing to climb: {crop} can hold it up.",
+        "deep": "Your roots stay near the top: with {crop} you use water from deeper down.",
+        "climate": "With {crop} the mix scores higher and it grows well in your climate."
+      }
+    },
+    "gaps": {
+      "soilTest": "We do not have a soil test: with one we could fine-tune fertilizer.",
+      "varieties": "Heights, roots and cycles are typical values: your variety may differ.",
+      "survey": "Some land questions are unanswered: with them the plan fits your farm's history.",
+      "climateMock": "The climate is sample data (NASA POWER did not respond).",
+      "prices": "We do not know your prices: the selling value is approximate."
+    },
+    "formula": {
+      "title": "How do we calculate this?",
+      "climate": "Fits your climate: we look for the best planting month using NASA POWER temperature, frost and rain. The crop that does worst counts the most.",
+      "synergy": "Help each other: each pair adds points if one holds up, feeds, covers or shades the other, and loses points if they share pests, block each other's light or compete for fertilizer. Well-known pairings (like the milpa) count double.",
+      "space": "Heights and roots: how much of the space from the ground to the tallest plant has leaves, how much of the soil the roots reach, and whether the cycles have different lengths.",
+      "soil": "Care for the soil: adds points for a legume, for covering the soil (more if your field has erosion risk) and for deep roots.",
+      "fit": "Fits your farm: what you told us (your last crop, fertilizer, pests, what the harvest is for), your markets and the workload.",
+      "total": "Total: a weighted average. Climate weighs 3 (4 if saving water matters a lot to you), helping each other and heights weigh 2, soil weighs more if soil or erosion matter to you, and your farm weighs 2 if you answered the land questions.",
+      "limits": "These are general rules with typical values for each crop. They do not know your variety, your exact soil or your prices."
+    },
+    "article": {
+      "maize": "the",
+      "soybean": "the",
+      "wheat": "the",
+      "rice": "the",
+      "coffee": "the",
+      "beans": "the",
+      "sorghum": "the",
+      "millet": "the",
+      "cowpea": "the",
+      "groundnut": "the",
+      "chickpea": "the",
+      "mungbean": "the",
+      "barley": "the",
+      "oats": "the",
+      "potato": "the",
+      "cassava": "the",
+      "plantain": "the",
+      "sugarcane": "the",
+      "cotton": "the",
+      "sunflower": "the",
+      "alfalfa": "the",
+      "clover": "the",
+      "vetch": "the",
+      "rye": "the",
+      "radish": "the",
+      "pasture": "the",
+      "forage-peanut": "the",
+      "shade-trees": "the",
+      "vegetables": "the",
+      "squash": "the",
+      "pigeonpea": "the",
+      "fallow": "the"
+    }
+  },
+  "report": {
+    "metaTitle": "Agroclimatic report",
+    "title": "Agroclimatic report",
+    "kicker": "Field Shift · NASA Space Apps",
+    "noPlace": "The report area is missing. Open it from a region on the map or ask the assistant for it.",
+    "backHome": "Go to the map",
+    "print": "Print or save as PDF",
+    "csv": "Download data (CSV)",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "back": "Back to the map",
+    "place": "Area",
+    "coords": "Coordinates",
+    "municipality": "Nearest municipality",
+    "period": "Period",
+    "recent": "Last 30 days with data",
+    "range": "from {start} to {end}",
+    "partial": "The month is not over yet: data up to {end}.",
+    "generated": "Generated on {date}",
+    "disclaimer": "This report summarizes NASA satellite and model data for an area of about 50 km. It supports, and does not replace, the farmer’s judgment or local technical assistance.",
+    "loading": "Preparing the report with NASA data…",
+    "error": "We could not get NASA POWER data. Check your connection.",
+    "retry": "Try again",
+    "summaryTitle": "Summary",
+    "sRain": "{total} of rain fell over {days, plural, one {# rainy day} other {# rainy days}}.",
+    "sRainLess": "That is {pct} % less than normal for these dates ({normal}).",
+    "sRainMore": "That is {pct} % more than normal for these dates ({normal}).",
+    "sRainNear": "That is close to normal for these dates ({normal}).",
+    "sTemp": "Mean temperature {tmean} (normal: {normal}). Average high {tmax} and average low {tmin}.",
+    "sSoil": "Root-zone soil moisture: {soil} on average (normal: {normal}).",
+    "sSoilNoNormal": "Root-zone soil moisture: {soil} on average.",
+    "sEvents": "{count, plural, =0 {No heavy rain, dry spells, extreme heat or frost.} one {There was # weather event (details below).} other {There were # weather events (details below).}}",
+    "sEmergencies": "{count, plural, =0 {No emergencies recorded within 50 km in the period.} one {# emergency or event recorded within 50 km (details below).} other {# emergencies or events recorded within 50 km (details below).}}",
+    "indicatorsTitle": "Indicators",
+    "iRain": "Total rain",
+    "iRainyDays": "Rainy days",
+    "iTmax": "Average high",
+    "iTmin": "Average low",
+    "iSoil": "Root-zone moisture",
+    "iNormal": "Normal: {value}",
+    "iNoNormal": "No normal value",
+    "rainChartTitle": "Daily rain",
+    "rainChartNote": "Bars: rain on that day. Dotted line: rain on a normal day for those dates.",
+    "normalLine": "normal",
+    "tempChartTitle": "Daily temperature",
+    "tMaxLabel": "High",
+    "tMinLabel": "Low",
+    "weatherEventsTitle": "Weather events in the period",
+    "noWeatherEvents": "No heavy rain, dry spells, extreme heat or frost according to the rules below.",
+    "eventDates": "{start} – {end}",
+    "emergenciesTitle": "Recorded emergencies and events (50 km)",
+    "emergenciesNone": "None in the period.",
+    "emergenciesError": "We could not check the emergency records.",
+    "historyLine": "Official UNGRD history in {place}: {count, plural, =0 {no weather or ground emergencies} one {# weather or ground emergency} other {# weather or ground emergencies}} between {from} and {to}.",
+    "historyOutside": "The official UNGRD record only covers Colombia.",
+    "watchTitle": "What to watch",
+    "watch": {
+      "dry": "Below-normal rain or a dry spell: check soil moisture before planting or fertilizing, prioritize irrigation and keep the soil covered.",
+      "wet": "Heavy rain: check drains, ditches and slopes. There is a higher risk of waterlogging, erosion and landslides.",
+      "frost": "Frost: protect seedbeds and sensitive crops on clear nights.",
+      "heat": "Extreme heat: irrigate in the cool hours and watch for stress in crops and animals.",
+      "calm": "No strong signals in the period: follow your usual calendar and check the local forecast."
+    },
+    "watchAdvice": "Before important decisions, check with local technical assistance or an agronomist in your area.",
+    "dailyTitle": "Daily data",
+    "colDate": "Date",
+    "colRain": "Rain ({unit})",
+    "colNormal": "Normal ({unit})",
+    "colTmax": "High ({unit})",
+    "colTmin": "Low ({unit})",
+    "colSoil": "Roots (%)",
+    "sourcesTitle": "Sources, method and limits",
+    "srcPower": "NASA POWER (daily): corrected rain (PRECTOTCORR), maximum and minimum temperature at 2 m and root-zone soil moisture (GWETROOT). Cell of about 50 km; about 3 days behind.",
+    "srcNormal": "Normal: NASA POWER monthly average at the same point ({period}).",
+    "srcEvents": "Emergencies: UNGRD (datos.gov.co, located at the center of the municipality), NASA EONET and community reports (not verified).",
+    "srcCoverage": "Days with data: {have} of {total}.",
+    "srcLimits": "This is not a forecast. A satellite or model value averages a large area: use it as a trend and compare it with what you see on your farm.",
+    "rulesTitle": "Weather event rules",
+    "openApp": "See this area in Field Shift",
+    "ask": "Create report",
+    "askHint": "Printable agroclimatic report and CSV",
+    "chatOpen": "Open the report",
+    "sTempNoNormal": "Mean temperature {tmean}. Average high {tmax} and average low {tmin}.",
+    "iTmean": "Mean temperature",
+    "iNormalPct": "Normal: {value} ({pct})"
+  },
+  "narrator": {
+    "listen": "Listen",
+    "stop": "Stop",
+    "listenRegion": "Listen to the summary",
+    "listenReply": "Listen to the answer"
+  },
+  "products": {
+    "cafe": "Coffee",
+    "cacao": "Cocoa",
+    "platano": "Plantain",
+    "banano": "Banana",
+    "yuca": "Cassava",
+    "papa": "Potato",
+    "papa-criolla": "Yellow potato",
+    "maiz": "Maize",
+    "frijol": "Beans",
+    "arroz": "Rice",
+    "panela": "Panela (cane sugar)",
+    "arveja": "Peas",
+    "aguacate": "Avocado",
+    "mango": "Mango",
+    "naranja": "Orange",
+    "limon": "Lime",
+    "mandarina": "Tangerine",
+    "mora": "Andean blackberry",
+    "lulo": "Lulo",
+    "tomate-arbol": "Tree tomato",
+    "granadilla": "Sweet granadilla",
+    "maracuya": "Passion fruit",
+    "pina": "Pineapple",
+    "papaya": "Papaya",
+    "guayaba": "Guava",
+    "uchuva": "Goldenberry",
+    "tomate": "Tomato",
+    "cebolla-cabezona": "Bulb onion",
+    "cebolla-larga": "Spring onion",
+    "zanahoria": "Carrot",
+    "ahuyama": "Squash",
+    "arracacha": "Arracacha",
+    "hortalizas": "Vegetables",
+    "huevos": "Eggs",
+    "miel": "Honey",
+    "otro": "Other product"
+  },
+  "units": {
+    "kg": "kg",
+    "t": "tonne",
+    "arroba": "arroba (12.5 kg)",
+    "bulto": "sack (50 kg)",
+    "carga": "carga (125 kg)",
+    "racimo": "bunch",
+    "canastilla": "crate",
+    "unidad": "unit"
+  },
+  "unitsShort": {
+    "kg": "kg",
+    "t": "t",
+    "arroba": "arroba",
+    "bulto": "sack",
+    "carga": "carga",
+    "racimo": "bunch",
+    "canastilla": "crate",
+    "unidad": "unit"
+  },
+  "market": {
+    "section": "Market: prices and selling nearby",
+    "hint": "Wholesale prices from DANE SIPSA and yields from your department (EVA). They help you decide: they are not what you will be paid at the farm.",
+    "priceAt": "{price} per kg at {market}",
+    "distance": "{km} km away",
+    "median": "12-month median",
+    "noPrice": "No public wholesale price nearby",
+    "trend": {
+      "up": "Price rising",
+      "down": "Price falling",
+      "flat": "Price steady"
+    },
+    "trendPct": "{pct} in a year",
+    "volatility": {
+      "low": "Changes little month to month",
+      "medium": "Changes somewhat month to month",
+      "high": "Swings a lot month to month"
+    },
+    "supply": {
+      "up": "More produce reaching the market",
+      "down": "Less produce reaching the market",
+      "flat": "Same amount reaching the market"
+    },
+    "yieldDept": "Yields ~{value} t/ha in your department",
+    "yieldNational": "Yields ~{value} t/ha (national average)",
+    "revenue": "Approx. gross income: {value} per hectare per harvest",
+    "firstHarvest": "First harvest in about {months} months",
+    "credit": "{count, plural, one {# Finagro loan} other {# Finagro loans}} for the {chain} chain in your department ({small} to smallholders)",
+    "outlook": {
+      "favorable": "In favour",
+      "neutral": "Steady",
+      "unfavorable": "Against"
+    },
+    "aiBadge": "AI analysis",
+    "rulesBadge": "Rules",
+    "aiNote": "Conclusion written by AI from these figures. Check it against your experience.",
+    "rulesNote": "Conclusion computed with simple rules from these figures.",
+    "factor": "Market adjustment to the income score: ×{factor}",
+    "risks": "Market risks",
+    "gaps": "What we don’t know about the market",
+    "sources": "Sources: DANE SIPSA (prices up to {month}), EVA (yields), Finagro (loans).",
+    "chipLabel": "Market",
+    "compareRow": "Market (wholesale price)",
+    "nearbyTitle": "Market in this area",
+    "nearestMarket": "Nearest wholesale market: {name}, {km} km away",
+    "loading": "Loading prices…",
+    "error": "We couldn’t load prices.",
+    "retry": "Try again",
+    "empty": "No market data for this point (Colombia only for now).",
+    "trm": "Dollar (TRM): {value} · {pct} in a year",
+    "fertilizers": "Fertilizers: {pct} in a year (UPRA index)",
+    "seedNote": "saved copy",
+    "more": "More products",
+    "less": "Show less"
+  },
+  "listings": {
+    "layerName": "Farms selling",
+    "layerShort": "Harvests from Colombian farmers, with WhatsApp contact",
+    "publish": "Publish my farm",
+    "publishHint": "Offer your harvest to buyers. It’s free.",
+    "myListing": "My listing",
+    "onlyColombia": "Only for farms in Colombia for now.",
+    "count": "{count, plural, =0 {No farms selling here} one {# farm selling here} other {# farms selling here}}",
+    "dialog": {
+      "title": "Publish my farm",
+      "step": "Step {n} of 3",
+      "steps": {
+        "products": "What do you sell?",
+        "contact": "Contact and privacy",
+        "review": "Review and publish"
+      },
+      "prefilled": "We filled this in with the crops in your rotation. Change it if you like.",
+      "product": "Product",
+      "productName": "Variety or presentation (optional)",
+      "productNamePlaceholder": "E.g. dry parchment, hartón, Hass",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "price": "Price per {unit} (optional)",
+      "priceHint": "Empty = negotiable.",
+      "reference": "Wholesale reference at {market} ({month}): {price} per {unit}",
+      "referenceKg": "Wholesale reference at {market} ({month}): {price} per kg",
+      "available": "When do you have it?",
+      "availableNow": "Now",
+      "availableLater": "At harvest",
+      "from": "From",
+      "to": "To",
+      "addProduct": "Add another product",
+      "removeProduct": "Remove {product}",
+      "farmName": "Farm name",
+      "description": "Tell buyers about it (optional)",
+      "descriptionHint": "How you deliver, pick-up days, how you farm. Up to 280 characters. No phone numbers or links.",
+      "certifications": "Labels (self-declared)",
+      "whatsapp": "Your WhatsApp mobile number",
+      "whatsappHint": "E.g. 300 123 4567. It isn’t shown on the page: buyers message you through a button.",
+      "privacy": "We only show your municipality and an approximate point (about 5 km away), never your farm’s outline.",
+      "consent": "I agree that Field Shift shows this listing publicly and that buyers can message me on WhatsApp. I can delete it any time and it expires after 60 days (Colombian Law 1581 of 2012).",
+      "consentRequired": "We need your permission to publish.",
+      "next": "Next",
+      "back": "Back",
+      "publish": "Publish",
+      "publishing": "Publishing…",
+      "close": "Close",
+      "preview": "This is what buyers will see",
+      "errors": {
+        "invalid": "Check the details: something is missing or too long.",
+        "phone": "That doesn’t look like a Colombian mobile number (10 digits starting with 3).",
+        "outside": "For now we only publish farms in Colombia.",
+        "rate": "You’ve published several times this hour. Try again later.",
+        "storage": "We couldn’t save your listing. Try again.",
+        "network": "No connection. Try again."
+      },
+      "done": "Your farm is published!",
+      "doneHint": "We saved the key to pause or delete it on this phone. It expires on {date}.",
+      "view": "View my listing",
+      "share": "Share",
+      "shareText": "See what I sell at my farm {name}",
+      "copied": "Link copied"
+    },
+    "manage": {
+      "pause": "Pause",
+      "resume": "Resume",
+      "remove": "Delete",
+      "removeConfirm": "Delete this listing? This can’t be undone.",
+      "renew": "Renew 60 days",
+      "paused": "Paused: buyers can’t see it.",
+      "removed": "Listing deleted",
+      "updated": "Listing updated",
+      "error": "Couldn’t change it. Try again.",
+      "expires": "Expires on {date}"
+    },
+    "card": {
+      "whatsapp": "Message on WhatsApp",
+      "viewFarm": "View farm",
+      "sample": "Example",
+      "sampleNote": "This is an example listing: it has no real contact.",
+      "priceUnit": "{price} / {unit}",
+      "priceAgree": "Negotiable price",
+      "quantity": "{quantity} {unit}",
+      "availableNow": "Available now",
+      "availableRange": "Harvest: {from} to {to}",
+      "area": "{area} ha",
+      "approx": "Approximate location (~5 km)",
+      "close": "Close",
+      "report": "Report listing",
+      "reported": "Thanks. We’ll review it.",
+      "certNote": "Labels declared by the farmer; we don’t verify them."
+    },
+    "certs": {
+      "organico": "Organic",
+      "bpa": "Good Agricultural Practices",
+      "comercio-justo": "Fair trade",
+      "rainforest": "Rainforest Alliance",
+      "transicion": "Transitioning to agroecology"
+    },
+    "nearby": {
+      "title": "Farms selling here",
+      "empty": "Nobody has published in this municipality yet.",
+      "seeAll": "See all in {place}"
+    },
+    "suggest": {
+      "title": "Do you sell your harvest?",
+      "body": "Publish your farm so buyers can find you and message you on WhatsApp.",
+      "cta": "Publish my farm"
+    },
+    "page": {
+      "title": "Farms selling",
+      "subtitle": "Harvests from Colombian farmers. Direct WhatsApp contact, no commissions.",
+      "dept": "Department",
+      "product": "Product",
+      "all": "All",
+      "filter": "Filter",
+      "empty": "No published farms match that filter.",
+      "backToGlobe": "Back to the globe",
+      "seeOnGlobe": "See on the globe",
+      "satellite": "Satellite view of the area",
+      "satelliteCredit": "Imagery: Esri World Imagery. Approximate location (~5 km).",
+      "ndvi": "Greenness of the area (NASA MODIS NDVI, {month})",
+      "ndviNote": "Each square is ~1 km: it shows the area, not the farm. Greener = more active vegetation.",
+      "products": "What they sell",
+      "about": "About the farm",
+      "marketTitle": "Reference prices in the area",
+      "published": "Published on {date}",
+      "expires": "Valid until {date}",
+      "sampleBanner": "This is an example listing for the demo: it has no real contact.",
+      "disclaimer": "Field Shift doesn’t sell or charge commissions: it connects buyers with producers. Agree on price, quality and delivery directly with the farmer.",
+      "notFound": "This listing is no longer available.",
+      "count": "{count, plural, =0 {No farms} one {# farm} other {# farms}}"
+    }
+  }
+}
