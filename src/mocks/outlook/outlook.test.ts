@@ -8,7 +8,12 @@ import { averageRow, cashCalendar, foodCalendar, LABOR_DAYS, laborRows } from '.
 import { buildMockOutlook } from './index';
 import { REFERENCES } from './references';
 
-const S = (crop: CropSeason['crop'], startMonth: number, endMonth: number, extra: Partial<CropSeason> = {}): CropSeason => ({
+const S = (
+  crop: CropSeason['crop'],
+  startMonth: number,
+  endMonth: number,
+  extra: Partial<CropSeason> = {},
+): CropSeason => ({
   crop,
   startMonth,
   endMonth,
@@ -17,7 +22,10 @@ const S = (crop: CropSeason['crop'], startMonth: number, endMonth: number, extra
   ...extra,
 });
 
-function outlookFor(demoId: string, opts: { household?: Household; pace?: Pace; locale?: 'es' | 'en'; region?: 'co' | 'global' } = {}) {
+function outlookFor(
+  demoId: string,
+  opts: { household?: Household; pace?: Pace; locale?: 'es' | 'en'; region?: 'co' | 'global' } = {},
+) {
   const demo = DEMO_FARMS.find((d) => d.id === demoId)!;
   const field = toFieldInput(demoField(demo, 'es'));
   const analysis = buildMockAnalysis({ field, priorities: DEFAULT_PRIORITIES, locale: opts.locale ?? 'es' });
@@ -25,15 +33,17 @@ function outlookFor(demoId: string, opts: { household?: Household; pace?: Pace; 
     field: analysis.field,
     priorities: DEFAULT_PRIORITIES,
     locale: opts.locale ?? 'es',
-    strategies: analysis.strategies.map(({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
-      id,
-      name,
-      isCurrent,
-      durationMonths,
-      seasons,
-      scores,
-      confidence,
-    })),
+    strategies: analysis.strategies.map(
+      ({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
+        id,
+        name,
+        isCurrent,
+        durationMonths,
+        seasons,
+        scores,
+        confidence,
+      }),
+    ),
     site: {
       annualPrecipMm: analysis.climate.summary.annualPrecipMm,
       tMeanC: analysis.climate.months.reduce((a, m) => a + (m.tMean.value ?? 0), 0) / 12,
@@ -54,18 +64,22 @@ function outlookFor(demoId: string, opts: { household?: Household; pace?: Pace; 
 }
 
 describe('contrato de /rotations/outlook', () => {
-  it.each(DEMO_FARMS.map((d) => d.id))('%s: cumple el contrato, 10 años por opción y cada cita está en las fuentes', (id) => {
-    const { res, analysis } = outlookFor(id);
-    expect(OutlookResponse.safeParse(res).success).toBe(true);
-    expect(res.strategies).toHaveLength(analysis.strategies.length);
-    const refs = new Set(res.references.map((r) => r.id));
-    for (const o of res.strategies) {
-      expect(o.years).toHaveLength(10);
-      for (const id of [...o.milestones.flatMap((m) => m.refIds), ...o.social.flatMap((f) => f.refIds)]) expect(refs).toContain(id);
-    }
-    for (const f of res.context.facts) for (const r of f.refIds) expect(refs).toContain(r);
-    for (const r of res.references) expect(Object.keys(REFERENCES)).toContain(r.id);
-  });
+  it.each(DEMO_FARMS.map((d) => d.id))(
+    '%s: cumple el contrato, 10 años por opción y cada cita está en las fuentes',
+    (id) => {
+      const { res, analysis } = outlookFor(id);
+      expect(OutlookResponse.safeParse(res).success).toBe(true);
+      expect(res.strategies).toHaveLength(analysis.strategies.length);
+      const refs = new Set(res.references.map((r) => r.id));
+      for (const o of res.strategies) {
+        expect(o.years).toHaveLength(10);
+        for (const id of [...o.milestones.flatMap((m) => m.refIds), ...o.social.flatMap((f) => f.refIds)])
+          expect(refs).toContain(id);
+      }
+      for (const f of res.context.facts) for (const r of f.refIds) expect(refs).toContain(r);
+      for (const r of res.references) expect(Object.keys(REFERENCES)).toContain(r.id);
+    },
+  );
 
   it('las fuentes del catálogo tienen URL https y texto en los dos idiomas', () => {
     for (const r of Object.values(REFERENCES)) {
@@ -109,7 +123,9 @@ describe('la rotación en el tiempo', () => {
         const end = o.years.at(-1)!.soilOrganicMatterPct.mid;
         const curEnd = current.years.at(-1)!.soilOrganicMatterPct.mid;
         if (s.soilOrganicMatter > cur.soilOrganicMatter + 5) expect(end).toBeGreaterThan(curEnd);
-        expect(Math.abs(end - res.baseline.soilOrganicMatterPct) / res.baseline.soilOrganicMatterPct).toBeLessThan(0.15);
+        expect(
+          Math.abs(end - res.baseline.soilOrganicMatterPct) / res.baseline.soilOrganicMatterPct,
+        ).toBeLessThan(0.15);
       }
     }
   });
@@ -127,7 +143,8 @@ describe('la rotación en el tiempo', () => {
 
   it('el suelo perdido se acumula: nunca baja de un año al siguiente', () => {
     for (const o of outlookFor('cafe-quindio').res.strategies) {
-      for (let i = 1; i < o.years.length; i++) expect(o.years[i]!.soilLostMm).toBeGreaterThanOrEqual(o.years[i - 1]!.soilLostMm);
+      for (let i = 1; i < o.years.length; i++)
+        expect(o.years[i]!.soilLostMm).toBeGreaterThanOrEqual(o.years[i - 1]!.soilLostMm);
     }
   });
 
@@ -164,7 +181,8 @@ describe('contexto social', () => {
   it('tierra arrendada: las opciones que tardan en pagarse llevan un aviso; tierra propia, a favor', () => {
     const rent = outlookFor('cafe-quindio', { household: { workers: 2, tenure: 'rent', association: null } });
     const own = outlookFor('cafe-quindio', { household: { workers: 2, tenure: 'own', association: null } });
-    for (const o of rent.others) expect(['watch', 'alert']).toContain(o.social.find((f) => f.kind === 'tenure')!.status);
+    for (const o of rent.others)
+      expect(['watch', 'alert']).toContain(o.social.find((f) => f.kind === 'tenure')!.status);
     for (const o of own.others) expect(o.social.find((f) => f.kind === 'tenure')!.status).toBe('good');
   });
 
@@ -213,12 +231,18 @@ describe('calendario: jornales, comida y ventas', () => {
   it('el grano seco guardado alcanza ~6 meses; el café no es comida para la casa pero sí venta', () => {
     expect(foodCalendar([S('maize', 5, 10)]).months.filter(Boolean)).toHaveLength(6);
     expect(foodCalendar([S('coffee', 1, 12, { role: 'perennial' })]).months.some(Boolean)).toBe(false);
-    expect(cashCalendar([S('coffee', 1, 12, { role: 'perennial' })], []).months.filter(Boolean).length).toBeGreaterThanOrEqual(5);
+    expect(
+      cashCalendar([S('coffee', 1, 12, { role: 'perennial' })], []).months.filter(Boolean).length,
+    ).toBeGreaterThanOrEqual(5);
   });
 
   it('más cultivos de comida y de familias distintas → menos meses sin comida', () => {
     const mono = foodCalendar([S('maize', 5, 10)]);
-    const milpa = foodCalendar([S('maize', 3, 7), S('beans', 3, 6, { role: 'intercrop' }), S('cassava', 3, 12, { role: 'intercrop' })]);
+    const milpa = foodCalendar([
+      S('maize', 3, 7),
+      S('beans', 3, 6, { role: 'intercrop' }),
+      S('cassava', 3, 12, { role: 'intercrop' }),
+    ]);
     expect(milpa.gapMonths.length).toBeLessThan(mono.gapMonths.length);
     expect(milpa.families).toBeGreaterThan(mono.families);
   });

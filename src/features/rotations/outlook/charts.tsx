@@ -89,7 +89,11 @@ export function Trajectory({
   }
   const pad = (hi - lo) * 0.08;
   const x = scaleLinear<number>({ domain: [0, n], range: [0, iw] });
-  const y = scaleLinear<number>({ domain: [includeZero ? Math.min(0, lo) : lo - pad, hi + pad], range: [ih, 0], nice: true });
+  const y = scaleLinear<number>({
+    domain: [includeZero ? Math.min(0, lo) : lo - pad, hi + pad],
+    range: [ih, 0],
+    nice: true,
+  });
   const ticks = y.ticks(4);
   const xTicks = Array.from({ length: n + 1 }, (_, i) => i).filter((i) => i % 2 === 0 || n <= 6);
 
@@ -97,7 +101,8 @@ export function Trajectory({
     const r = el.getBoundingClientRect();
     return Math.max(0, Math.min(n, Math.round(x.invert(clientX - r.left - M.left))));
   };
-  const onPointer = (e: PointerEvent<SVGRectElement>) => setHover(yearAt(e.clientX, e.currentTarget.ownerSVGElement!));
+  const onPointer = (e: PointerEvent<SVGRectElement>) =>
+    setHover(yearAt(e.clientX, e.currentTarget.ownerSVGElement!));
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'ArrowRight') setHover((h) => Math.min(n, (h ?? -1) + 1));
     else if (e.key === 'ArrowLeft') setHover((h) => Math.max(0, (h ?? n + 1) - 1));
@@ -137,7 +142,9 @@ export function Trajectory({
                 </text>
               </g>
             ))}
-            {reference != null && <line x1={0} x2={iw} y1={y(reference)} y2={y(reference)} stroke={GRID} strokeOpacity={0.45} />}
+            {reference != null && (
+              <line x1={0} x2={iw} y1={y(reference)} y2={y(reference)} stroke={GRID} strokeOpacity={0.45} />
+            )}
             {series.map((s) =>
               s.band ? (
                 <Area
@@ -166,24 +173,56 @@ export function Trajectory({
               />
             ))}
             {series.map((s) => (
-              <circle key={`${s.id}-end`} cx={x(s.values.length - 1)} cy={y(s.values.at(-1)!)} r={4} fill={s.color} stroke={SURFACE} strokeWidth={2} />
+              <circle
+                key={`${s.id}-end`}
+                cx={x(s.values.length - 1)}
+                cy={y(s.values.at(-1)!)}
+                r={4}
+                fill={s.color}
+                stroke={SURFACE}
+                strokeWidth={2}
+              />
             ))}
             {marker && markerSeries && marker.year <= n && (
               <g transform={`translate(${x(marker.year)},${y(markerSeries.values[marker.year]!)})`}>
-                <rect x={-5} y={-5} width={10} height={10} transform="rotate(45)" fill={SURFACE} stroke={markerSeries.color} strokeWidth={2} />
+                <rect
+                  x={-5}
+                  y={-5}
+                  width={10}
+                  height={10}
+                  transform="rotate(45)"
+                  fill={SURFACE}
+                  stroke={markerSeries.color}
+                  strokeWidth={2}
+                />
               </g>
             )}
             {hover != null && (
               <g>
                 <line x1={x(hover)} x2={x(hover)} y1={0} y2={ih} stroke={GRID} strokeOpacity={0.5} />
                 {series.map((s) => (
-                  <circle key={s.id} cx={x(hover)} cy={y(s.values[hover]!)} r={4} fill={s.color} stroke={SURFACE} strokeWidth={2} />
+                  <circle
+                    key={s.id}
+                    cx={x(hover)}
+                    cy={y(s.values[hover]!)}
+                    r={4}
+                    fill={s.color}
+                    stroke={SURFACE}
+                    strokeWidth={2}
+                  />
                 ))}
               </g>
             )}
             <line x1={0} x2={iw} y1={ih} y2={ih} stroke={GRID} strokeOpacity={0.35} />
             {xTicks.map((i) => (
-              <text key={i} x={x(i)} y={ih + 16} fontSize={10} textAnchor={i === 0 ? 'start' : i === n ? 'end' : 'middle'} fill="currentColor">
+              <text
+                key={i}
+                x={x(i)}
+                y={ih + 16}
+                fontSize={10}
+                textAnchor={i === 0 ? 'start' : i === n ? 'end' : 'middle'}
+                fill="currentColor"
+              >
                 {i === 0 ? t('today') : t('yearShort', { n: i })}
               </text>
             ))}
@@ -215,7 +254,11 @@ export function Trajectory({
           <ul className="mt-0.5 flex flex-col gap-0.5">
             {series.map((s) => (
               <li key={s.id} className="flex items-center gap-1.5">
-                <span aria-hidden className="inline-block h-0.5 w-3 shrink-0 rounded" style={{ background: s.color }} />
+                <span
+                  aria-hidden
+                  className="inline-block h-0.5 w-3 shrink-0 rounded"
+                  style={{ background: s.color }}
+                />
                 <span className="min-w-0 flex-1 truncate text-ink-muted">{s.label}</span>
                 <span className="font-semibold tabular-nums">{format(s.values[hover]!)}</span>
               </li>
@@ -228,12 +271,24 @@ export function Trajectory({
 }
 
 /** Leyenda de la trayectoria: color + nombre + valor al final (la identidad nunca depende solo del color). */
-export function SeriesLegend({ series, format, endLabel }: { series: Series[]; format: (v: number) => string; endLabel: string }) {
+export function SeriesLegend({
+  series,
+  format,
+  endLabel,
+}: {
+  series: Series[];
+  format: (v: number) => string;
+  endLabel: string;
+}) {
   return (
     <ul className="flex flex-col gap-1 text-xs">
       {series.map((s) => (
         <li key={s.id} className="flex items-center gap-2">
-          <span aria-hidden className="inline-block h-1 w-4 shrink-0 rounded-full" style={{ background: s.color }} />
+          <span
+            aria-hidden
+            className="inline-block h-1 w-4 shrink-0 rounded-full"
+            style={{ background: s.color }}
+          />
           <span className="min-w-0 flex-1 truncate">{s.label}</span>
           <span className="shrink-0 text-ink-muted">
             {endLabel} <span className="font-semibold text-ink tabular-nums">{format(s.values.at(-1)!)}</span>
@@ -245,7 +300,15 @@ export function SeriesLegend({ series, format, endLabel }: { series: Series[]; f
 }
 
 /** Tabla con los mismos datos (vista accesible y para quien prefiere números). */
-export function SeriesTable({ series, format, caption }: { series: Series[]; format: (v: number) => string; caption: string }) {
+export function SeriesTable({
+  series,
+  format,
+  caption,
+}: {
+  series: Series[];
+  format: (v: number) => string;
+  caption: string;
+}) {
   const t = useTranslations('rotations.outlook');
   const n = Math.max(...series.map((s) => s.values.length));
   return (
@@ -333,12 +396,31 @@ export function RotationWheel({ months, cycleYears }: { months: (CropId | null)[
 
   return (
     <figure className="flex flex-col items-center gap-2">
-      <div className="relative" style={{ width: size, height: size }} role="img" aria-label={`${t('wheelLabel', { years: cycleYears })}: ${describe}.`}>
+      <div
+        className="relative"
+        style={{ width: size, height: size }}
+        role="img"
+        aria-label={`${t('wheelLabel', { years: cycleYears })}: ${describe}.`}
+      >
         <svg width={size} height={size} aria-hidden className="text-ink-muted">
           <defs>
-            <pattern id={`${uid}-hatch`} width={6} height={6} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <pattern
+              id={`${uid}-hatch`}
+              width={6}
+              height={6}
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
+            >
               <rect width={6} height={6} fill="currentColor" opacity={0.06} />
-              <line x1={0} y1={0} x2={0} y2={6} stroke="currentColor" strokeOpacity={0.35} strokeWidth={1.5} />
+              <line
+                x1={0}
+                y1={0}
+                x2={0}
+                y2={6}
+                stroke="currentColor"
+                strokeOpacity={0.35}
+                strokeWidth={1.5}
+              />
             </pattern>
           </defs>
           <g transform={`translate(${size / 2},${size / 2})`}>
@@ -362,8 +444,21 @@ export function RotationWheel({ months, cycleYears }: { months: (CropId | null)[
                 const am = ang(yIdx * 12 + 6);
                 return (
                   <g key={yIdx}>
-                    <line x1={Math.sin(a) * (r0 - 4)} y1={-Math.cos(a) * (r0 - 4)} x2={Math.sin(a) * (r1 + 4)} y2={-Math.cos(a) * (r1 + 4)} stroke="currentColor" strokeWidth={1.5} />
-                    <text x={Math.sin(am) * (r0 - 12)} y={-Math.cos(am) * (r0 - 12) + 3} fontSize={10} textAnchor="middle" fill="currentColor">
+                    <line
+                      x1={Math.sin(a) * (r0 - 4)}
+                      y1={-Math.cos(a) * (r0 - 4)}
+                      x2={Math.sin(a) * (r1 + 4)}
+                      y2={-Math.cos(a) * (r1 + 4)}
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      x={Math.sin(am) * (r0 - 12)}
+                      y={-Math.cos(am) * (r0 - 12) + 3}
+                      fontSize={10}
+                      textAnchor="middle"
+                      fill="currentColor"
+                    >
                       {t('yearShort', { n: yIdx + 1 })}
                     </text>
                   </g>
@@ -373,13 +468,27 @@ export function RotationWheel({ months, cycleYears }: { months: (CropId | null)[
               monthNames.map((m, i) => {
                 const a = ang(i + 0.5);
                 return (
-                  <text key={i} x={Math.sin(a) * (r0 - 9)} y={-Math.cos(a) * (r0 - 9) + 3} fontSize={9} textAnchor="middle" fill="currentColor">
+                  <text
+                    key={i}
+                    x={Math.sin(a) * (r0 - 9)}
+                    y={-Math.cos(a) * (r0 - 9) + 3}
+                    fontSize={9}
+                    textAnchor="middle"
+                    fill="currentColor"
+                  >
                     {m.charAt(0).toUpperCase()}
                   </text>
                 );
               })}
             {/* Flecha: el sentido del tiempo (como las agujas del reloj). */}
-            <path d={`M ${-6} ${-r1 - 8} L 6 ${-r1 - 4} L ${-6} ${-r1}`} fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d={`M ${-6} ${-r1 - 8} L 6 ${-r1 - 4} L ${-6} ${-r1}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         </svg>
         {runs
@@ -400,7 +509,9 @@ export function RotationWheel({ months, cycleYears }: { months: (CropId | null)[
         <div aria-hidden className="absolute inset-0 grid place-items-center">
           <div className="flex max-w-[6.5rem] flex-col items-center text-center">
             <Repeat className="size-5 text-field-300" />
-            <span className="mt-0.5 text-[11px] leading-tight font-semibold">{t('wheelCenter', { years: cycleYears })}</span>
+            <span className="mt-0.5 text-[11px] leading-tight font-semibold">
+              {t('wheelCenter', { years: cycleYears })}
+            </span>
           </div>
         </div>
       </div>
@@ -420,7 +531,9 @@ export function YearStrip({ years, milestones }: { years: OutlookYear[]; milesto
   const t = useTranslations('rotations.outlook');
   const tc = useTranslations('crops');
   const monthNames = useMonthNames();
-  const groups = PHASE_ORDER.map((p) => ({ phase: p, years: years.filter((y) => y.phase === p) })).filter((g) => g.years.length);
+  const groups = PHASE_ORDER.map((p) => ({ phase: p, years: years.filter((y) => y.phase === p) })).filter(
+    (g) => g.years.length,
+  );
   const flagged = new Set(milestones.map((m) => m.year));
 
   return (
@@ -432,7 +545,9 @@ export function YearStrip({ years, milestones }: { years: OutlookYear[]; milesto
           <section key={g.phase} aria-label={t(`phase.${g.phase}`)}>
             <p className="mb-1 flex flex-wrap items-baseline gap-x-2 text-xs">
               <span className="font-semibold">{t(`phase.${g.phase}`)}</span>
-              <span className="text-ink-muted">{first === last ? t('yearN', { n: first }) : t('yearsRange', { from: first, to: last })}</span>
+              <span className="text-ink-muted">
+                {first === last ? t('yearN', { n: first }) : t('yearsRange', { from: first, to: last })}
+              </span>
               <span className="w-full text-ink-faint">{t(`phaseHint.${g.phase}`)}</span>
             </p>
             <ul className="flex flex-col gap-1">
@@ -440,23 +555,34 @@ export function YearStrip({ years, milestones }: { years: OutlookYear[]; milesto
                 const crops = [...new Set(y.months.filter((c): c is CropId => c != null))];
                 return (
                   <li key={y.year} className="flex items-center gap-1.5">
-                    <span className="w-6 shrink-0 text-[10px] font-semibold text-ink-faint">{t('yearShort', { n: y.year })}</span>
+                    <span className="w-6 shrink-0 text-[10px] font-semibold text-ink-faint">
+                      {t('yearShort', { n: y.year })}
+                    </span>
                     <span className="sr-only">
-                      {t('yearN', { n: y.year })}: {crops.length ? crops.map((c) => tc(c)).join(', ') : t('bare')}
+                      {t('yearN', { n: y.year })}:{' '}
+                      {crops.length ? crops.map((c) => tc(c)).join(', ') : t('bare')}
                       {y.adopted < 1 && `. ${t('adopted', { pct: Math.round(y.adopted * 100) })}`}
                       {flagged.has(y.year) && `. ${t('hasMilestone')}`}
                     </span>
-                    <div aria-hidden className="relative grid h-4 flex-1 grid-cols-12 gap-px overflow-hidden rounded-md">
+                    <div
+                      aria-hidden
+                      className="relative grid h-4 flex-1 grid-cols-12 gap-px overflow-hidden rounded-md"
+                    >
                       {y.months.map((c, m) => (
                         <div
                           key={m}
                           title={`${monthNames[m]}: ${c ? tc(c) : t('bare')}`}
                           className={clsx(!c && 'pattern-hatch text-white/15')}
-                          style={c ? { background: `${CROPS[c].color}${y.adopted < 1 ? '66' : 'aa'}` } : undefined}
+                          style={
+                            c ? { background: `${CROPS[c].color}${y.adopted < 1 ? '66' : 'aa'}` } : undefined
+                          }
                         />
                       ))}
                     </div>
-                    <span aria-hidden className="w-9 shrink-0 text-right text-[10px] text-ink-muted tabular-nums">
+                    <span
+                      aria-hidden
+                      className="w-9 shrink-0 text-right text-[10px] text-ink-muted tabular-nums"
+                    >
                       {y.adopted < 1 ? `${Math.round(y.adopted * 100)} %` : ''}
                     </span>
                     <span aria-hidden className="grid w-4 shrink-0 place-items-center">
@@ -513,7 +639,12 @@ export function LaborChart({
   const iw = Math.max(0, width - M.left - M.right);
   const ih = H - M.top - M.bottom;
   const max = Math.max(capacity * 1.1, ...need, ...(base ?? [])) || 1;
-  const x = scaleBand<number>({ domain: monthNames.map((_, i) => i), range: [0, iw], paddingInner: 0.25, paddingOuter: 0.1 });
+  const x = scaleBand<number>({
+    domain: monthNames.map((_, i) => i),
+    range: [0, iw],
+    paddingInner: 0.25,
+    paddingOuter: 0.1,
+  });
   const y = scaleLinear<number>({ domain: [0, max], range: [ih, 0], nice: true });
   const bars = base ? 2 : 1;
   const bw = Math.min(12, (x.bandwidth() - (bars - 1) * 2) / bars);
@@ -544,14 +675,37 @@ export function LaborChart({
               const over = need[i]! > capacity;
               return (
                 <g key={i}>
-                  {base && <path d={col(x0, base[i]!)} fill={baseColor} opacity={hover != null && hover !== i ? 0.45 : 0.9} />}
-                  <path d={col(x0 + (base ? bw + 2 : 0), need[i]!)} fill={color} opacity={hover != null && hover !== i ? 0.45 : 1} />
+                  {base && (
+                    <path
+                      d={col(x0, base[i]!)}
+                      fill={baseColor}
+                      opacity={hover != null && hover !== i ? 0.45 : 0.9}
+                    />
+                  )}
+                  <path
+                    d={col(x0 + (base ? bw + 2 : 0), need[i]!)}
+                    fill={color}
+                    opacity={hover != null && hover !== i ? 0.45 : 1}
+                  />
                   {over && (
-                    <text x={x0 + groupW / 2} y={y(need[i]!) - 4} fontSize={11} fontWeight={700} textAnchor="middle" fill="currentColor">
+                    <text
+                      x={x0 + groupW / 2}
+                      y={y(need[i]!) - 4}
+                      fontSize={11}
+                      fontWeight={700}
+                      textAnchor="middle"
+                      fill="currentColor"
+                    >
                       !
                     </text>
                   )}
-                  <text x={(x(i) ?? 0) + x.bandwidth() / 2} y={ih + 14} fontSize={9} textAnchor="middle" fill="currentColor">
+                  <text
+                    x={(x(i) ?? 0) + x.bandwidth() / 2}
+                    y={ih + 14}
+                    fontSize={9}
+                    textAnchor="middle"
+                    fill="currentColor"
+                  >
                     {m.charAt(0).toUpperCase()}
                   </text>
                   <rect
@@ -568,7 +722,16 @@ export function LaborChart({
               );
             })}
             {/* Umbral: lo que da la familia (línea punteada porque es un límite, no un dato). */}
-            <line x1={0} x2={iw} y1={y(capacity)} y2={y(capacity)} stroke="currentColor" strokeWidth={1.5} strokeDasharray="4 3" opacity={0.8} />
+            <line
+              x1={0}
+              x2={iw}
+              y1={y(capacity)}
+              y2={y(capacity)}
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeDasharray="4 3"
+              opacity={0.8}
+            />
             <text x={iw} y={y(capacity) - 4} fontSize={10} textAnchor="end" fill="currentColor">
               {labels.capacity}
             </text>
@@ -586,12 +749,14 @@ export function LaborChart({
           {base && (
             <p className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm" style={{ background: baseColor }} />
-              {labels.base}: <span className="font-semibold tabular-nums">{t('days', { n: Math.round(base[hover]!) })}</span>
+              {labels.base}:{' '}
+              <span className="font-semibold tabular-nums">{t('days', { n: Math.round(base[hover]!) })}</span>
             </p>
           )}
           <p className="flex items-center gap-1.5">
             <span className="size-2 rounded-sm" style={{ background: color }} />
-            {labels.need}: <span className="font-semibold tabular-nums">{t('days', { n: Math.round(need[hover]!) })}</span>
+            {labels.need}:{' '}
+            <span className="font-semibold tabular-nums">{t('days', { n: Math.round(need[hover]!) })}</span>
           </p>
         </div>
       )}
@@ -602,7 +767,15 @@ export function LaborChart({
 // ---------------------------------------------------------------- meses con comida o con venta
 
 /** Fila de 12 meses: lleno = sí, rayas = no (no depende solo del color). */
-export function MonthStrip({ months, label, tone }: { months: boolean[]; label: string; tone: 'food' | 'cash' }) {
+export function MonthStrip({
+  months,
+  label,
+  tone,
+}: {
+  months: boolean[];
+  label: string;
+  tone: 'food' | 'cash';
+}) {
   const t = useTranslations('rotations.outlook');
   const monthNames = useMonthNames();
   const yes = months.flatMap((v, i) => (v ? [monthNames[i]] : []));
@@ -617,7 +790,9 @@ export function MonthStrip({ months, label, tone }: { months: boolean[]; label: 
           <div
             key={i}
             title={monthNames[i]}
-            className={clsx(v ? (tone === 'food' ? 'bg-field-500/70' : 'bg-sun/70') : 'pattern-hatch text-white/20')}
+            className={clsx(
+              v ? (tone === 'food' ? 'bg-field-500/70' : 'bg-sun/70') : 'pattern-hatch text-white/20',
+            )}
           />
         ))}
       </div>

@@ -36,7 +36,10 @@ function read(): Record<string, Household> {
 
 function write(all: Record<string, Household>) {
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(Object.entries(all).slice(-MAX_FIELDS))));
+    window.localStorage.setItem(
+      KEY,
+      JSON.stringify(Object.fromEntries(Object.entries(all).slice(-MAX_FIELDS))),
+    );
   } catch {
     /* modo privado o sin espacio: sigue en memoria */
   }
@@ -57,4 +60,5 @@ export const useOutlookStore = create<OutlookState>()((set) => ({
   setIndicator: (indicator) => set({ indicator }),
 }));
 
-export const useHousehold = (fieldId: string) => useOutlookStore((s) => s.household[fieldId] ?? EMPTY_HOUSEHOLD);
+export const useHousehold = (fieldId: string) =>
+  useOutlookStore((s) => s.household[fieldId] ?? EMPTY_HOUSEHOLD);

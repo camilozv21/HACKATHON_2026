@@ -55,10 +55,26 @@ function contextFor(hint: RegionHint, l: Loc): OutlookResponse['context'] {
     placeName: hint.placeName,
     facts,
     questions: [
-      tr(l, '¿Quién trabaja la finca y en qué meses hay más trabajo?', 'Who works the farm and in which months is there most work?'),
-      tr(l, '¿La tierra es propia, arrendada o en compañía? ¿Por cuántos años?', 'Is the land owned, rented or sharecropped? For how many years?'),
-      tr(l, '¿A quién le vendes y en qué meses necesitas dinero?', 'Who do you sell to and in which months do you need money?'),
-      tr(l, '¿Qué comida sale de la finca para la casa y en qué meses falta?', 'What food goes from the farm to the home, and in which months is it missing?'),
+      tr(
+        l,
+        '¿Quién trabaja la finca y en qué meses hay más trabajo?',
+        'Who works the farm and in which months is there most work?',
+      ),
+      tr(
+        l,
+        '¿La tierra es propia, arrendada o en compañía? ¿Por cuántos años?',
+        'Is the land owned, rented or sharecropped? For how many years?',
+      ),
+      tr(
+        l,
+        '¿A quién le vendes y en qué meses necesitas dinero?',
+        'Who do you sell to and in which months do you need money?',
+      ),
+      tr(
+        l,
+        '¿Qué comida sale de la finca para la casa y en qué meses falta?',
+        'What food goes from the farm to the home, and in which months is it missing?',
+      ),
     ],
   };
 }
@@ -79,7 +95,13 @@ export function buildMockOutlook(req: OutlookRequestParsed, hint: RegionHint): O
     );
   }
   if (req.field.areaHa == null) {
-    assumptions.push(tr(l, 'No sabemos el tamaño del lote: hicimos las cuentas para 1 hectárea.', "We don't know the plot size: we calculated for 1 hectare."));
+    assumptions.push(
+      tr(
+        l,
+        'No sabemos el tamaño del lote: hicimos las cuentas para 1 hectárea.',
+        "We don't know the plot size: we calculated for 1 hectare.",
+      ),
+    );
   }
   if (hh?.workers == null) {
     assumptions.push(
@@ -91,14 +113,29 @@ export function buildMockOutlook(req: OutlookRequestParsed, hint: RegionHint): O
     );
   }
   if (req.site?.slopePct == null) {
-    assumptions.push(tr(l, 'No medimos la pendiente de tu lote: el suelo que se lava es una estimación gruesa.', "We didn't measure your plot's slope: soil loss is a rough estimate."));
+    assumptions.push(
+      tr(
+        l,
+        'No medimos la pendiente de tu lote: el suelo que se lava es una estimación gruesa.',
+        "We didn't measure your plot's slope: soil loss is a rough estimate.",
+      ),
+    );
   }
+  // En Colombia, el puntaje de ingresos del análisis ya usa precios mayoristas (SIPSA) y rendimientos del departamento
+  // (EVA): ver docs/market-data.md. En otros países sigue siendo un valor relativo genérico.
+  const colombia = hint.region === 'co';
   assumptions.push(
-    tr(
-      l,
-      'Los jornales son valores típicos de referencia y los ingresos no usan precios de tu mercado: compáralos con tus cuentas.',
-      'Workdays are typical reference values and income does not use your local prices: compare them with your own numbers.',
-    ),
+    colombia
+      ? tr(
+          l,
+          'Los jornales son valores típicos de referencia. Los ingresos usan precios mayoristas de DANE SIPSA y rendimientos de tu departamento, no lo que te pagan en finca ni tus costos: compáralos con tus cuentas.',
+          'Workdays are typical reference values. Income uses DANE SIPSA wholesale prices and your department’s yields, not your farm-gate price or your costs: compare them with your own numbers.',
+        )
+      : tr(
+          l,
+          'Los jornales son valores típicos de referencia y los ingresos no usan precios de tu mercado: compáralos con tus cuentas.',
+          'Workdays are typical reference values and income does not use your local prices: compare them with your own numbers.',
+        ),
     tr(
       l,
       'El clima se supone como el promedio de los últimos 20 años: no incluye un El Niño o una La Niña fuerte. El rango muestra años buenos y malos típicos.',
@@ -108,10 +145,22 @@ export function buildMockOutlook(req: OutlookRequestParsed, hint: RegionHint): O
 
   const context = contextFor(hint, l);
   const cited = new Set<string>([
-    ...outlooks.flatMap((o) => [...o.milestones.flatMap((m) => m.refIds), ...o.social.flatMap((f) => f.refIds)]),
+    ...outlooks.flatMap((o) => [
+      ...o.milestones.flatMap((m) => m.refIds),
+      ...o.social.flatMap((f) => f.refIds),
+    ]),
     ...context.facts.flatMap((f) => f.refIds),
     // El modelo mismo: efecto rotación, materia orgánica, erosión, bache de la transición.
-    ...(['zhao-2022', 'poeplau-don-2015', 'bakker-2004', 'den-biggelaar-2004', 'verheijen-2009', 'sare-2019', 'gaudin-2015', 'dane-2011-jornales'] satisfies RefId[]),
+    ...([
+      'zhao-2022',
+      'poeplau-don-2015',
+      'bakker-2004',
+      'den-biggelaar-2004',
+      'verheijen-2009',
+      'sare-2019',
+      'gaudin-2015',
+      'dane-2011-jornales',
+    ] satisfies RefId[]),
   ]);
 
   return {
@@ -127,7 +176,9 @@ export function buildMockOutlook(req: OutlookRequestParsed, hint: RegionHint): O
       areaAssumed: req.field.areaHa == null,
       workers: ctx.workers,
       workersAssumed: hh?.workers == null,
-      laborDaysHa: Math.round(outlooks.find((o) => o.strategyId === ctx.current.id)!.labor.perHaByMonth.reduce((a, b) => a + b, 0)),
+      laborDaysHa: Math.round(
+        outlooks.find((o) => o.strategyId === ctx.current.id)!.labor.perHaByMonth.reduce((a, b) => a + b, 0),
+      ),
     },
     strategies: outlooks,
     context,

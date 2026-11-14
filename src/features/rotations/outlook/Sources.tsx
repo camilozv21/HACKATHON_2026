@@ -9,7 +9,15 @@ type RefCtx = { number: (id: string) => number | null; anchor: (id: string) => s
 const Ctx = createContext<RefCtx>({ number: () => null, anchor: (id) => id });
 
 /** Numera las fuentes en el orden en que llegan y da a cada cita su ancla en la lista. */
-export function ReferencesProvider({ references, scope, children }: { references: Reference[]; scope: string; children: ReactNode }) {
+export function ReferencesProvider({
+  references,
+  scope,
+  children,
+}: {
+  references: Reference[];
+  scope: string;
+  children: ReactNode;
+}) {
   const value = useMemo<RefCtx>(() => {
     const index = new Map(references.map((r, i) => [r.id, i + 1]));
     return { number: (id) => index.get(id) ?? null, anchor: (id) => `src-${scope}-${id}` };
@@ -32,7 +40,9 @@ function goTo(anchor: string) {
 export function Cite({ ids }: { ids: string[] }) {
   const t = useTranslations('rotations.outlook');
   const { number, anchor } = useContext(Ctx);
-  const nums = ids.map((id) => ({ id, n: number(id) })).filter((x): x is { id: string; n: number } => x.n != null);
+  const nums = ids
+    .map((id) => ({ id, n: number(id) }))
+    .filter((x): x is { id: string; n: number } => x.n != null);
   if (!nums.length) return null;
   return (
     <span className="ml-1 inline-flex flex-wrap gap-0.5 align-baseline">
@@ -58,7 +68,12 @@ export function SourcesList({ references }: { references: Reference[] }) {
   return (
     <ol className="flex flex-col gap-2">
       {references.map((r, i) => (
-        <li key={r.id} id={anchor(r.id)} tabIndex={-1} className="scroll-mt-4 rounded-xl bg-black/20 p-3 outline-none ring-1 ring-line focus-visible:ring-2 focus-visible:ring-sky-glow">
+        <li
+          key={r.id}
+          id={anchor(r.id)}
+          tabIndex={-1}
+          className="scroll-mt-4 rounded-xl bg-black/20 p-3 ring-1 ring-line outline-none focus-visible:ring-2 focus-visible:ring-sky-glow"
+        >
           <p className="text-xs text-ink-muted">
             <span className="mr-1 font-semibold text-sky-glow tabular-nums">{i + 1}.</span>
             {r.authors} ({r.year}). <span className="text-ink">{r.title}</span>. <i>{r.venue}</i>.

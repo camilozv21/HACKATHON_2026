@@ -7,7 +7,15 @@ import type { ReactNode } from 'react';
 import type { Tenure } from '@/lib/api/outlook';
 import { useHousehold, useOutlookStore } from './store';
 
-function Chip({ pressed, onClick, children }: { pressed: boolean; onClick: () => void; children: ReactNode }) {
+function Chip({
+  pressed,
+  onClick,
+  children,
+}: {
+  pressed: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
   return (
     <button
       type="button"
@@ -51,12 +59,17 @@ export function HouseholdQuestions({ fieldId }: { fieldId: string }) {
       <p className="flex items-start gap-2 text-sm">
         <Users aria-hidden className="mt-0.5 size-4 shrink-0 text-field-300" />
         <span>
-          <span className="font-semibold">{t('title')}</span> <span className="text-ink-muted">{t('hint')}</span>
+          <span className="font-semibold">{t('title')}</span>{' '}
+          <span className="text-ink-muted">{t('hint')}</span>
         </span>
       </p>
       <Question legend={t('workers')}>
         {WORKERS.map((n) => (
-          <Chip key={n} pressed={hh.workers === n} onClick={() => set({ workers: hh.workers === n ? null : n })}>
+          <Chip
+            key={n}
+            pressed={hh.workers === n}
+            onClick={() => set({ workers: hh.workers === n ? null : n })}
+          >
             {n === 5 ? t('workersMore') : n}
           </Chip>
         ))}
@@ -70,7 +83,11 @@ export function HouseholdQuestions({ fieldId }: { fieldId: string }) {
       </Question>
       <Question legend={t('association')}>
         {([true, false] as const).map((v) => (
-          <Chip key={String(v)} pressed={hh.association === v} onClick={() => set({ association: hh.association === v ? null : v })}>
+          <Chip
+            key={String(v)}
+            pressed={hh.association === v}
+            onClick={() => set({ association: hh.association === v ? null : v })}
+          >
             {v ? t('yes') : t('no')}
           </Chip>
         ))}

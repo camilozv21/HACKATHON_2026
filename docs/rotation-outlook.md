@@ -50,12 +50,12 @@ el análisis sabe del sitio:
 
 Manda además tres respuestas de la familia, todas opcionales:
 
-| Campo | Valores | Para qué |
-| --- | --- | --- |
-| `household.workers` | 1–12 | Jornales que da la familia al mes (frente a los meses pico). |
-| `household.tenure` | `own` \| `rent` \| `shared` \| `unknown` | Si conviene invertir en suelo cuando tarda años en pagarse. |
-| `household.association` | `true` \| `false` | Venta en grupo, semilla y acompañamiento. |
-| `pace` | `all` \| `gradual` | Todo el lote el año 1, o ¼ → ½ → todo. |
+| Campo                   | Valores                                  | Para qué                                                     |
+| ----------------------- | ---------------------------------------- | ------------------------------------------------------------ |
+| `household.workers`     | 1–12                                     | Jornales que da la familia al mes (frente a los meses pico). |
+| `household.tenure`      | `own` \| `rent` \| `shared` \| `unknown` | Si conviene invertir en suelo cuando tarda años en pagarse.  |
+| `household.association` | `true` \| `false`                        | Venta en grupo, semilla y acompañamiento.                    |
+| `pace`                  | `all` \| `gradual`                       | Todo el lote el año 1, o ¼ → ½ → todo.                       |
 
 Si falta un dato, el modelo lo supone y lo dice en `assumptions` y en `baseline.*Assumed`.
 
@@ -64,16 +64,16 @@ Si falta un dato, el modelo lo supone y lo dice en `assumptions` y en `baseline.
 `a` es la parte del lote que ya cambió. Con `pace: 'all'` vale 1 desde el año 1; con `gradual`, 0,25 → 0,5 → 1.
 Cada puntaje efectivo mezcla lo de hoy y la opción según `a`.
 
-| Indicador | Regla | Fuente |
-| --- | --- | --- |
-| Materia orgánica (%) | Se acerca a un nuevo equilibrio `MO₀ × (1 + r)`, con respuesta de primer orden (τ = 12 años en clima cálido, 18 en templado, 25 en frío). `r` sube 0,5 % por cada punto de puntaje de materia orgánica sobre lo de hoy. Lo de hoy también se mueve: baja si su puntaje es bajo (quema, suelo desnudo). Con una cobertura, el resultado da ~5 % más de carbono en 10 años. | Poeplau y Don 2015 (0,32 t C/ha/año; ~155 años al equilibrio); McDaniel et al. 2014 (+3,6 % de C con más cultivos; +8,5 % con cobertura); Minasny et al. 2017 (4 por mil al año) |
-| Materia orgánica de partida | El análisis de suelo si lo hay. Si no, lo típico del clima: 5 % en clima frío o de altura, 1–1,8 % en zonas secas, 2,2 % en trópico cálido y 3 % en los demás. Siempre se marca como supuesto. | — |
-| Suelo que se lava (t/ha/año) | Pérdida potencial × factor de cobertura `0,35 × ((100 − erosión)/100)^1,6` (lógica de RUSLE). Pérdida potencial = 150 × lluvia/2.000 mm × (pendiente + 2)/32 × textura. Calibrado con la finca demo de Quindío: el café sin cobertura da ~25 t/ha (Cenicafé midió 14,67 con azadón) y con cobertura < 1 t/ha (Cenicafé: 0,61). | Rivera Posada 1996, Cenicafé (14,67 t/ha con azadón; 0,61 t/ha con cobertura); Montgomery 2007 |
-| Suelo perdido (mm, acumulado) | Σ pérdida / 13 (1 mm en una hectárea ≈ 13 t, con densidad aparente de 1,3). Lo tolerable es ~1 t/ha/año. | Verheijen et al. 2009 (0,3–1,4 t/ha/año) |
-| Productividad | `1 − 0,0004 × mm perdidos`: ~4 % menos por cada 10 cm de suelo. | Bakker et al. 2004; den Biggelaar et al. 2004 (0,3 %/año en promedio mundial) |
-| Ingreso neto (100 = hoy) | `productividad × [(1 − a) + a × L × (1 + g × rampa)] − costos`. Ver la explicación debajo de la tabla. | Zhao et al. 2022 (+20 % con leguminosa previa); Pittelkow et al. 2015, FCR (bache de 1–2 años); SARE 2019 (~3 años para recuperar) |
-| Rango año malo / año bueno | `v = 0,24 − 0,0012 × corte de plagas − 0,025 × (familias − 1)`, entre 0,07 y 0,30, más 0,04 en la transición. Malo = `mid × (1 − v)`, bueno = `mid × (1 + 0,6 v)`: los años malos pesan más. | Gaudin et al. 2015; Bowles et al. 2020 |
-| Jornales/ha | Mezcla de lo de hoy y de la opción, más los jornales de establecer un perenne nuevo el año en que se siembra. | DANE 2011; UPRA 2023 |
+| Indicador                     | Regla                                                                                                                                                                                                                                                                                                                                                                     | Fuente                                                                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Materia orgánica (%)          | Se acerca a un nuevo equilibrio `MO₀ × (1 + r)`, con respuesta de primer orden (τ = 12 años en clima cálido, 18 en templado, 25 en frío). `r` sube 0,5 % por cada punto de puntaje de materia orgánica sobre lo de hoy. Lo de hoy también se mueve: baja si su puntaje es bajo (quema, suelo desnudo). Con una cobertura, el resultado da ~5 % más de carbono en 10 años. | Poeplau y Don 2015 (0,32 t C/ha/año; ~155 años al equilibrio); McDaniel et al. 2014 (+3,6 % de C con más cultivos; +8,5 % con cobertura); Minasny et al. 2017 (4 por mil al año) |
+| Materia orgánica de partida   | El análisis de suelo si lo hay. Si no, lo típico del clima: 5 % en clima frío o de altura, 1–1,8 % en zonas secas, 2,2 % en trópico cálido y 3 % en los demás. Siempre se marca como supuesto.                                                                                                                                                                            | —                                                                                                                                                                                |
+| Suelo que se lava (t/ha/año)  | Pérdida potencial × factor de cobertura `0,35 × ((100 − erosión)/100)^1,6` (lógica de RUSLE). Pérdida potencial = 150 × lluvia/2.000 mm × (pendiente + 2)/32 × textura. Calibrado con la finca demo de Quindío: el café sin cobertura da ~25 t/ha (Cenicafé midió 14,67 con azadón) y con cobertura < 1 t/ha (Cenicafé: 0,61).                                            | Rivera Posada 1996, Cenicafé (14,67 t/ha con azadón; 0,61 t/ha con cobertura); Montgomery 2007                                                                                   |
+| Suelo perdido (mm, acumulado) | Σ pérdida / 13 (1 mm en una hectárea ≈ 13 t, con densidad aparente de 1,3). Lo tolerable es ~1 t/ha/año.                                                                                                                                                                                                                                                                  | Verheijen et al. 2009 (0,3–1,4 t/ha/año)                                                                                                                                         |
+| Productividad                 | `1 − 0,0004 × mm perdidos`: ~4 % menos por cada 10 cm de suelo.                                                                                                                                                                                                                                                                                                           | Bakker et al. 2004; den Biggelaar et al. 2004 (0,3 %/año en promedio mundial)                                                                                                    |
+| Ingreso neto (100 = hoy)      | `productividad × [(1 − a) + a × L × (1 + g × rampa)] − costos`. Ver la explicación debajo de la tabla.                                                                                                                                                                                                                                                                    | Zhao et al. 2022 (+20 % con leguminosa previa); Pittelkow et al. 2015, FCR (bache de 1–2 años); SARE 2019 (~3 años para recuperar)                                               |
+| Rango año malo / año bueno    | `v = 0,24 − 0,0012 × corte de plagas − 0,025 × (familias − 1)`, entre 0,07 y 0,30, más 0,04 en la transición. Malo = `mid × (1 − v)`, bueno = `mid × (1 + 0,6 v)`: los años malos pesan más.                                                                                                                                                                              | Gaudin et al. 2015; Bowles et al. 2020                                                                                                                                           |
+| Jornales/ha                   | Mezcla de lo de hoy y de la opción, más los jornales de establecer un perenne nuevo el año en que se siembra.                                                                                                                                                                                                                                                             | DANE 2011; UPRA 2023                                                                                                                                                             |
 
 Partes de la fórmula del ingreso:
 
@@ -112,17 +112,17 @@ hoy:
 
 **Jornales por hectárea y ciclo.** Son valores para trabajo a mano o con animales.
 
-| Cultivo | Jornales/ha | Fuente |
-| --- | --- | --- |
-| Maíz | 40 | DANE 2011 (37 por ha cosechada) |
-| Fríjol | 80 | UPRA 2023: 48–131 según la región; DANE 2011: 38 |
-| Yuca | 75 | UPRA 2023: 53–93; DANE 2011: 100 |
-| Papa | 105 | DANE 2011 (104) |
-| Plátano | 108 | DANE 2011 |
-| Café | 150 por año | DANE 2011 |
-| Caña panelera | 200 por año | DANE 2011 (204) |
-| Hortalizas | 150 | DANE 2011 |
-| Los demás | valores típicos | Sin fuente local: el backend debería reemplazarlos. |
+| Cultivo       | Jornales/ha     | Fuente                                              |
+| ------------- | --------------- | --------------------------------------------------- |
+| Maíz          | 40              | DANE 2011 (37 por ha cosechada)                     |
+| Fríjol        | 80              | UPRA 2023: 48–131 según la región; DANE 2011: 38    |
+| Yuca          | 75              | UPRA 2023: 53–93; DANE 2011: 100                    |
+| Papa          | 105             | DANE 2011 (104)                                     |
+| Plátano       | 108             | DANE 2011                                           |
+| Café          | 150 por año     | DANE 2011                                           |
+| Caña panelera | 200 por año     | DANE 2011 (204)                                     |
+| Hortalizas    | 150             | DANE 2011                                           |
+| Los demás     | valores típicos | Sin fuente local: el backend debería reemplazarlos. |
 
 Notas sobre los jornales:
 
@@ -154,15 +154,15 @@ ganado, hay venta todo el año.
 Cada estrategia trae `social[]`. Cada factor tiene un estado (`good`, `watch` o `alert`), y la UI siempre lo muestra
 con ícono y texto.
 
-| Factor | Cuándo | Fuente |
-| --- | --- | --- |
-| `labor` | Siempre. Es `alert` si habría que contratar más jornales que hoy. | DANE 2011, UPRA 2023; en Colombia, el envejecimiento del campo (CNA 2014) |
-| `tenure` | Tierra propia: a favor. Arrendada o en compañía con una opción que tarda ≥ 3 años en pagarse o que siembra un perenne: alerta. Sin respuesta: pregunta. | Higgins et al. 2018; Lawry et al. 2017 |
-| `food` | Meses sin comida de la finca frente a hoy, y la diversidad. Si todo se vende, es menos grave. | Vaitla et al. 2009; Waha et al. 2018 |
-| `cash` | Meses con venta frente a hoy. | Gaudin et al. 2015; Bowles et al. 2020 |
-| `market` | Hay un cultivo nuevo que no está en los mercados que marcó la persona, o hay asociación. | Knowler y Bradshaw 2007 (capital social) |
-| `knowledge` | Hay un cultivo o una cobertura nuevos para la persona: escuela de campo y prueba en parte del lote. | Waddington et al. 2014; Prokopy et al. 2019 |
-| `workload` | El trabajo sube ≥ 15 % o hay una cobertura nueva: repartir tareas y decidir juntos sobre lo que se gana. | FAO 2023; en Colombia, CNA 2014 (36,4 % de productoras) |
+| Factor      | Cuándo                                                                                                                                                  | Fuente                                                                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `labor`     | Siempre. Es `alert` si habría que contratar más jornales que hoy.                                                                                       | DANE 2011, UPRA 2023; en Colombia, el envejecimiento del campo (CNA 2014) |
+| `tenure`    | Tierra propia: a favor. Arrendada o en compañía con una opción que tarda ≥ 3 años en pagarse o que siembra un perenne: alerta. Sin respuesta: pregunta. | Higgins et al. 2018; Lawry et al. 2017                                    |
+| `food`      | Meses sin comida de la finca frente a hoy, y la diversidad. Si todo se vende, es menos grave.                                                           | Vaitla et al. 2009; Waha et al. 2018                                      |
+| `cash`      | Meses con venta frente a hoy.                                                                                                                           | Gaudin et al. 2015; Bowles et al. 2020                                    |
+| `market`    | Hay un cultivo nuevo que no está en los mercados que marcó la persona, o hay asociación.                                                                | Knowler y Bradshaw 2007 (capital social)                                  |
+| `knowledge` | Hay un cultivo o una cobertura nuevos para la persona: escuela de campo y prueba en parte del lote.                                                     | Waddington et al. 2014; Prokopy et al. 2019                               |
+| `workload`  | El trabajo sube ≥ 15 % o hay una cobertura nueva: repartir tareas y decidir juntos sobre lo que se gana.                                                | FAO 2023; en Colombia, CNA 2014 (36,4 % de productoras)                   |
 
 **Contexto de la región** (`context`). Dentro de Colombia, la ruta usa `nearestMunicipio` (≤ 30 km del centro de un
 municipio). Ahí suma tres datos del país:

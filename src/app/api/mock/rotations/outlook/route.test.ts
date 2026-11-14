@@ -7,24 +7,36 @@ import { buildMockAnalysis } from '@/mocks/analysis';
 import { POST } from './route';
 
 const post = (body: unknown) =>
-  POST(new Request('http://test/api/mock/rotations/outlook', { method: 'POST', body: JSON.stringify(body), headers: { 'content-type': 'application/json' } }));
+  POST(
+    new Request('http://test/api/mock/rotations/outlook', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'content-type': 'application/json' },
+    }),
+  );
 
 function bodyFor(demoId: string) {
   const demo = DEMO_FARMS.find((d) => d.id === demoId)!;
-  const analysis = buildMockAnalysis({ field: toFieldInput(demoField(demo, 'es')), priorities: DEFAULT_PRIORITIES, locale: 'es' });
+  const analysis = buildMockAnalysis({
+    field: toFieldInput(demoField(demo, 'es')),
+    priorities: DEFAULT_PRIORITIES,
+    locale: 'es',
+  });
   return {
     field: analysis.field,
     priorities: DEFAULT_PRIORITIES,
     locale: 'es',
-    strategies: analysis.strategies.map(({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
-      id,
-      name,
-      isCurrent,
-      durationMonths,
-      seasons,
-      scores,
-      confidence,
-    })),
+    strategies: analysis.strategies.map(
+      ({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
+        id,
+        name,
+        isCurrent,
+        durationMonths,
+        seasons,
+        scores,
+        confidence,
+      }),
+    ),
     household: { workers: 2, tenure: 'rent', association: null },
     pace: 'gradual',
   };

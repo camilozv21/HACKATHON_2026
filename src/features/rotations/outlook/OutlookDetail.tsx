@@ -9,9 +9,25 @@ import type { AnalysisResponse, CropId, RotationStrategy } from '@/lib/api/contr
 import type { OutlookResponse, StrategyOutlook } from '@/lib/api/outlook';
 import { seriesColor } from '../colors';
 import { useMonthNames } from '../parts';
-import { LaborChart, MonthStrip, RotationWheel, SeriesLegend, SeriesTable, Trajectory, YearStrip } from './charts';
+import {
+  LaborChart,
+  MonthStrip,
+  RotationWheel,
+  SeriesLegend,
+  SeriesTable,
+  Trajectory,
+  YearStrip,
+} from './charts';
 import { HouseholdQuestions } from './HouseholdQuestions';
-import { Fold, IndicatorPicker, MILESTONE_ICON, PacePicker, StatusBadge, toSeries, useIndicatorFormat } from './parts';
+import {
+  Fold,
+  IndicatorPicker,
+  MILESTONE_ICON,
+  PacePicker,
+  StatusBadge,
+  toSeries,
+  useIndicatorFormat,
+} from './parts';
 import { Cite, ReferencesProvider, SourcesList } from './Sources';
 import { useOutlookStore } from './store';
 import { useUnits } from '@/lib/units';
@@ -45,7 +61,21 @@ function CycleList({ o }: { o: StrategyOutlook }) {
   );
 }
 
-function SocialSection({ data, o, base, color, baseColor, fieldId }: { data: OutlookResponse; o: StrategyOutlook; base?: StrategyOutlook; color: string; baseColor: string; fieldId: string }) {
+function SocialSection({
+  data,
+  o,
+  base,
+  color,
+  baseColor,
+  fieldId,
+}: {
+  data: OutlookResponse;
+  o: StrategyOutlook;
+  base?: StrategyOutlook;
+  color: string;
+  baseColor: string;
+  fieldId: string;
+}) {
   const t = useTranslations('rotations.outlook');
   const u = useUnits();
   const isCurrent = !base || base.strategyId === o.strategyId;
@@ -84,7 +114,10 @@ function SocialSection({ data, o, base, color, baseColor, fieldId }: { data: Out
             need: isCurrent ? t('todayLabel') : t('thisOption'),
             base: t('todayLabel'),
             capacity: t('familyCapacity', { n: o.labor.familyPerMonth }),
-            chart: t('laborChart', { peak: Math.round(Math.max(...o.labor.farmByMonth)), family: o.labor.familyPerMonth }),
+            chart: t('laborChart', {
+              peak: Math.round(Math.max(...o.labor.farmByMonth)),
+              family: o.labor.familyPerMonth,
+            }),
           }}
         />
         <ul aria-hidden className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">
@@ -108,10 +141,18 @@ function SocialSection({ data, o, base, color, baseColor, fieldId }: { data: Out
       <div className="flex flex-col gap-1.5">
         <p className="font-semibold">{t('foodTitle')}</p>
         {!isCurrent && base && <MonthStrip months={base.food.months} label={t('todayLabel')} tone="food" />}
-        <MonthStrip months={o.food.months} label={isCurrent ? t('todayLabel') : t('thisOption')} tone="food" />
+        <MonthStrip
+          months={o.food.months}
+          label={isCurrent ? t('todayLabel') : t('thisOption')}
+          tone="food"
+        />
         <p className="mt-1 font-semibold">{t('cashTitle')}</p>
         {!isCurrent && base && <MonthStrip months={base.cash.months} label={t('todayLabel')} tone="cash" />}
-        <MonthStrip months={o.cash.months} label={isCurrent ? t('todayLabel') : t('thisOption')} tone="cash" />
+        <MonthStrip
+          months={o.cash.months}
+          label={isCurrent ? t('todayLabel') : t('thisOption')}
+          tone="cash"
+        />
         <p className="text-xs text-ink-muted">{t('stripLegend')}</p>
       </div>
 
@@ -119,7 +160,9 @@ function SocialSection({ data, o, base, color, baseColor, fieldId }: { data: Out
 
       {data.context.facts.length > 0 && (
         <div>
-          <p className="mb-1 font-semibold">{data.context.region === 'co' ? t('contextCo') : t('contextGlobal')}</p>
+          <p className="mb-1 font-semibold">
+            {data.context.region === 'co' ? t('contextCo') : t('contextGlobal')}
+          </p>
           <ul className="flex flex-col gap-1.5">
             {data.context.facts.map((f) => (
               <li key={f.id} className="rounded-xl bg-black/20 p-3 ring-1 ring-line">
@@ -179,7 +222,9 @@ export default function OutlookDetail({
 
   const isCurrent = strategy.isCurrent;
   const series = [
-    ...(isCurrent || !base ? [] : [toSeries(base, indicator, data, { label: t('todayLabel'), color: baseColor })]),
+    ...(isCurrent || !base
+      ? []
+      : [toSeries(base, indicator, data, { label: t('todayLabel'), color: baseColor })]),
     toSeries(o, indicator, data, { label: isCurrent ? t('todayLabel') : strategy.name, color }, true),
   ];
   const transitionEnd = o.years.filter((y) => y.phase === 'transition').at(-1)?.year ?? 0;
@@ -188,11 +233,17 @@ export default function OutlookDetail({
 
   return (
     <ReferencesProvider references={data.references} scope={`dt-${id}`}>
-      <div className={q.isFetching ? 'flex flex-col gap-4 opacity-70 transition-opacity' : 'flex flex-col gap-4'} aria-busy={q.isFetching}>
+      <div
+        className={q.isFetching ? 'flex flex-col gap-4 opacity-70 transition-opacity' : 'flex flex-col gap-4'}
+        aria-busy={q.isFetching}
+      >
         <Fold title={t('detailTitle', { n: data.horizonYears })} icon={CalendarRange}>
           <p className="text-ink-muted">{t('detailHint')}</p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
-            <RotationWheel months={o.years.slice(0, o.cycleYears).flatMap((y) => y.months)} cycleYears={o.cycleYears} />
+            <RotationWheel
+              months={o.years.slice(0, o.cycleYears).flatMap((y) => y.months)}
+              cycleYears={o.cycleYears}
+            />
             <div className="w-full min-w-0 flex-1">
               <p className="mb-1 font-semibold">{t('cycleTitle', { years: o.cycleYears })}</p>
               <CycleList o={o} />
@@ -207,7 +258,9 @@ export default function OutlookDetail({
                 <p className="text-xs text-ink-muted">
                   {t('breakEven')} <GlossaryLink term="break-even" />
                 </p>
-                <p className="text-xl font-bold">{be === 1 ? t('noDipShort') : be == null ? t('notInHorizon') : t('yearN', { n: be })}</p>
+                <p className="text-xl font-bold">
+                  {be === 1 ? t('noDipShort') : be == null ? t('notInHorizon') : t('yearN', { n: be })}
+                </p>
               </div>
               <div className="rounded-2xl bg-black/20 p-3 ring-1 ring-line">
                 <p className="text-xs text-ink-muted">{t('soilSavedLabel', { n: data.horizonYears })}</p>
@@ -230,14 +283,26 @@ export default function OutlookDetail({
               label={chartLabel}
               reference={indicator === 'income' ? 100 : undefined}
               includeZero={indicator === 'soilLost' || indicator === 'labor'}
-              shade={!isCurrent && transitionEnd > 0 ? { to: transitionEnd, label: t('phase.transition') } : undefined}
-              marker={!isCurrent && indicator === 'income' && be != null && be > 1 ? { year: be, seriesId: o.strategyId, label: t('breakEven') } : undefined}
+              shade={
+                !isCurrent && transitionEnd > 0
+                  ? { to: transitionEnd, label: t('phase.transition') }
+                  : undefined
+              }
+              marker={
+                !isCurrent && indicator === 'income' && be != null && be > 1
+                  ? { year: be, seriesId: o.strategyId, label: t('breakEven') }
+                  : undefined
+              }
             />
             <div className="mt-2">
               <SeriesLegend series={series} format={fmt} endLabel={t('inYears', { n: data.horizonYears })} />
             </div>
-            {(indicator === 'income' || indicator === 'som') && <p className="mt-1 text-xs text-ink-muted">{t('bandNote')}</p>}
-            {!isCurrent && indicator === 'income' && be != null && be > 1 && <p className="mt-1 text-xs text-ink-muted">{t('markerNote')}</p>}
+            {(indicator === 'income' || indicator === 'som') && (
+              <p className="mt-1 text-xs text-ink-muted">{t('bandNote')}</p>
+            )}
+            {!isCurrent && indicator === 'income' && be != null && be > 1 && (
+              <p className="mt-1 text-xs text-ink-muted">{t('markerNote')}</p>
+            )}
             <details className="mt-2 rounded-2xl bg-black/20 ring-1 ring-line">
               <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-3 text-sm font-semibold [&::-webkit-details-marker]:hidden">
                 <Table2 aria-hidden className="size-4 text-ink-muted" />
@@ -252,7 +317,14 @@ export default function OutlookDetail({
 
         <Fold title={t('socialTitle')} icon={HeartHandshake} open={false}>
           <p className="text-ink-muted">{t('socialHint')}</p>
-          <SocialSection data={data} o={o} base={base} color={color} baseColor={baseColor} fieldId={analysis.field.id} />
+          <SocialSection
+            data={data}
+            o={o}
+            base={base}
+            color={color}
+            baseColor={baseColor}
+            fieldId={analysis.field.id}
+          />
         </Fold>
 
         <Fold title={t('assumptions')} icon={CircleHelp} open={false}>

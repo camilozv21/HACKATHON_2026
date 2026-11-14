@@ -48,7 +48,8 @@ type Scores = OutlookStrategyInput['scores'];
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 const round = (v: number, d = 1) => Math.round(v * 10 ** d) / 10 ** d;
 /** "un mes" / "3 meses" (y en inglés "one month" / "3 months"). */
-const monthsN = (n: number, l: Loc) => (n === 1 ? tr(l, 'un mes', 'one month') : tr(l, `${n} meses`, `${n} months`));
+const monthsN = (n: number, l: Loc) =>
+  n === 1 ? tr(l, 'un mes', 'one month') : tr(l, `${n} meses`, `${n} months`);
 
 const listJoin = (xs: string[], l: Loc) =>
   xs.length <= 1 ? (xs[0] ?? '') : `${xs.slice(0, -1).join(', ')} ${tr(l, 'y', 'and')} ${xs.at(-1)}`;
@@ -189,7 +190,10 @@ function project(s: OutlookStrategyInput, ctx: Ctx): Path {
   const cycleYears = cycleYearsOf(s.durationMonths);
   const rows = monthRows(s.seasons, cycleYears);
   const laborS = averageRow(laborRows(s.seasons, cycleYears, ctx.mechanized)).reduce((a, b) => a + b, 0);
-  const laborC = averageRow(laborRows(cur.seasons, cycleYearsOf(cur.durationMonths), ctx.mechanized)).reduce((a, b) => a + b, 0);
+  const laborC = averageRow(laborRows(cur.seasons, cycleYearsOf(cur.durationMonths), ctx.mechanized)).reduce(
+    (a, b) => a + b,
+    0,
+  );
   const costs = costProfile(s, ctx);
   const g = s.isCurrent ? 0 : rotationGain(s.scores, cur.scores);
   const L = s.isCurrent ? 1 : (s.scores.income + 20) / (cur.scores.income + 20);
@@ -236,10 +240,18 @@ function project(s: OutlookStrategyInput, ctx: Ctx): Path {
     converted.forEach((d, j) => {
       if (d > 0) cost += d * costs.at(y - j);
     });
-    const mid = 100 * (productivity * ((1 - a) + adopted) - cost);
+    const mid = 100 * (productivity * (1 - a + adopted) - cost);
     const fam = famC + a * (famS - famC);
-    const phase: Phase = s.isCurrent ? 'stable' : y <= transitionEnd ? 'transition' : y <= buildingEnd ? 'building' : 'stable';
-    const v = clamp(0.24 - 0.0012 * eff('pestBreak') - 0.025 * (fam - 1), 0.07, 0.3) + (phase === 'transition' ? 0.04 : 0);
+    const phase: Phase = s.isCurrent
+      ? 'stable'
+      : y <= transitionEnd
+        ? 'transition'
+        : y <= buildingEnd
+          ? 'building'
+          : 'stable';
+    const v =
+      clamp(0.24 - 0.0012 * eff('pestBreak') - 0.025 * (fam - 1), 0.07, 0.3) +
+      (phase === 'transition' ? 0.04 : 0);
 
     // Trabajo
     const newShare = converted.at(-1) ?? 0;
@@ -251,10 +263,18 @@ function project(s: OutlookStrategyInput, ctx: Ctx): Path {
       phase,
       adopted: round(a, 2),
       months: rows[(y - 1) % cycleYears]!,
-      soilOrganicMatterPct: { mid: round(som, 2), low: round(som - somSpread, 2), high: round(som + somSpread, 2) },
+      soilOrganicMatterPct: {
+        mid: round(som, 2),
+        low: round(som - somSpread, 2),
+        high: round(som + somSpread, 2),
+      },
       soilLossTHa: { mid: round(loss), low: round(loss * 0.6), high: round(loss * 1.6) },
       soilLostMm: round(lostMm, 2),
-      incomeIndex: { mid: round(mid), low: round(mid - Math.abs(mid) * v), high: round(mid + Math.abs(mid) * 0.6 * v) },
+      incomeIndex: {
+        mid: round(mid),
+        low: round(mid - Math.abs(mid) * v),
+        high: round(mid + Math.abs(mid) * 0.6 * v),
+      },
       laborDaysHa: round(labor, 0),
     });
     income.push(mid);
@@ -285,7 +305,11 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
       {
         year: Math.min(5, req.horizonYears),
         kind: 'soil-test',
-        text: tr(l, 'Haz un análisis de suelo para saber cómo va la materia orgánica.', 'Get a soil test to see how organic matter is doing.'),
+        text: tr(
+          l,
+          'Haz un análisis de suelo para saber cómo va la materia orgánica.',
+          'Get a soil test to see how organic matter is doing.',
+        ),
         refIds: ['minasny-2017'] satisfies RefId[],
       },
     ];
@@ -311,15 +335,27 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
     year: 1,
     kind: 'trial',
     text: gradual
-      ? tr(l, 'Año de prueba: la rotación nueva en ¼ del lote; el resto sigue como hoy.', 'Trial year: the new rotation on ¼ of the plot; the rest stays as today.')
-      : tr(l, 'Primer año: todo el lote cambia. Es el año de aprender y el ingreso puede bajar.', 'First year: the whole plot changes. It is the learning year and income may dip.'),
+      ? tr(
+          l,
+          'Año de prueba: la rotación nueva en ¼ del lote; el resto sigue como hoy.',
+          'Trial year: the new rotation on ¼ of the plot; the rest stays as today.',
+        )
+      : tr(
+          l,
+          'Primer año: todo el lote cambia. Es el año de aprender y el ingreso puede bajar.',
+          'First year: the whole plot changes. It is the learning year and income may dip.',
+        ),
     refIds: (gradual ? ['pittelkow-2015-fcr', 'snapp-2010'] : ['pittelkow-2015-fcr']) satisfies RefId[],
   });
   if (gradual) {
     out.push({
       year: 3,
       kind: 'full-adoption',
-      text: tr(l, 'Todo el lote con la rotación nueva (año 2: la mitad).', 'The whole plot on the new rotation (year 2: half).'),
+      text: tr(
+        l,
+        'Todo el lote con la rotación nueva (año 2: la mitad).',
+        'The whole plot on the new rotation (year 2: half).',
+      ),
       refIds: [],
     });
   }
@@ -329,7 +365,11 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
       out.push({
         year: y,
         kind: 'first-harvest',
-        text: tr(l, `Primera cosecha del ${cropName(p, l)} nuevo.`, `First harvest of the new ${cropName(p, l)}.`),
+        text: tr(
+          l,
+          `Primera cosecha del ${cropName(p, l)} nuevo.`,
+          `First harvest of the new ${cropName(p, l)}.`,
+        ),
         refIds: [],
       });
     }
@@ -338,7 +378,11 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
     out.push({
       year: cycleYears,
       kind: 'first-cycle',
-      text: tr(l, `Primera vuelta completa de la rotación (${cycleYears} años); luego se repite.`, `First full turn of the rotation (${cycleYears} years); then it repeats.`),
+      text: tr(
+        l,
+        `Primera vuelta completa de la rotación (${cycleYears} años); luego se repite.`,
+        `First full turn of the rotation (${cycleYears} years); then it repeats.`,
+      ),
       refIds: [],
     });
   }
@@ -358,7 +402,11 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
     out.push({
       year: be,
       kind: 'break-even',
-      text: tr(l, 'Recuperas lo invertido: lo ganado desde el año 1 iguala a seguir como hoy.', 'You recover the investment: what you earned since year 1 equals staying as today.'),
+      text: tr(
+        l,
+        'Recuperas lo invertido: lo ganado desde el año 1 iguala a seguir como hoy.',
+        'You recover the investment: what you earned since year 1 equals staying as today.',
+      ),
       refIds: ['sare-2019'] satisfies RefId[],
     });
   }
@@ -372,13 +420,19 @@ function milestones(s: OutlookStrategyInput, path: Path, be: number | null, ctx:
         'La materia orgánica ya subió lo suficiente para notarse en un análisis de suelo.',
         'Organic matter has risen enough to show up in a soil test.',
       ),
-      refIds: (ctx.colombia ? ['poeplau-don-2015', 'mcdaniel-2014', 'castro-rincon-2018'] : ['poeplau-don-2015', 'mcdaniel-2014']) satisfies RefId[],
+      refIds: (ctx.colombia
+        ? ['poeplau-don-2015', 'mcdaniel-2014', 'castro-rincon-2018']
+        : ['poeplau-don-2015', 'mcdaniel-2014']) satisfies RefId[],
     });
   }
   out.push({
     year: Math.min(5, req.horizonYears),
     kind: 'soil-test',
-    text: tr(l, 'Haz un análisis de suelo antes de empezar y otro aquí para medir el cambio.', 'Test your soil before you start and again here to measure the change.'),
+    text: tr(
+      l,
+      'Haz un análisis de suelo antes de empezar y otro aquí para medir el cambio.',
+      'Test your soil before you start and again here to measure the change.',
+    ),
     refIds: ['minasny-2017'] satisfies RefId[],
   });
   return out.sort((a, b) => a.year - b.year);
@@ -413,7 +467,11 @@ function socialFactors(
     const hired = Math.round(labor.hiredDaysYear);
     // Más de 10 % (y al menos 5 jornales) por encima de lo que ya se contrata hoy.
     const moreHired = hired > base.labor.hiredDaysYear * 1.1 + 5;
-    const status: SocialFactor['status'] = moreHired ? 'alert' : peakNeed >= 0.8 * labor.familyPerMonth || laborChange >= 0.15 ? 'watch' : 'good';
+    const status: SocialFactor['status'] = moreHired
+      ? 'alert'
+      : peakNeed >= 0.8 * labor.familyPerMonth || laborChange >= 0.15
+        ? 'watch'
+        : 'good';
     const change = s.isCurrent
       ? ''
       : laborChange >= 0.05
@@ -460,22 +518,35 @@ function socialFactors(
 
   // 2. Tenencia de la tierra: lo que se invierte en el suelo tarda en pagarse.
   {
-    const slow = (be ?? 99) >= 3 || perennialsOf(s.seasons).some((p) => !cropsOf(ctx.current.seasons).includes(p));
+    const slow =
+      (be ?? 99) >= 3 || perennialsOf(s.seasons).some((p) => !cropsOf(ctx.current.seasons).includes(p));
     const payoff =
-      be == null ? tr(l, `más de ${req.horizonYears} años`, `more than ${req.horizonYears} years`) : be === 1 ? tr(l, 'un año', 'one year') : tr(l, `${be} años`, `${be} years`);
+      be == null
+        ? tr(l, `más de ${req.horizonYears} años`, `more than ${req.horizonYears} years`)
+        : be === 1
+          ? tr(l, 'un año', 'one year')
+          : tr(l, `${be} años`, `${be} years`);
     if (hh.tenure === 'own') {
       out.push({
         kind: 'tenure',
         status: 'good',
         title: tr(l, 'La tierra es tuya', 'The land is yours'),
-        text: tr(l, 'Lo que ganes en suelo (materia orgánica, menos erosión) se queda en tu finca.', 'What you gain in soil (organic matter, less erosion) stays on your farm.'),
+        text: tr(
+          l,
+          'Lo que ganes en suelo (materia orgánica, menos erosión) se queda en tu finca.',
+          'What you gain in soil (organic matter, less erosion) stays on your farm.',
+        ),
         refIds: ['higgins-2018'] satisfies RefId[],
       });
     } else if (hh.tenure === 'rent' || hh.tenure === 'shared') {
       out.push({
         kind: 'tenure',
         status: slow ? 'alert' : 'watch',
-        title: tr(l, hh.tenure === 'rent' ? 'Tierra arrendada' : 'Tierra en compañía', hh.tenure === 'rent' ? 'Rented land' : 'Sharecropped land'),
+        title: tr(
+          l,
+          hh.tenure === 'rent' ? 'Tierra arrendada' : 'Tierra en compañía',
+          hh.tenure === 'rent' ? 'Rented land' : 'Sharecropped land',
+        ),
         text: slow
           ? tr(
               l,
@@ -508,7 +579,16 @@ function socialFactors(
   {
     const purpose = req.field.survey?.purpose ?? null;
     const diff = base.food.gapMonths.length - food.gapMonths.length;
-    const status: SocialFactor['status'] = diff > 0 ? 'good' : diff < 0 ? (purpose === 'sale' ? 'watch' : 'alert') : food.gapMonths.length ? 'watch' : 'good';
+    const status: SocialFactor['status'] =
+      diff > 0
+        ? 'good'
+        : diff < 0
+          ? purpose === 'sale'
+            ? 'watch'
+            : 'alert'
+          : food.gapMonths.length
+            ? 'watch'
+            : 'good';
     const text =
       diff > 0
         ? tr(
@@ -556,10 +636,22 @@ function socialFactors(
       title: tr(l, 'Dinero durante el año', 'Money through the year'),
       text:
         n > nb
-          ? tr(l, `Vendes en ${monthsN(n, l)} del año (hoy ${nb}): el dinero no depende de una sola cosecha.`, `You sell in ${monthsN(n, l)} of the year (today ${nb}): money does not depend on a single harvest.`)
+          ? tr(
+              l,
+              `Vendes en ${monthsN(n, l)} del año (hoy ${nb}): el dinero no depende de una sola cosecha.`,
+              `You sell in ${monthsN(n, l)} of the year (today ${nb}): money does not depend on a single harvest.`,
+            )
           : n < nb
-            ? tr(l, `Vendes en ${monthsN(n, l)} del año (hoy ${nb}): planea el dinero para los meses sin venta.`, `You sell in ${monthsN(n, l)} of the year (today ${nb}): plan money for the months without sales.`)
-            : tr(l, `Vendes en ${monthsN(n, l)} del año, como hoy.`, `You sell in ${monthsN(n, l)} of the year, as today.`),
+            ? tr(
+                l,
+                `Vendes en ${monthsN(n, l)} del año (hoy ${nb}): planea el dinero para los meses sin venta.`,
+                `You sell in ${monthsN(n, l)} of the year (today ${nb}): plan money for the months without sales.`,
+              )
+            : tr(
+                l,
+                `Vendes en ${monthsN(n, l)} del año, como hoy.`,
+                `You sell in ${monthsN(n, l)} of the year, as today.`,
+              ),
       refIds: ['gaudin-2015', 'bowles-2020'] satisfies RefId[],
     });
   }
@@ -570,7 +662,10 @@ function socialFactors(
     const markets = new Set(req.priorities.constraints.markets);
     const unsold = costs.newHarvested.filter((c) => !markets.has(c));
     if (unsold.length || hh.association) {
-      const names = listJoin(unsold.map((c) => cropName(c, l)), l);
+      const names = listJoin(
+        unsold.map((c) => cropName(c, l)),
+        l,
+      );
       out.push({
         kind: 'market',
         status: unsold.length ? 'watch' : 'good',
@@ -581,7 +676,11 @@ function socialFactors(
               `Antes de sembrar ${names}, averigua quién lo compra y a qué precio.${hh.association ? ' Con tu asociación pueden vender juntos.' : ' Vender en grupo (asociación) ayuda.'}`,
               `Before sowing ${names}, find out who buys it and at what price.${hh.association ? ' Your association can sell together.' : ' Selling as a group (association) helps.'}`,
             )
-          : tr(l, 'Con tu asociación pueden comprar semilla y vender juntos.', 'With your association you can buy seed and sell together.'),
+          : tr(
+              l,
+              'Con tu asociación pueden comprar semilla y vender juntos.',
+              'With your association you can buy seed and sell together.',
+            ),
         refIds: ['knowler-bradshaw-2007'] satisfies RefId[],
       });
     }
@@ -592,7 +691,10 @@ function socialFactors(
     const costs = costProfile(s, ctx);
     const novel = [...costs.newHarvested, ...costs.newCovers.filter((c) => !ctx.usual.has(c))];
     if (novel.length) {
-      const names = listJoin([...new Set(novel)].map((c) => cropName(c, l)), l);
+      const names = listJoin(
+        [...new Set(novel)].map((c) => cropName(c, l)),
+        l,
+      );
       out.push({
         kind: 'knowledge',
         status: 'watch',
@@ -618,7 +720,9 @@ function socialFactors(
         'Las tareas nuevas (sembrar y cortar la cobertura, más deshierbe o cosecha) suman trabajo. Repártanlas en familia y decidan juntos sobre lo que se gana: en el campo, las mujeres suelen recibir menos pago por el mismo trabajo.',
         'New tasks (sowing and cutting the cover, more weeding or harvest) add work. Share them as a family and decide together on what is earned: in farming, women are often paid less for the same work.',
       ),
-      refIds: (ctx.colombia ? ['fao-2023-women', 'dane-cna-2014-productoras'] : ['fao-2023-women']) satisfies RefId[],
+      refIds: (ctx.colombia
+        ? ['fao-2023-women', 'dane-cna-2014-productoras']
+        : ['fao-2023-women']) satisfies RefId[],
     });
   }
 
@@ -655,15 +759,24 @@ export function strategyOutlooks(req: OutlookRequestParsed, l: Loc, colombia: bo
     const family = workers * DAYS_PER_WORKER;
     const max = Math.max(...farm);
     const over = farm.flatMap((v, i) => (v > family ? [i + 1] : []));
-    const peakMonths = over.length ? over : farm.flatMap((v, i) => (max > 0 && v >= max * 0.9 ? [i + 1] : []));
+    const peakMonths = over.length
+      ? over
+      : farm.flatMap((v, i) => (max > 0 && v >= max * 0.9 ? [i + 1] : []));
     const labor: StrategyOutlook['labor'] = {
       perHaByMonth: perHa.map((v) => round(v)),
       farmByMonth: farm.map((v) => round(v)),
       familyPerMonth: family,
       peakMonths,
-      hiredDaysYear: round(farm.reduce((a, v) => a + Math.max(0, v - family), 0), 0),
+      hiredDaysYear: round(
+        farm.reduce((a, v) => a + Math.max(0, v - family), 0),
+        0,
+      ),
     };
-    return { labor, food: foodCalendar(s.seasons), cash: cashCalendar(s.seasons, req.priorities.constraints.markets) };
+    return {
+      labor,
+      food: foodCalendar(s.seasons),
+      cash: cashCalendar(s.seasons, req.priorities.constraints.markets),
+    };
   };
 
   const base = calendars(current);

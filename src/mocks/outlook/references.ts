@@ -14,7 +14,8 @@ export const REFERENCES = {
   'zhao-2022': {
     authors: 'Zhao J, Chen J, Beillouin D, Lambers H, Yang Y, Smith P, Zeng Z, Olesen JE, Zang H',
     year: 2022,
-    title: 'Global systematic review with meta-analysis reveals yield advantage of legume-based rotations and its drivers',
+    title:
+      'Global systematic review with meta-analysis reveals yield advantage of legume-based rotations and its drivers',
     venue: 'Nature Communications 13:4926',
     url: doi('10.1038/s41467-022-32464-0'),
     topic: 'yield',
@@ -26,7 +27,8 @@ export const REFERENCES = {
   'bowles-2020': {
     authors: 'Bowles TM, Mooshammer M, Socolar Y, et al., Grandy AS',
     year: 2020,
-    title: 'Long-Term Evidence Shows that Crop-Rotation Diversification Increases Agricultural Resilience to Adverse Growing Conditions in North America',
+    title:
+      'Long-Term Evidence Shows that Crop-Rotation Diversification Increases Agricultural Resilience to Adverse Growing Conditions in North America',
     venue: 'One Earth 2(3):284–293',
     url: doi('10.1016/j.oneear.2020.02.007'),
     topic: 'stability',
@@ -50,7 +52,8 @@ export const REFERENCES = {
   'davis-2012': {
     authors: 'Davis AS, Hill JD, Chase CA, Johanns AM, Liebman M',
     year: 2012,
-    title: 'Increasing Cropping System Diversity Balances Productivity, Profitability and Environmental Health',
+    title:
+      'Increasing Cropping System Diversity Balances Productivity, Profitability and Environmental Health',
     venue: 'PLoS ONE 7(10):e47149',
     url: doi('10.1371/journal.pone.0047149'),
     topic: 'economics',
@@ -74,7 +77,8 @@ export const REFERENCES = {
   'mcdaniel-2014': {
     authors: 'McDaniel MD, Tiemann LK, Grandy AS',
     year: 2014,
-    title: 'Does agricultural crop diversity enhance soil microbial biomass and organic matter dynamics? A meta-analysis',
+    title:
+      'Does agricultural crop diversity enhance soil microbial biomass and organic matter dynamics? A meta-analysis',
     venue: 'Ecological Applications 24(3):560–570',
     url: doi('10.1890/13-0616.1'),
     topic: 'soil-carbon',
@@ -110,7 +114,8 @@ export const REFERENCES = {
   'castro-rincon-2018': {
     authors: 'Castro-Rincón E, Mojica-Rodríguez JE, Carulla-Fornaguera JE, Lascano-Aguilar CE',
     year: 2018,
-    title: 'Evaluation of legumes as green manure in forage crops for livestock in the dry Colombian Caribbean',
+    title:
+      'Evaluation of legumes as green manure in forage crops for livestock in the dry Colombian Caribbean',
     venue: 'Agronomía Mesoamericana 29(3):597–617',
     url: doi('10.15517/ma.v29i3.32350'),
     topic: 'colombia',
@@ -196,7 +201,8 @@ export const REFERENCES = {
   'den-biggelaar-2004': {
     authors: 'den Biggelaar C, Lal R, Wiebe K, Eswaran H, Breneman V, Reich P',
     year: 2004,
-    title: 'The global impact of soil erosion on productivity. II: Effects on crop yields and production over time',
+    title:
+      'The global impact of soil erosion on productivity. II: Effects on crop yields and production over time',
     venue: 'Advances in Agronomy 81:49–95',
     url: doi('10.1016/S0065-2113(03)81002-7'),
     topic: 'erosion',
@@ -330,7 +336,8 @@ export const REFERENCES = {
   'minagricultura-464-2017': {
     authors: 'Ministerio de Agricultura y Desarrollo Rural de Colombia',
     year: 2017,
-    title: 'Resolución 000464 de 2017: Lineamientos estratégicos de política pública para la Agricultura Campesina, Familiar y Comunitaria',
+    title:
+      'Resolución 000464 de 2017: Lineamientos estratégicos de política pública para la Agricultura Campesina, Familiar y Comunitaria',
     venue: 'MinAgricultura (copia en FAOLEX)',
     url: 'https://faolex.fao.org/docs/pdf/col173052.pdf',
     topic: 'colombia',
@@ -366,7 +373,8 @@ export const REFERENCES = {
   'higgins-2018': {
     authors: 'Higgins D, Balint T, Liversage H, Winters P',
     year: 2018,
-    title: 'Investigating the impacts of increased rural land tenure security: A systematic review of the evidence',
+    title:
+      'Investigating the impacts of increased rural land tenure security: A systematic review of the evidence',
     venue: 'Journal of Rural Studies 61:34–62',
     url: doi('10.1016/j.jrurstud.2018.05.001'),
     topic: 'tenure',
@@ -378,7 +386,8 @@ export const REFERENCES = {
   'lawry-2017': {
     authors: 'Lawry S, Samii C, Hall R, Leopold A, Hornby D, Mtero F',
     year: 2017,
-    title: 'The impact of land property rights interventions on investment and agricultural productivity in developing countries: a systematic review',
+    title:
+      'The impact of land property rights interventions on investment and agricultural productivity in developing countries: a systematic review',
     venue: 'Journal of Development Effectiveness 9(1):61–81',
     url: doi('10.1080/19439342.2016.1160947'),
     topic: 'tenure',
@@ -403,7 +412,8 @@ export const REFERENCES = {
   'prokopy-2019': {
     authors: 'Prokopy LS, Floress K, Arbuckle JG, et al.',
     year: 2019,
-    title: 'Adoption of agricultural conservation practices in the United States: Evidence from 35 years of quantitative literature',
+    title:
+      'Adoption of agricultural conservation practices in the United States: Evidence from 35 years of quantitative literature',
     venue: 'Journal of Soil and Water Conservation 74(5):520–534',
     url: doi('10.2489/jswc.74.5.520'),
     topic: 'adoption',
@@ -440,7 +450,8 @@ export const REFERENCES = {
   'yu-2015': {
     authors: 'Yu Y, Stomph T-J, Makowski D, van der Werf W',
     year: 2015,
-    title: 'Temporal niche differentiation increases the land equivalent ratio of annual intercrops: A meta-analysis',
+    title:
+      'Temporal niche differentiation increases the land equivalent ratio of annual intercrops: A meta-analysis',
     venue: 'Field Crops Research 184:133–144',
     url: doi('10.1016/j.fcr.2015.09.010'),
     topic: 'intercropping',

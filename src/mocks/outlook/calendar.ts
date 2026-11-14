@@ -63,10 +63,27 @@ export const ESTABLISH_DAYS: Partial<Record<CropId, number>> = {
 export const YEARS_TO_HARVEST: Partial<Record<CropId, number>> = { coffee: 2, plantain: 1, sugarcane: 1 };
 
 /** Con tractor o sembradora, los granos extensivos piden mucho menos trabajo a mano. */
-const MECHANIZABLE = new Set<CropId>(['maize', 'soybean', 'wheat', 'rice', 'sorghum', 'barley', 'oats', 'sunflower', 'cotton']);
+const MECHANIZABLE = new Set<CropId>([
+  'maize',
+  'soybean',
+  'wheat',
+  'rice',
+  'sorghum',
+  'barley',
+  'oats',
+  'sunflower',
+  'cotton',
+]);
 
 /** Lo que no se come en la casa (se vende o es cobertura, sombra o forraje). */
-const NOT_HOME_FOOD = new Set<CropId>(['coffee', 'cotton', 'sugarcane', 'soybean', 'sunflower', 'shade-trees']);
+const NOT_HOME_FOOD = new Set<CropId>([
+  'coffee',
+  'cotton',
+  'sugarcane',
+  'soybean',
+  'sunflower',
+  'shade-trees',
+]);
 
 /** Meses que dura lo cosechado (seco y guardado, en la mata o fresco). */
 const STORE_MONTHS: Partial<Record<CropId, number>> = {
@@ -167,7 +184,8 @@ function harvests(seasons: CropSeason[]): { crop: CropId; months: number[] }[] {
     if (s.role === 'fallow' || s.role === 'cover') continue;
     if (isPerennial(s) && fullYear(s)) {
       if (s.crop === 'coffee') out.push({ crop: s.crop, months: COFFEE_HARVEST });
-      else if (s.crop === 'plantain' || s.crop === 'sugarcane') out.push({ crop: s.crop, months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] });
+      else if (s.crop === 'plantain' || s.crop === 'sugarcane')
+        out.push({ crop: s.crop, months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] });
       continue;
     }
     out.push({ crop: s.crop, months: [s.endMonth] });
@@ -221,7 +239,11 @@ export function perennialsOf(seasons: CropSeason[]): CropId[] {
 
 /** Coberturas (incluidas las vivas bajo un perenne). */
 export function coversOf(seasons: CropSeason[]): CropId[] {
-  return [...new Set(seasons.filter((s) => s.role === 'cover' || CROPS[s.crop].family === 'cover').map((s) => s.crop))];
+  return [
+    ...new Set(
+      seasons.filter((s) => s.role === 'cover' || CROPS[s.crop].family === 'cover').map((s) => s.crop),
+    ),
+  ];
 }
 
 /** Lo que se vende o se come (no coberturas, sombra ni descanso). */

@@ -19,15 +19,17 @@ export function useOutlook(analysis: AnalysisResponse | undefined) {
   const pace = useOutlookStore((s) => s.pace);
   const fieldId = analysis?.field.id ?? '';
   const household = useHousehold(fieldId);
-  const strategies = analysis?.strategies.map(({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
-    id,
-    name,
-    isCurrent,
-    durationMonths,
-    seasons,
-    scores,
-    confidence,
-  }));
+  const strategies = analysis?.strategies.map(
+    ({ id, name, isCurrent, durationMonths, seasons, scores, confidence }) => ({
+      id,
+      name,
+      isCurrent,
+      durationMonths,
+      seasons,
+      scores,
+      confidence,
+    }),
+  );
 
   return useQuery({
     queryKey: ['outlook', fieldId, strategies, priorities.constraints, household, pace, locale],

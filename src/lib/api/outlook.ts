@@ -6,7 +6,16 @@
  * Vive aparte de contract.ts para que solo lo cargue el chunk "En el tiempo" (y no todos los que usan el contrato).
  */
 import { z } from 'zod';
-import { Confidence, CropId, DataSource, FarmerPriorities, FieldInput, Level, Month, RotationStrategy } from './contract';
+import {
+  Confidence,
+  CropId,
+  DataSource,
+  FarmerPriorities,
+  FieldInput,
+  Level,
+  Month,
+  RotationStrategy,
+} from './contract';
 
 // ---------------------------------------------------------------- entrada
 
@@ -228,7 +237,9 @@ export const OutlookResponse = z.object({
   context: z.object({
     region: z.enum(['co', 'global']),
     placeName: z.string().nullable(),
-    facts: z.array(z.object({ id: z.string(), text: z.string().max(320), refIds: z.array(z.string()).max(4) })).max(8),
+    facts: z
+      .array(z.object({ id: z.string(), text: z.string().max(320), refIds: z.array(z.string()).max(4) }))
+      .max(8),
     questions: z.array(z.string().max(200)).max(6),
   }),
   /** Lo que supusimos porque no lo sabemos (se muestra como "Lo que no sabemos"). */

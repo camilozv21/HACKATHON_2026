@@ -90,7 +90,10 @@ export default function OutlookOverview({
     : [];
 
   return (
-    <section aria-labelledby={`${id}-t`} className="flex flex-col gap-3 rounded-3xl bg-white/5 p-4 ring-1 ring-line">
+    <section
+      aria-labelledby={`${id}-t`}
+      className="flex flex-col gap-3 rounded-3xl bg-white/5 p-4 ring-1 ring-line"
+    >
       <div>
         <h4 id={`${id}-t`} className="flex items-center gap-2 text-base font-bold">
           <Hourglass aria-hidden className="size-5 text-field-300" />
@@ -102,12 +105,17 @@ export default function OutlookOverview({
       <IndicatorPicker />
       <PacePicker />
 
-      {q.isError && !data && <p className="rounded-xl bg-risk-medium/10 p-3 text-sm ring-1 ring-risk-medium/40">{t('error')}</p>}
+      {q.isError && !data && (
+        <p className="rounded-xl bg-risk-medium/10 p-3 text-sm ring-1 ring-risk-medium/40">{t('error')}</p>
+      )}
       {!data && !q.isError && <div aria-hidden className="shimmer h-56 rounded-2xl" />}
 
       {data && (
         <ReferencesProvider references={data.references} scope={`ov-${id.replace(/:/g, '')}`}>
-          <div aria-busy={q.isFetching} className={q.isFetching ? 'opacity-70 transition-opacity' : undefined}>
+          <div
+            aria-busy={q.isFetching}
+            className={q.isFetching ? 'opacity-70 transition-opacity' : undefined}
+          >
             <p className="mb-1 text-xs text-ink-muted">
               {t(`indicatorHint.${indicator}`)}{' '}
               {indicator === 'som' && <GlossaryLink term="organic-matter" />}
@@ -128,7 +136,13 @@ export default function OutlookOverview({
             </div>
           </div>
 
-          {top && <Takeaway data={data} item={top} currentId={ranked.find((r) => r.strategy.isCurrent)?.strategy.id} />}
+          {top && (
+            <Takeaway
+              data={data}
+              item={top}
+              currentId={ranked.find((r) => r.strategy.isCurrent)?.strategy.id}
+            />
+          )}
 
           <details className="group rounded-2xl bg-black/20 ring-1 ring-line">
             <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-3 text-sm font-semibold [&::-webkit-details-marker]:hidden">
@@ -136,7 +150,11 @@ export default function OutlookOverview({
               {t('seeData')}
             </summary>
             <div className="px-3 pb-3">
-              <SeriesTable series={series} format={fmt} caption={t('chartLabel', { indicator: t(`indicators.${indicator}`), n: data.horizonYears })} />
+              <SeriesTable
+                series={series}
+                format={fmt}
+                caption={t('chartLabel', { indicator: t(`indicators.${indicator}`), n: data.horizonYears })}
+              />
             </div>
           </details>
 

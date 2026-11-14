@@ -26,7 +26,12 @@ import type { MilestoneKind, OutlookResponse, SocialFactor, StrategyOutlook } fr
 import { INDICATORS, useOutlookStore, type Indicator } from './store';
 import type { Series } from './charts';
 
-export const INDICATOR_ICON: Record<Indicator, LucideIcon> = { income: TrendingUp, som: Sprout, soilLost: Mountain, labor: Hammer };
+export const INDICATOR_ICON: Record<Indicator, LucideIcon> = {
+  income: TrendingUp,
+  som: Sprout,
+  soilLost: Mountain,
+  labor: Hammer,
+};
 
 export const MILESTONE_ICON: Record<MilestoneKind, LucideIcon> = {
   trial: FlaskConical,
@@ -62,7 +67,11 @@ export function IndicatorPicker() {
   const value = useOutlookStore((s) => s.indicator);
   const id = useId();
   return (
-    <div role="radiogroup" aria-labelledby={`${id}-l`} className="grid grid-cols-2 gap-1 rounded-2xl bg-white/5 p-1 ring-1 ring-line sm:grid-cols-4">
+    <div
+      role="radiogroup"
+      aria-labelledby={`${id}-l`}
+      className="grid grid-cols-2 gap-1 rounded-2xl bg-white/5 p-1 ring-1 ring-line sm:grid-cols-4"
+    >
       <span id={`${id}-l`} className="sr-only">
         {t('label')}
       </span>
@@ -99,7 +108,11 @@ export function PacePicker() {
       <span id={`${id}-l`} className="text-xs font-semibold text-ink-muted">
         {t('label')}
       </span>
-      <div role="radiogroup" aria-labelledby={`${id}-l`} className="grid grid-cols-2 gap-1 rounded-2xl bg-white/5 p-1 ring-1 ring-line">
+      <div
+        role="radiogroup"
+        aria-labelledby={`${id}-l`}
+        className="grid grid-cols-2 gap-1 rounded-2xl bg-white/5 p-1 ring-1 ring-line"
+      >
         {(['all', 'gradual'] as const).map((p) => (
           <button
             key={p}
@@ -113,7 +126,11 @@ export function PacePicker() {
             )}
           >
             {t(p)}
-            <span className={clsx('text-[11px] font-normal', value === p ? 'text-black/75' : 'text-ink-faint')}>{t(`${p}Hint`)}</span>
+            <span
+              className={clsx('text-[11px] font-normal', value === p ? 'text-black/75' : 'text-ink-faint')}
+            >
+              {t(`${p}Hint`)}
+            </span>
           </button>
         ))}
       </div>
@@ -122,13 +139,30 @@ export function PacePicker() {
 }
 
 /** Sección plegable (como las del detalle de la estrategia). */
-export function Fold({ title, icon: Icon, children, open = true }: { title: string; icon: LucideIcon; children: ReactNode; open?: boolean }) {
+export function Fold({
+  title,
+  icon: Icon,
+  children,
+  open = true,
+}: {
+  title: string;
+  icon: LucideIcon;
+  children: ReactNode;
+  open?: boolean;
+}) {
   return (
     <details open={open} className="group rounded-2xl bg-white/5 ring-1 ring-line">
       <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-3 font-bold [&::-webkit-details-marker]:hidden">
         <Icon aria-hidden className="size-5 shrink-0 text-field-300" />
         <span className="flex-1">{title}</span>
-        <svg aria-hidden viewBox="0 0 24 24" className="size-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" strokeWidth={2}>
+        <svg
+          aria-hidden
+          viewBox="0 0 24 24"
+          className="size-5 transition-transform group-open:rotate-180"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
           <path d="m6 9 6 6 6-6" />
         </svg>
       </summary>
@@ -145,17 +179,32 @@ export function useIndicatorFormat() {
   return (k: Indicator) => {
     switch (k) {
       case 'income':
-        return { unit: t('units.income'), fmt: (v: number) => format.number(v, { maximumFractionDigits: 0 }) };
+        return {
+          unit: t('units.income'),
+          fmt: (v: number) => format.number(v, { maximumFractionDigits: 0 }),
+        };
       case 'som':
-        return { unit: t('units.som'), fmt: (v: number) => `${format.number(v, { maximumFractionDigits: 2 })} %` };
+        return {
+          unit: t('units.som'),
+          fmt: (v: number) => `${format.number(v, { maximumFractionDigits: 2 })} %`,
+        };
       case 'soilLost':
         return imperial
-          ? { unit: t('units.soilLostIn'), fmt: (v: number) => `${format.number(mmToIn(v), { maximumFractionDigits: 2 })} in` }
-          : { unit: t('units.soilLostMm'), fmt: (v: number) => `${format.number(v, { maximumFractionDigits: 1 })} mm` };
+          ? {
+              unit: t('units.soilLostIn'),
+              fmt: (v: number) => `${format.number(mmToIn(v), { maximumFractionDigits: 2 })} in`,
+            }
+          : {
+              unit: t('units.soilLostMm'),
+              fmt: (v: number) => `${format.number(v, { maximumFractionDigits: 1 })} mm`,
+            };
       case 'labor':
         // Los datos llegan por hectárea; en imperial se muestran por acre.
         return imperial
-          ? { unit: t('units.laborAc'), fmt: (v: number) => format.number(v / haToAc(1), { maximumFractionDigits: 0 }) }
+          ? {
+              unit: t('units.laborAc'),
+              fmt: (v: number) => format.number(v / haToAc(1), { maximumFractionDigits: 0 }),
+            }
           : { unit: t('units.labor'), fmt: (v: number) => format.number(v, { maximumFractionDigits: 0 }) };
     }
   };
@@ -170,7 +219,12 @@ export function seriesValues(o: StrategyOutlook, k: Indicator, data: OutlookResp
     labor: data.baseline.laborDaysHa,
   }[k];
   const pick = (y: StrategyOutlook['years'][number]) =>
-    ({ income: y.incomeIndex.mid, som: y.soilOrganicMatterPct.mid, soilLost: y.soilLostMm, labor: y.laborDaysHa })[k];
+    ({
+      income: y.incomeIndex.mid,
+      som: y.soilOrganicMatterPct.mid,
+      soilLost: y.soilLostMm,
+      labor: y.laborDaysHa,
+    })[k];
   const band = (y: StrategyOutlook['years'][number]): [number, number] | null =>
     k === 'income'
       ? [y.incomeIndex.low, y.incomeIndex.high]
@@ -179,7 +233,12 @@ export function seriesValues(o: StrategyOutlook, k: Indicator, data: OutlookResp
         : null;
   const values = [today, ...o.years.map(pick)];
   const b = o.years.map(band);
-  return { values, band: b.every(Boolean) ? ([[today, today], ...(b as [number, number][])] as [number, number][]) : undefined };
+  return {
+    values,
+    band: b.every(Boolean)
+      ? ([[today, today], ...(b as [number, number][])] as [number, number][])
+      : undefined,
+  };
 }
 
 export function toSeries(
@@ -190,5 +249,11 @@ export function toSeries(
   withBand = false,
 ): Series {
   const v = seriesValues(o, k, data);
-  return { id: o.strategyId, label: meta.label, color: meta.color, values: v.values, band: withBand ? v.band : undefined };
+  return {
+    id: o.strategyId,
+    label: meta.label,
+    color: meta.color,
+    values: v.values,
+    band: withBand ? v.band : undefined,
+  };
 }
