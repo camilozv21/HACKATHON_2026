@@ -92,7 +92,7 @@ El proxy también acepta las formas habituales de n8n y las normaliza: `[ {…} 
 |---|---|---|
 | `flyTo` | `lat`, `lon`, `zoom?`, `label?` | Vuela a un punto. Si solo mandas `label`, el cliente lo geocodifica (MapTiler/Nominatim). |
 | `fitBounds` | `bbox: [oeste, sur, este, norte]` | Encuadra un área. |
-| `setLayer` | `layerId`, `date?`, `opacity?` | Activa una capa NASA. `layerId` ∈ `ndvi`, `soil-moisture`, `rain`, `lst-day`, `lst-night`, `evap`, `groundwater`, `relief`. La fecha se ajusta a la válida más cercana. |
+| `setLayer` | `layerId`, `date?`, `opacity?`, `risk?` | Activa una capa NASA. `layerId` ∈ `ndvi`, `soil-moisture`, `rain`, `lst-day`, `lst-night`, `evap`, `groundwater`, `relief`, `risk`. La fecha se ajusta a la válida más cercana. `risk` (solo con `layerId: "risk"`, zonas de riesgo de Colombia) ∈ `all`, `drought`, `water`, `heat`, `soil`; por defecto `all`. Con la capa `risk` activa, un `openRegion` en Colombia abre el municipio, y su panel muestra el riesgo y los cambios del terreno (docs/terrain-risk.md). |
 | `clearLayers` | — | Quita las capas de datos. |
 | `openRegion` | `lat`, `lon`, `name?` | Abre el drawer de región con los sensores NASA. |
 | `highlightArea` | `geojson` | Dibuja un contorno luminoso (GeoJSON en EPSG:4326). |
@@ -102,6 +102,7 @@ El proxy también acepta las formas habituales de n8n y las normaliza: `[ {…} 
 | `setTime` | `when: "YYYY-MM" \| "YYYY-MM-DD" \| null` | Máquina del tiempo: lleva toda la app (capas, drawer de región, panel de la finca) a esa fecha pasada; `null` vuelve a hoy. Hay datos diarios desde 1981 y con ~3 días de retraso. Ejemplo: "¿cómo llovió en mayo?" → `setTime "2026-05"` + `setLayer rain`. |
 | `showEvents` | `on?: boolean`, `kind?` (`landslide`, `flood`, `storm`, `wildfire`, `drought`, `frost`, `erosion`, `earthquake`, `volcano`, `other`) | Muestra (u oculta) los eventos y emergencias en el globo: NASA EONET, UNGRD (Colombia) y reportes de la comunidad, del periodo de `view.when` o de los últimos 90 días. Ver [`events.md`](events.md). |
 | `reportEvent` | `kind?`, `lat?`, `lon?` | Abre el formulario "Reportar un evento" con esos datos. **Solo lo abre**: la persona revisa y decide si lo envía. Si hay personas en peligro, la respuesta debe decir primero que llamen al 123. |
+| `showListings` | `on?: boolean`, `listingId?` | Muestra (u oculta) las **fincas que venden** en Colombia; con `listingId` abre la tarjeta de esa publicación. Nunca compartas teléfonos: el comprador usa el botón de WhatsApp de la app. Ver [`listings.md`](listings.md). |
 | `agroReport` | `lat?`, `lon?`, `name?`, `when?` (`YYYY-MM`) | Prepara el informe agroclimático imprimible y en CSV de esa zona (sin `lat/lon`: la que se ve después del vuelo) para ese mes, el mes de `view.when` o los últimos 30 días. El chat muestra el botón "Abrir el informe". Úsala cuando pidan un informe, exportar o descargar datos, un PDF o un CSV. |
 
 ## Recomendaciones para el flujo en n8n
@@ -124,9 +125,10 @@ Si no hay `N8N_WEBHOOK_URL` pero sí `ANTHROPIC_API_KEY` (en `.env.local` o en l
 
 - Modelo `claude-opus-5-5`, esfuerzo `low` (chat rápido) y *fallback* del servidor ante rechazos
   (`server-side-fallback-2026-07-01`, `fallbacks: "default"`).
-- Tool runner del SDK con tres herramientas: `get_region_data` (resumen de sensores; lluvia y temperatura reales
-  de NASA POWER, el resto simulado y marcado), `get_events` (eventos y emergencias) y `geocode` (MapTiler o
-  Nominatim).
+- Tool runner del SDK con cinco herramientas: `get_region_data` (resumen de sensores; lluvia y temperatura reales
+  de NASA POWER, el resto simulado y marcado), `get_events` (eventos y emergencias), `geocode` (MapTiler o
+  Nominatim), `get_market` (precios SIPSA, rendimientos EVA, crédito Finagro y conclusión del departamento; solo
+  Colombia) y `find_listings` (fincas que venden, sin teléfonos).
 - El `profile` de la request va en el bloque `<context>`; el prompt del sistema explica cómo adaptar la respuesta.
 - Salida estructurada con JSON Schema (`reply`, `actions`, `sources`, `suggestions`), validada otra vez con zod.
 - Latencia medida: ~12 s en caliente (geocodificar + datos de la región + respuesta).
@@ -172,3 +174,12 @@ mismo contrato.
 curl -X POST http://localhost:3000/api/agent -H 'Content-Type: application/json' \
   -d '{"sessionId":"demo-session-1","message":"muéstrame la humedad del suelo en el Punjab","locale":"es","userLocation":null,"view":{"center":[0,0],"zoom":2},"history":[]}'
 ```
+
+## Mercado y fincas que venden (Colombia)
+
+Si el flujo de n8n quiere responder sobre precios o compra/venta, puede llamar a nuestras rutas públicas:
+`GET /api/market?lat&lon&locale&products` (precios mayoristas SIPSA, tendencia, oferta, rendimiento EVA, crédito Finagro y
+la conclusión del departamento) y `GET /api/listings?product&bbox` (sin teléfonos). Reglas para el prompt de n8n:
+citar "DANE SIPSA" y el mes, decir que son precios mayoristas (en finca pagan menos, sin descontar costos), advertir la
+sobreoferta cuando muchos siembran lo mismo y, para comprar, añadir `showListings`. El prompt del AI Agent de n8n se
+actualiza en n8n (no vive en este repo).

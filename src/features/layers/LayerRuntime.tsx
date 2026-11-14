@@ -6,8 +6,9 @@ import { useEffect, useRef } from 'react';
 import { gibsTileUrl } from '@/features/globe/gibs';
 import { useGlobeStore } from '@/features/globe/store';
 import { firstOverlayId } from '@/features/globe/style';
+import { useRiskStore } from '@/features/terrain/store';
 import { prefersReducedMotion, useIsDesktop } from '@/lib/hooks/useMediaQuery';
-import { urlOptions } from '@/lib/urlState';
+import { riskParams, urlOptions } from '@/lib/urlState';
 import { UrlStateProvider } from '@/lib/url/UrlStateProvider';
 import { entryValue, loadColormap, lookupColor, readGibsPixel } from './colormap';
 import { latestDate, monthOptions, snapDate } from './dates';
@@ -38,6 +39,14 @@ function removeData(map: MapLibreMap, id: string) {
   if (map.getSource(id)) map.removeSource(id);
 }
 
+/** Fuente de la capa de zonas de riesgo (src/features/terrain/riskLayer.ts, que se carga solo si hace falta). */
+const RISK_SOURCE_ID = 'data-risk';
+const loadRiskLayer = () => import('@/features/terrain/riskLayer');
+
+function hideRiskIfShown(map: MapLibreMap) {
+  if (map.getSource(RISK_SOURCE_ID)) void loadRiskLayer().then((m) => m.hideRisk(map));
+}
+
 /** Mantiene el mapa igual al store de capas (fuente única de verdad: useLayerStore). */
 function MapSync() {
   const map = useGlobeStore((s) => s.map);
@@ -48,6 +57,10 @@ function MapSync() {
   const playing = useLayerStore((s) => s.playing);
   const isDesktop = useIsDesktop();
   const mainId = active[0];
+  const riskKind = useRiskStore((s) => s.kind);
+  const riskRelief = useRiskStore((s) => s.relief);
+  const riskOn = Boolean(mainId && LAYER_BY_ID[mainId].kind === 'vector');
+  const riskOpacity = mainId && riskOn ? (opacity[mainId] ?? LAYER_BY_ID[mainId].defaultOpacity) : 0;
   // Capa raster principal con doble búfer: cambiar de fecha o de capa cruza las imágenes en vez de parchearlas.
   const swapRef = useRef<RasterSwap | null>(null);
 
@@ -59,8 +72,32 @@ function MapSync() {
       swap.clear();
       swapRef.current = null;
       for (const id of LAYER_IDS) if (LAYER_BY_ID[id].kind === 'hillshade') removeData(map, lyrId(id));
+      hideRiskIfShown(map);
     };
   }, [map]);
+
+  // Zonas de riesgo (polígonos por municipio + relieve). Cambiar de riesgo solo cambia la pintura.
+  useEffect(() => {
+    if (!map || !ready) return;
+    if (!riskOn) {
+      hideRiskIfShown(map);
+      return;
+    }
+    let current = true;
+    void loadRiskLayer().then((m) => {
+      if (!current) return;
+      return m.showRisk(map, {
+        kind: riskKind,
+        relief: riskRelief,
+        opacity: riskOpacity,
+        beforeId: beforeId(map),
+        isCurrent: () => current,
+      });
+    });
+    return () => {
+      current = false;
+    };
+  }, [map, ready, riskOn, riskKind, riskRelief, riskOpacity]);
 
   // Capa principal (la de comparación la dibuja la cortina en desktop).
   useEffect(() => {
@@ -73,6 +110,12 @@ function MapSync() {
     }
     const cfg = LAYER_BY_ID[mainId];
     const op = opacity[mainId] ?? cfg.defaultOpacity;
+
+    // Polígonos propios: los dibuja el efecto de zonas de riesgo.
+    if (cfg.kind === 'vector') {
+      swap.clear();
+      return;
+    }
 
     if (cfg.kind === 'hillshade') {
       swap.clear();
@@ -268,32 +311,48 @@ function Probe() {
   return null;
 }
 
-/** ?layer=<id>&ldate=YYYY-MM-DD para compartir lo que se está viendo. */
+/** ?layer=<id>&ldate=YYYY-MM-DD (&risk=<tipo> con zonas de riesgo) para compartir lo que se está viendo. */
 function LayerUrlSync() {
-  const [params, setParams] = useQueryStates({ layer: parseAsString, ldate: parseAsString }, urlOptions);
+  const [params, setParams] = useQueryStates({ layer: parseAsString, ldate: parseAsString, ...riskParams }, urlOptions);
   const restored = useRef(false);
   const initial = useRef(params);
 
   useEffect(() => {
     if (restored.current) return;
     restored.current = true;
-    const { layer, ldate } = initial.current;
+    const { layer, ldate, risk } = initial.current;
     if (layer && (LAYER_IDS as readonly string[]).includes(layer)) {
       const cfg = LAYER_BY_ID[layer as LayerId];
+      if (cfg.kind === 'vector' && risk) useRiskStore.getState().setKind(risk);
       useLayerStore.getState().setLayer(cfg.id, { date: snapDate(cfg, ldate) ?? undefined });
     }
   }, []);
 
-  useEffect(
-    () =>
-      useLayerStore.subscribe((s, prev) => {
-        const id = s.active[0];
-        const date = id ? s.dates[id] : undefined;
-        if (id === prev.active[0] && date === (id ? prev.dates[id] : undefined)) return;
-        void setParams({ layer: id ?? null, ldate: id && LAYER_BY_ID[id].kind === 'gibs' ? (date ?? null) : null });
-      }),
-    [setParams],
-  );
+  useEffect(() => {
+    // El combinado es el valor por defecto: no se escribe en la URL.
+    const riskOf = (id: LayerId | undefined) => {
+      const kind = useRiskStore.getState().kind;
+      return id && LAYER_BY_ID[id].kind === 'vector' && kind !== 'all' ? kind : null;
+    };
+    const offLayers = useLayerStore.subscribe((s, prev) => {
+      const id = s.active[0];
+      const date = id ? s.dates[id] : undefined;
+      if (id === prev.active[0] && date === (id ? prev.dates[id] : undefined)) return;
+      void setParams({
+        layer: id ?? null,
+        ldate: id && LAYER_BY_ID[id].kind === 'gibs' ? (date ?? null) : null,
+        risk: riskOf(id),
+      });
+    });
+    const offRisk = useRiskStore.subscribe((s, prev) => {
+      if (s.kind === prev.kind) return;
+      void setParams({ risk: riskOf(useLayerStore.getState().active[0]) });
+    });
+    return () => {
+      offLayers();
+      offRisk();
+    };
+  }, [setParams]);
   return null;
 }
 

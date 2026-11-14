@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { HAZARD_KINDS } from '@/features/events/kindIds';
 import { LAYER_IDS } from '@/features/layers/ids';
+import { RISK_KINDS } from '@/features/terrain/kinds';
 
 // ---------------------------------------------------------------- básicos
 
@@ -745,6 +746,8 @@ export const AgentAction = z.discriminatedUnion('type', [
     layerId: LayerIdSchema,
     date: z.string().optional(),
     opacity: z.number().min(0).max(1).optional(),
+    /** Solo con layerId "risk": qué riesgo pintar (por defecto el combinado). */
+    risk: z.enum(RISK_KINDS).optional(),
   }),
   z.object({ type: z.literal('clearLayers') }),
   z.object({ type: z.literal('openRegion'), lat: z.number(), lon: z.number(), name: z.string().optional() }),
@@ -775,6 +778,8 @@ export const AgentAction = z.discriminatedUnion('type', [
   }),
   /** Abrir las preguntas rápidas del análisis de la finca (en ese dato, si viene) para completar lo que falta. */
   z.object({ type: z.literal('askForData'), need: DataNeed.optional().catch(undefined) }),
+  /** Mostrar (u ocultar) las fincas que venden en el globo y, si viene, abrir la tarjeta de una publicación. */
+  z.object({ type: z.literal('showListings'), on: z.boolean().optional(), listingId: z.string().max(40).optional() }),
 ]);
 export type AgentAction = z.infer<typeof AgentAction>;
 

@@ -6,6 +6,7 @@
 import type { GeoJSONSource } from 'maplibre-gl';
 import { toast } from '@/components/ui/toast';
 import { useEventsStore } from '@/features/events/store';
+import { useListingsStore } from '@/features/listings/store';
 import { reportHref } from '@/features/report/report';
 import { useFarmDataStore } from '@/features/field/farmData';
 import { useFieldStore } from '@/features/field/store';
@@ -14,10 +15,26 @@ import { getMap } from '@/features/globe/store';
 import { snapDate } from '@/features/layers/dates';
 import { LAYER_BY_ID } from '@/features/layers/layers.config';
 import { useLayerStore } from '@/features/layers/store';
+import { useRiskStore } from '@/features/terrain/store';
 import { parseTimeParam, toTimeParam } from '@/features/time/period';
 import { useTimeStore } from '@/features/time/store';
+import { adminTarget, CO_BBOX, findAdminAt, loadAdmin } from '@/features/region/admin';
 import { useRegionStore } from '@/features/region/store';
+import { inBBox } from '@/lib/bbox';
 import { AgentAction } from '@/lib/api/contract';
+
+/** Cambia la región abierta por el municipio de Colombia que contiene el punto (si aún es esa región). */
+function openMunicipality(lat: number, lon: number) {
+  if (!inBBox(CO_BBOX, lon, lat)) return;
+  void loadAdmin('mpio')
+    .then((index) => {
+      const cur = useRegionStore.getState().target;
+      if (!cur || cur.lat !== lat || cur.lon !== lon || cur.admin) return;
+      const area = findAdminAt(index, lon, lat);
+      if (area) useRegionStore.getState().openRegion(adminTarget(area, { lat, lon }));
+    })
+    .catch(() => undefined);
+}
 
 const ORDER: Record<AgentAction['type'], number> = {
   flyTo: 0,
@@ -35,6 +52,8 @@ const ORDER: Record<AgentAction['type'], number> = {
   reportEvent: 6,
   agroReport: 7,
   playRadio: 6,
+  // Las fincas que venden se muestran después del vuelo (como los eventos).
+  showListings: 2,
 };
 
 function waitMoveEnd(timeoutMs = 9000) {
@@ -139,6 +158,7 @@ export async function runAgentActions(
       }
       case 'setLayer': {
         const cfg = LAYER_BY_ID[a.layerId];
+        if (cfg.kind === 'vector') useRiskStore.getState().setKind(a.risk ?? 'all');
         useLayerStore.getState().setLayer(a.layerId, {
           date: a.date ? (snapDate(cfg, a.date) ?? undefined) : undefined,
           opacity: a.opacity,
@@ -150,6 +170,8 @@ export async function runAgentActions(
         break;
       case 'openRegion':
         useRegionStore.getState().openRegion({ lat: a.lat, lon: a.lon, name: a.name ?? null });
+        // Con las zonas de riesgo a la vista, en Colombia se abre el municipio: su panel trae el riesgo y el Markov.
+        if (useLayerStore.getState().active[0] === 'risk') openMunicipality(a.lat, a.lon);
         openedRegion = true;
         moved = true;
         break;
@@ -187,6 +209,12 @@ export async function runAgentActions(
         const region = useRegionStore.getState().target;
         const name = a.name ?? (a.lat == null && region ? region.name : null);
         report = reportHref(opts.locale, { lat, lon, name, when: a.when !== undefined ? a.when : sel ? toTimeParam(sel) : null });
+        break;
+      }
+      case 'showListings': {
+        const shop = useListingsStore.getState();
+        shop.setVisible(a.on ?? true);
+        if ((a.on ?? true) && a.listingId) shop.select(a.listingId);
         break;
       }
       case 'reportEvent':

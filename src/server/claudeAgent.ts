@@ -2,8 +2,9 @@
  * Agente del campo con Claude (Anthropic API). Solo servidor: lo usa /api/agent cuando no hay webhook de n8n
  * y existe ANTHROPIC_API_KEY (en .env.local, nunca con prefijo NEXT_PUBLIC_).
  *
- * - Tool runner del SDK con tres herramientas propias: datos de región (NASA POWER real + resto simulado y marcado),
- *   eventos y emergencias (UNGRD + NASA EONET + comunidad) y geocodificación de lugares.
+ * - Tool runner del SDK con cinco herramientas propias: datos de región (NASA POWER real + resto simulado y marcado),
+ *   eventos y emergencias (UNGRD + NASA EONET + comunidad), geocodificación de lugares, mercado de Colombia
+ *   (SIPSA, EVA, Finagro) y fincas que venden (sin teléfonos).
  * - Salida estructurada (JSON schema) con el mismo contrato que n8n: reply, actions, sources, suggestions.
  * - claude-opus-5-5 con esfuerzo "low" (chat: respuestas rápidas) y fallback del servidor ante rechazos.
  */
@@ -11,11 +12,15 @@ import Anthropic from '@anthropic-ai/sdk';
 import { betaJSONSchemaOutputFormat, betaTool } from '@anthropic-ai/sdk/helpers/beta/json-schema';
 import { DEMO_FARMS } from '@/features/field/demoFarms';
 import { LAYER_IDS } from '@/features/layers/ids';
+import { RISK_KINDS } from '@/features/terrain/kinds';
 import { eventWindow } from '@/features/events/window';
 import { AgentResponse, DATA_NEEDS, HAZARD_KINDS, type AgentRequest, type HazardEvent } from '@/lib/api/contract';
 import { buildMockRegion } from '@/mocks/region';
 import { parseTimeParam, periodLabel, periodOf } from '@/features/time/period';
 import { eventHistory } from './events';
+import { listListings } from './listings';
+import { marketForPoint } from './market';
+import { PRODUCT_IDS, type ProductId } from '@/lib/market/catalog';
 import { powerPeriod, powerRecent } from './powerRecent';
 
 const MODEL = 'claude-opus-5-5';
@@ -48,7 +53,7 @@ Data rules:
 
 Globe actions (the app runs them in order: flights first, then layers, then panels):
 - flyTo {lat, lon, zoom, label}: zoom 5–8 for a region, 11–14 for a farm or town. Use it when the user asks to see or go somewhere, or asks about a specific place.
-- setLayer {layerId, date?}: when the user asks about a variable. Layers: ndvi (plant greenness, MODIS), soil-moisture (root-zone soil moisture, SMAP), rain (daily rain, GPM IMERG), lst-day (daytime ground heat, MODIS), lst-night (night cold and frost risk, MODIS), evap (water the land loses, MERRA-2 model), groundwater (GRACE/GRACE-FO, data up to 2022), relief (slopes, SRTM).
+- setLayer {layerId, date?}: when the user asks about a variable. Layers: ndvi (plant greenness, MODIS), soil-moisture (root-zone soil moisture, SMAP), rain (daily rain, GPM IMERG), lst-day (daytime ground heat, MODIS), lst-night (night cold and frost risk, MODIS), evap (water the land loses, MERRA-2 model), groundwater (GRACE/GRACE-FO, data up to 2022), relief (slopes, SRTM), risk (risk zones per municipality of Colombia, computed in Google Earth Engine from SMAP, GPM, MODIS, GRACE and SRTM; add risk = all | drought | water (waterlogging/flood) | heat | soil (soil degradation) to choose which one, and openRegion on a Colombian place so the panel shows the evidence and how its land changed, a Markov chain of land states 2016–2018 → 2023–2025). Only for Colombia; say so if asked elsewhere. If the data is simulated, say it.
 - openRegion {lat, lon, name}: opens the panel with all NASA sensor cards for a place. Use it for questions about conditions in a place.
 - clearLayers: only when the user asks to remove layers.
 - showStrategies: only for crop rotation questions and only if view.fieldId exists; otherwise tell the user to mark the farm with the "Mi finca" / "My farm" button.
@@ -57,8 +62,15 @@ Globe actions (the app runs them in order: flights first, then layers, then pane
 - setTime {when}: when = "YYYY-MM" (a month) or "YYYY-MM-DD" (a day) moves the whole app to that past date (map layers, region panel, farm panel); when = null goes back to today. Put it before setLayer.
 - showEvents {on?, kind?}: shows events and emergencies on the globe (NASA EONET worldwide, the official UNGRD record for Colombia and community reports), optionally only one kind (landslide, flood, storm, wildfire, drought, frost, erosion, earthquake, volcano, other). It shows the period of view.when, or the last 90 days.
 - reportEvent {kind?, lat?, lon?}: opens the form so the user can report an event (landslide, flood, hail…). It only opens the form: the user reviews and sends it. Use it when the user wants to report or warn about something that happened.
+- showListings {on?, listingId?}: shows (or hides) farms that sell their produce in Colombia on the globe; with listingId it opens that farm's card.
 - agroReport {lat?, lon?, name?, when?}: prepares a printable agroclimatic report for a place (daily rain and temperature against normal from NASA POWER, weather events, nearby emergencies, what to watch, daily data table) that the user can print, save as PDF or download as CSV. when = "YYYY-MM" for a month; omit it for the month in view.when or the last 30 days. Without lat/lon it uses the place on screen (after any flyTo). Use it when the user asks for a report, an "informe", to export or download data, a PDF or a CSV (for example a local government office). The app shows a button to open it; tell the user what it contains.
 Use no actions for general questions that are not about a place.
+
+Market and selling (Colombia only):
+- For questions about prices, what sells well, what to plant for income, or where to sell, call get_market for the place. It returns DANE SIPSA wholesale prices (12-month median at the nearest wholesale market, trend, volatility, supply), EVA yields, Finagro credit and an outlook per product. Cite "DANE SIPSA" and the month. Say these are wholesale prices: farmers usually get less, and costs are not subtracted. A high price today can fall if many people plant the same crop (oversupply).
+- Combine market with climate: before recommending a crop for income, also check get_region_data so the advice fits the weather and soil.
+- For questions about buying produce or farms that sell, call find_listings and add showListings {on: true} (with listingId to open one). Never share phone numbers: buyers use the WhatsApp button in the app. Example listings (sample) have no real contact: say so.
+- If a farmer wants to sell their harvest, tell them to mark their farm with "Mi finca" and tap "Publicar mi finca" (free, contact by WhatsApp, only the municipality is shown).
 
 Events and emergencies:
 - For questions about landslides, floods, fires, storms, emergencies or disasters in a place, call get_events (with month="YYYY-MM" for a past month) and add showEvents. UNGRD data is official but published with a delay (latest data: see the tool result) and located at the center of the municipality. Community reports are not verified: always say so.
@@ -94,6 +106,7 @@ const OUTPUT_SCHEMA = {
               'showEvents',
               'reportEvent',
               'agroReport',
+              'showListings',
             ],
           },
           need: { type: 'string', enum: [...DATA_NEEDS] },
@@ -105,10 +118,12 @@ const OUTPUT_SCHEMA = {
           label: { type: 'string' },
           name: { type: 'string' },
           layerId: { type: 'string', enum: [...LAYER_IDS] },
+          risk: { type: 'string', enum: [...RISK_KINDS] },
           date: { type: 'string' },
           bbox: { type: 'array', items: { type: 'number' } },
           fieldId: { type: 'string' },
           stationId: { type: 'string' },
+          listingId: { type: 'string' },
           when: { type: ['string', 'null'] },
         },
       },
@@ -258,7 +273,83 @@ function buildTools(locale: 'es' | 'en') {
     },
   });
 
-  return [getRegionData, geocodeTool, getEvents];
+  const getMarket = betaTool({
+    name: 'get_market',
+    description:
+      'Colombian agricultural market for a place: DANE SIPSA wholesale prices (12-month median COP/kg at the nearest wholesale market, year-on-year change, volatility, supply arriving), EVA yields of the department vs the country, Finagro credit for the crop chain, TRM and fertilizer price index, plus an outlook per product (favorable/neutral/unfavorable, written by AI or rules). Returns null outside Colombia.',
+    inputSchema: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['lat', 'lon'],
+      properties: {
+        lat: { type: 'number', description: 'Latitude in degrees' },
+        lon: { type: 'number', description: 'Longitude in degrees' },
+        products: { type: 'array', items: { type: 'string', enum: [...PRODUCT_IDS] }, description: 'Products to include (also adds the most planted in the department)' },
+      },
+    },
+    run: async ({ lat, lon, products }) => {
+      const m = await marketForPoint({ lat, lon, locale, products: (products ?? []) as ProductId[] }).catch(() => null);
+      if (!m) return 'No market data for this point (Colombia only).';
+      return JSON.stringify({
+        place: m.place,
+        nearestMarket: m.nearestMarket,
+        pricesUpTo: m.asOf.slice(0, 7),
+        trm: m.trm,
+        fertilizerChange12mPct: m.inputs?.fertChange12mPct ?? null,
+        headline: m.headline,
+        products: m.products.map((p) => ({
+          product: p.product,
+          wholesalePriceCopKg: p.priceCopKg,
+          market: p.market?.name ?? null,
+          distanceKm: p.market?.distanceKm ?? null,
+          change12mPct: p.change12mPct,
+          volatility: p.volatility,
+          supplyTrend: p.supplyTrend,
+          yieldTHa: p.yieldTHa,
+          yieldScope: p.yieldScope,
+          grossIncomeCopHaPerHarvest: p.revenueCopHa,
+          finagroCredits: p.credit ? { chain: p.credit.chain, total: p.credit.n, smallProducers: p.credit.small } : null,
+          monthsToFirstHarvest: p.monthsToFirstHarvest,
+          outlook: p.outlook,
+        })),
+      });
+    },
+  });
+
+  const findListings = betaTool({
+    name: 'find_listings',
+    description:
+      'Farms in Colombia that published their produce for sale (no phone numbers: buyers use the WhatsApp button in the app). Filter by product and/or a box around a point. Sample listings are demo examples without real contact.',
+    inputSchema: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        product: { type: 'string', enum: [...PRODUCT_IDS] },
+        lat: { type: 'number' },
+        lon: { type: 'number' },
+        radiusKm: { type: 'number', description: 'Search radius around lat/lon (default 60 km)' },
+      },
+    },
+    run: async ({ product, lat, lon, radiusKm }) => {
+      const d = Math.min(3, (radiusKm ?? 60) / 111);
+      const bbox = lat !== undefined && lon !== undefined ? ([lon - d, lat - d, lon + d, lat + d] as [number, number, number, number]) : undefined;
+      const { listings, total } = await listListings({ product, bbox, limit: 10 }).catch(() => ({ listings: [], total: 0 }));
+      return JSON.stringify({
+        total,
+        listings: listings.map((l) => ({
+          id: l.id,
+          farmName: l.farmName,
+          place: l.place,
+          approxLat: l.lat,
+          approxLon: l.lon,
+          products: l.products.map((p) => ({ product: p.product, name: p.name, quantity: p.quantity, unit: p.unit, priceCop: p.priceCop, available: p.available })),
+          sample: l.sample || undefined,
+        })),
+      });
+    },
+  });
+
+  return [getRegionData, geocodeTool, getEvents, getMarket, findListings];
 }
 
 export async function runClaudeAgent(req: AgentRequest): Promise<AgentResponse> {

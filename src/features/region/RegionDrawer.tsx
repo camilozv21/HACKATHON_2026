@@ -19,6 +19,7 @@ import { useAgentStore } from '@/features/agent/store';
 import { speak, stop, type NarratorLang } from '@/features/narrator/narrator';
 import { SpeakButton } from '@/features/narrator/SpeakButton';
 import { useNarratorStore } from '@/features/narrator/store';
+import dynamic from 'next/dynamic';
 import { NearbyEvents } from '@/features/events/NearbyEvents';
 import { MarketNearby } from '@/features/market/MarketNearby';
 import { inColombiaBox } from '@/lib/market/colombia';
@@ -40,6 +41,12 @@ import { bboxSideKm } from '@/lib/bbox';
 import { adminParam, getAdmin } from './admin';
 import { CountUp, LightWave, OrbitBadge, Sparkline } from './parts';
 import { defaultCellBBox, drawerWidth, useRegionStore } from './store';
+
+/** Zonas de riesgo y cambios del terreno (Markov, visx): solo se descarga al abrir un municipio o departamento. */
+const TerrainSection = dynamic(() => import('@/features/terrain/TerrainSection'), {
+  ssr: false,
+  loading: () => <div className="shimmer h-48 rounded-2xl" />,
+});
 
 const STATUS = {
   good: { Icon: CheckCircle2, cls: 'text-risk-low bg-risk-low/15', pattern: '' },
@@ -378,6 +385,12 @@ function RegionDrawerInner() {
                   </button>
                 </p>
               )}
+              {/* Los datos del terreno son estáticos: se muestran aunque /region falle. */}
+              {query.isError && !summary && target.admin && (
+                <div className="mt-2 mb-2">
+                  <TerrainSection code={target.admin.code} onSeeOnMap={() => !isDesktop && close()} />
+                </div>
+              )}
 
               {/* Qué marca el mapa: el área elegida, su departamento y el recuadro de donde vienen los datos.
                   Honestidad: el resumen describe ese recuadro, no un promedio de todo el municipio o departamento. */}
@@ -473,6 +486,12 @@ function RegionDrawerInner() {
                       ))}
                     </ul>
                   </motion.li>
+
+                  {target.admin && (
+                    <motion.li variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}>
+                      <TerrainSection code={target.admin.code} onSeeOnMap={() => !isDesktop && close()} />
+                    </motion.li>
+                  )}
 
                   <motion.li variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}>
                     <NearbyEvents

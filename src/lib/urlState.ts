@@ -1,4 +1,5 @@
 import { parseAsArrayOf, parseAsFloat, parseAsString, parseAsStringLiteral, throttle } from 'nuqs';
+import { RISK_KINDS } from '@/features/terrain/kinds';
 
 /**
  * Estado clave de la app en la URL (para compartir enlaces):
@@ -29,6 +30,11 @@ export const priorityParams = {
 export const listingParams = {
   shop: parseAsString,
   listing: parseAsString,
+};
+
+/** Zonas de riesgo: qué riesgo pinta la capa (?layer=risk&risk=drought). Sin él, el combinado. */
+export const riskParams = {
+  risk: parseAsStringLiteral(RISK_KINDS),
 };
 
 export const urlOptions = {

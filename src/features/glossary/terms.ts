@@ -30,6 +30,9 @@ export const GLOSSARY_TERMS = [
   'price-volatility',
   'oversupply',
   'gross-income',
+  'risk-zone',
+  'land-state',
+  'markov',
 ] as const;
 export type GlossaryTerm = (typeof GLOSSARY_TERMS)[number];
 
@@ -62,6 +65,9 @@ export const TERM_ICONS: Record<GlossaryTerm, string> = {
   'price-volatility': 'Activity',
   'oversupply': 'Boxes',
   'gross-income': 'Coins',
+  'risk-zone': 'ShieldAlert',
+  'land-state': 'Layers',
+  markov: 'Shuffle',
 };
 
 /** Ids que usan otras partes de la app (capas, tarjetas) → término del glosario. */

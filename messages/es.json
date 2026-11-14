@@ -196,6 +196,15 @@
         "low": "Plano",
         "high": "Empinado",
         "res": "30–90 m"
+      },
+      "risk": {
+        "name": "Zonas de riesgo",
+        "short": "Sequía, encharcamiento, calor y suelo, por municipio.",
+        "description": "Combinamos datos de satélites NASA en Google Earth Engine: humedad del suelo (SMAP), lluvia (GPM), calor y verdor (MODIS), agua subterránea (GRACE) y pendiente (SRTM). Cada municipio tiene un nivel por riesgo.",
+        "forCrops": "Rojo = más probabilidad de perder la cosecha por ese riesgo. Toca el municipio para ver por qué y cómo ha cambiado su terreno.",
+        "low": "Bajo",
+        "high": "Alto",
+        "res": "Municipio"
       }
     },
     "overlays": "Sobre el mapa",
@@ -692,6 +701,21 @@
         "title": "Ingreso bruto",
         "simple": "Lo que entra por vender la cosecha antes de pagar semillas, abonos, jornales y transporte. No es la ganancia.",
         "example": "10 toneladas de plátano a $1.500 el kilo son $15 millones de ingreso bruto; la ganancia es lo que queda después de los costos."
+      },
+      "risk-zone": {
+        "title": "Zona de riesgo",
+        "simple": "Lugar donde es más probable que el clima o el terreno dañen la cosecha: sequía, encharcamiento, calor o suelo que se degrada. Sale de combinar varios datos de satélite.",
+        "example": "Un municipio en rojo por sequía tuvo menos lluvia y el suelo más seco que lo normal: conviene guardar agua y cubrir el suelo."
+      },
+      "land-state": {
+        "title": "Estado del terreno",
+        "simple": "Cómo se ve la tierra desde el satélite: con plantas sanas, con plantas estresadas, con el suelo expuesto o con agua encima.",
+        "example": "Un potrero que se seca y pierde pasto pasa de “sana” a “con estrés” o a “suelo expuesto”."
+      },
+      "markov": {
+        "title": "Cambios de estado (cadena de Markov)",
+        "simple": "Cuenta qué parte del terreno pasó de un estado a otro entre dos fechas. Con eso se calcula hacia dónde iría el terreno si todo sigue igual.",
+        "example": "Si 20 de cada 100 hectáreas sanas pasaron a “con estrés”, la flecha de sana a estrés dice 20 %."
       }
     }
   },
@@ -2394,6 +2418,158 @@
       "disclaimer": "Field Shift no vende ni cobra comisiones: conecta a quien compra con quien produce. Acuerda precio, calidad y entrega directamente con el agricultor.",
       "notFound": "Esta publicación ya no está disponible.",
       "count": "{count, plural, =0 {Ninguna finca} one {# finca} other {# fincas}}"
+    }
+  },
+  "terrain": {
+    "loading": "Cargando datos del terreno…",
+    "error": "No pudimos cargar los datos del terreno.",
+    "retry": "Reintentar",
+    "noData": "No hay datos del terreno para esta zona.",
+    "simulated": "simulado",
+    "riskTitle": "Zonas de riesgo",
+    "riskIntro": "Combinamos humedad del suelo, lluvia, calor, verdor y relieve de satélites NASA ({initial} frente a {final}).",
+    "whatIsRisk": "¿Qué es esto?",
+    "mostly": "sobre todo por {hazard}",
+    "seeOnMap": "Ver {hazard} en el mapa",
+    "kinds": {
+      "all": "Combinado",
+      "drought": "Sequía",
+      "water": "Encharcamiento",
+      "heat": "Calor",
+      "soil": "Suelo degradado"
+    },
+    "levels": {
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto",
+      "none": "Sin dato"
+    },
+    "legend": {
+      "chooseKind": "Qué riesgo ver",
+      "levels": "Niveles de riesgo",
+      "relief": "Relieve",
+      "on": "encendido",
+      "off": "apagado",
+      "goColombia": "Ir a Colombia",
+      "loading": "Cargando zonas de riesgo…",
+      "error": "No pudimos cargar las zonas de riesgo. Revisa tu conexión.",
+      "onlyColombia": "Por ahora las zonas de riesgo solo están en Colombia.",
+      "hint": "Toca un municipio para ver por qué y cómo ha cambiado su terreno.",
+      "reliefMissing": "El relieve no está disponible en modo ahorro de datos.",
+      "synthetic": "Datos simulados para la demostración: falta correr el cálculo en Google Earth Engine."
+    },
+    "evidence": {
+      "smAnomDown": "Suelo {n} % más seco en 2023–2025 que en 2016–2022",
+      "smAnomUp": "Suelo {n} % más húmedo en 2023–2025 que en 2016–2022",
+      "pAnomDown": "En 2023–2025 llovió {n} % menos que lo normal",
+      "pAnomUp": "En 2023–2025 llovió {n} % más que lo normal",
+      "etRatio": "En 2023–2025 las plantas consiguieron el {n} % del agua que piden",
+      "gwDown": "El agua guardada en el subsuelo baja {amount} al año (tendencia regional)",
+      "gwUp": "El agua guardada en el subsuelo sube {amount} al año (tendencia regional)",
+      "pHeavy": "{n} días al año con aguaceros de más de {rain} (2016–2025)",
+      "smWet": "Suelo casi saturado el {n} % del tiempo",
+      "flat": "El {n} % del área es baja y plana",
+      "waterShare": "El {n} % del área pasa con agua o encharcada",
+      "lstHot": "En 2023–2025 la superficie pasó de {temp} el {n} % de las semanas",
+      "lstWarmer": "La superficie estuvo {amount} más caliente en 2023–2025 que en 2016–2022",
+      "lstCooler": "La superficie estuvo {amount} más fresca en 2023–2025 que en 2016–2022",
+      "toBare": "El {n} % del área que tenía plantas quedó con el suelo expuesto",
+      "ndviDown": "El verdor baja {n} puntos de NDVI por década",
+      "ndviUp": "El verdor sube {n} puntos de NDVI por década",
+      "mfi": "Lluvias que erosionan (índice {n}) en laderas de {slope} % de pendiente",
+      "slope": "Pendiente media de {n} %"
+    },
+    "indicators": {
+      "smAnom": "humedad del suelo (SMAP)",
+      "smWet": "suelo saturado (SMAP)",
+      "pAnom": "lluvia (GPM)",
+      "pHeavy": "aguaceros (GPM)",
+      "mfi": "lluvia que erosiona (GPM)",
+      "etRatio": "agua que usan las plantas (MODIS)",
+      "lstHot": "días de calor (MODIS)",
+      "lstAnom": "temperatura de la superficie (MODIS)",
+      "gwTrend": "agua subterránea (GRACE)",
+      "slope": "pendiente (SRTM)",
+      "flat": "terreno plano (SRTM)",
+      "ndviTrend": "tendencia del verdor (MODIS)",
+      "toBare": "paso a suelo expuesto",
+      "waterShare": "área con agua (MODIS)"
+    },
+    "gaps": {
+      "title": "Lo que no sabemos",
+      "synthetic": "Estos números son simulados: todavía no vienen del cálculo con satélites.",
+      "valid": "Los satélites vieron bien el {n} % del área (nubes, ciudades y nieve se dejan fuera).",
+      "grace": "El agua subterránea (GRACE) mide zonas de unos 300 km: es una tendencia regional, no de tu finca.",
+      "missing": "Sin dato de: {list}.",
+      "average": "Es el promedio del municipio. Tu finca puede estar mejor o peor: confírmalo en el terreno."
+    },
+    "changeTitle": "Cómo cambia el terreno",
+    "changeIntro": "Comparamos el estado del terreno al inicio y al final, píxel por píxel, con satélites NASA.",
+    "whatAreStates": "¿Qué son los estados?",
+    "initialFinal": "Estado inicial y estado final",
+    "diagramTitle": "Cambios de estado",
+    "whatIsMarkov": "¿Cómo se lee?",
+    "diagramHint": "Cada círculo es un estado (su tamaño es cuánto ocupa hoy). Las flechas dicen qué parte pasó de un estado a otro.",
+    "trendTitle": "Año por año y hacia dónde va",
+    "states": {
+      "healthy": {
+        "name": "Vegetación sana",
+        "short": "Sana",
+        "lower": "vegetación sana"
+      },
+      "stressed": {
+        "name": "Vegetación con estrés",
+        "short": "Con estrés",
+        "lower": "vegetación con estrés"
+      },
+      "bare": {
+        "name": "Suelo expuesto",
+        "short": "Expuesto",
+        "lower": "suelo expuesto"
+      },
+      "water": {
+        "name": "Agua o encharcado",
+        "short": "Agua",
+        "lower": "agua o encharcado"
+      }
+    },
+    "chart": {
+      "same": "igual",
+      "delta": "{sign}{n} pts"
+    },
+    "diagram": {
+      "stays": "se queda {n} %",
+      "aria": "Diagrama de cambios del terreno, {periods}. Se queda igual: {stays}. Cambios: {flows}.",
+      "ariaStay": "{state} {n} %",
+      "ariaFlow": "de {from} a {to} {n} %",
+      "ariaNoFlows": "ninguno mayor al 5 %"
+    },
+    "trend": {
+      "aria": "Parte del área en cada estado de {first} a {last}: {values}. La línea punteada es la proyección."
+    },
+    "table": {
+      "show": "Ver como tabla",
+      "hide": "Ocultar tabla",
+      "fromTo": "De ↓ a →",
+      "year": "Año",
+      "matrixCaption": "Probabilidad de pasar de un estado (fila) a otro (columna), {periods}",
+      "trendCaption": "Parte del área en cada estado, por año"
+    },
+    "change": {
+      "trend": {
+        "improving": "El terreno mejora: hay más vegetación sana y menos suelo expuesto.",
+        "worsening": "El terreno se está deteriorando: hay menos vegetación sana o más suelo expuesto.",
+        "stable": "El terreno se mantiene casi igual."
+      },
+      "biggest": "Lo que más cambió: {state} pasó de {from} % a {to} % del área.",
+      "mainFlow": "El mayor cambio fue de {from} a {to}: {n} % del área.",
+      "projection": "Si los cambios siguen igual, hacia {year} habría {healthy} % sana, {stressed} % con estrés, {bare} % expuesto y {water} % con agua.",
+      "longRun": "Si nada cambiara por muchos años, el terreno tendería a: {list}."
+    },
+    "notes": {
+      "average": "Describe el municipio en promedio, no tu finca.",
+      "projection": "La proyección supone que los cambios siguen igual; tu manejo, el clima y las políticas pueden cambiarla.",
+      "support": "Esta herramienta te apoya; no reemplaza tu criterio ni a los técnicos de tu zona."
     }
   }
 }

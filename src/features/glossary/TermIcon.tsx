@@ -16,7 +16,9 @@ import {
   Mountain,
   Satellite,
   Scale,
+  ShieldAlert,
   Shovel,
+  Shuffle,
   Snowflake,
   Sprout,
   Store,
@@ -54,6 +56,8 @@ const ICONS: Record<string, LucideIcon> = {
   Activity,
   Boxes,
   Coins,
+  ShieldAlert,
+  Shuffle,
 };
 
 export function TermIcon({ term, className }: { term: GlossaryTerm; className?: string }) {

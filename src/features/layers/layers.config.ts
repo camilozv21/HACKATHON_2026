@@ -26,10 +26,13 @@ export type LegendSpec = {
 
 export type LayerConfig = {
   id: LayerId;
-  kind: 'gibs' | 'hillshade';
+  /** gibs = teselas NASA GIBS; hillshade = relieve SRTM; vector = polígonos propios (zonas de riesgo). */
+  kind: 'gibs' | 'hillshade' | 'vector';
   /** Ícono lucide (nombre). */
-  icon: 'Leaf' | 'Droplets' | 'CloudRain' | 'Sun' | 'Moon' | 'Wind' | 'Waves' | 'Mountain';
+  icon: 'Leaf' | 'Droplets' | 'CloudRain' | 'Sun' | 'Moon' | 'Wind' | 'Waves' | 'Mountain' | 'ShieldAlert';
   source: DataSource;
+  /** Capas que combinan varios datos: todas sus fuentes. */
+  sources?: DataSource[];
   mission: string;
   cadence: Cadence;
   gibs?: { id: string; level: number; format: 'png' | 'jpeg'; defaultTime: string | null; ranges: string[] };
@@ -189,6 +192,18 @@ export const LAYERS: LayerConfig[] = [
     cadence: 'static',
     defaultOpacity: 0.7,
     glossary: 'slope',
+  },
+  {
+    // Calculada por municipio en Google Earth Engine (scripts/gee/terrain-co.js); método en docs/terrain-risk.md.
+    id: 'risk',
+    kind: 'vector',
+    icon: 'ShieldAlert',
+    source: 'Modelo agronómico',
+    sources: ['SMAP', 'GPM', 'MODIS', 'GRACE', 'SRTM'],
+    mission: 'Google Earth Engine · SMAP · GPM · MODIS · GRACE · SRTM',
+    cadence: 'static',
+    defaultOpacity: 0.6,
+    glossary: 'risk-zone',
   },
 ];
 

@@ -18,8 +18,33 @@ const PLACES: { keys: string[]; name: { es: string; en: string }; lon: number; l
   { keys: ['iowa', 'corn belt', 'cinturon del maiz'], name: { es: 'Iowa, EE. UU.', en: 'Iowa, USA' }, lon: -93.5, lat: 42.03, zoom: 6.5, demo: 'cornbelt-iowa' },
   { keys: ['sahel', 'niger', 'maradi'], name: { es: 'Maradi, Níger (Sahel)', en: 'Maradi, Niger (Sahel)' }, lon: 7.06, lat: 13.45, zoom: 6.5, demo: 'sahel-maradi' },
   { keys: ['pampa', 'pergamino', 'buenos aires'], name: { es: 'Pergamino, Argentina', en: 'Pergamino, Argentina' }, lon: -60.6, lat: -33.95, zoom: 7, demo: 'pampa-pergamino' },
+  { keys: ['la guajira', 'guajira', 'riohacha'], name: { es: 'Riohacha, La Guajira', en: 'Riohacha, La Guajira' }, lon: -72.91, lat: 11.53, zoom: 7 },
+  { keys: ['choco', 'quibdo'], name: { es: 'Quibdó, Chocó', en: 'Quibdó, Chocó' }, lon: -76.66, lat: 5.69, zoom: 7.5 },
+  { keys: ['caqueta', 'florencia'], name: { es: 'Florencia, Caquetá', en: 'Florencia, Caquetá' }, lon: -75.61, lat: 1.61, zoom: 7.5 },
   { keys: ['colombia'], name: { es: 'Colombia', en: 'Colombia' }, lon: -74.3, lat: 4.6, zoom: 4.8 },
 ];
+
+/** Zonas de riesgo y cambios del terreno (Markov): capa `risk`, solo Colombia. */
+const RISK_RE =
+  /(zonas? de riesgo|mapa de riesgo|risk zones?|risk map|markov|cambi\w* (del|el) terreno|estado del terreno|land chang|riesgo de (sequia|inundacion|encharcamiento|calor|erosion|degradacion)|(drought|flood|heat|erosion) risk)/;
+const CO_BOX = [-81.8, -4.3, -66.8, 13.5] as const;
+const inColombia = (lon: number, lat: number) => lon >= CO_BOX[0] && lon <= CO_BOX[2] && lat >= CO_BOX[1] && lat <= CO_BOX[3];
+
+function riskKindOf(text: string): 'all' | 'drought' | 'water' | 'heat' | 'soil' {
+  if (/(sequia|drought|seco|dry)/.test(text)) return 'drought';
+  if (/(inundac|encharc|flood|waterlog)/.test(text)) return 'water';
+  if (/(calor|heat|caliente|hot)/.test(text)) return 'heat';
+  if (/(erosion|degrad|suelo|soil)/.test(text)) return 'soil';
+  return 'all';
+}
+
+const RISK_LABEL = {
+  all: { es: '', en: '' },
+  drought: { es: ' de **sequía**', en: ' for **drought**' },
+  water: { es: ' de **encharcamiento o inundación**', en: ' for **waterlogging or flooding**' },
+  heat: { es: ' de **calor**', en: ' for **heat**' },
+  soil: { es: ' de **degradación del suelo**', en: ' for **soil degradation**' },
+} as const;
 
 const LAYER_WORDS: { layer: LayerId; words: string[]; label: { es: string; en: string }; dataset: string }[] = [
   { layer: 'soil-moisture', words: ['humedad del suelo', 'humedad', 'soil moisture', 'smap'], label: { es: 'humedad del suelo (SMAP)', en: 'soil moisture (SMAP)' }, dataset: 'SMAP L4 Root Zone Soil Moisture' },
@@ -113,11 +138,14 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
   const layer = LAYER_WORDS.find((w) => w.words.some((k) => text.includes(norm(k))));
   const known = PLACES.find((p) => p.keys.some((k) => text.includes(k)));
   const mine = /\b(mi zona|mi finca|aqui|donde estoy|my area|my farm|here|near me)\b/.test(text);
+  const wantsRisk = RISK_RE.test(text);
   const wantsRotation = /(rotacion|rotation|sequia|drought|que sembrar|what to plant|cultivo me conviene|which crop)/.test(text);
   const wantsMissing = /(que (datos|te) falta|que necesitas saber|completar (el |mi )?analisis|what (data|do you need)|complete (the|my) analysis)/.test(text);
   const missing = req.view.fieldId ? (req.view.missingData ?? []) : [];
   // Eventos y emergencias: verlos en el mapa o reportar uno (el formulario lo envía la persona, no el agente).
   const hazardKind = HAZARD_WORDS.find((h) => h.re.test(text))?.kind;
+  // Comprar o vender cosecha: fincas que venden (Colombia) y "Publicar mi finca".
+  const wantsListings = /(comprar|compro|quien vende|donde compro|fincas que venden|vender mi|vendo mi|publicar mi finca|buy |buy$|who sells|sell my|farms selling)/.test(text);
   const wantsReport = /\b(reportar|reporto|avisar|report)\b/.test(text) && (Boolean(hazardKind) || /(evento|emergencia|event|emergency)/.test(text));
   // Informe agroclimático (imprimible y CSV): "genera un informe", "exportar los datos", "agroclimatic report".
   const wantsAgroReport =
@@ -152,7 +180,12 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
   if (askedWhen && sel) actions.push({ type: 'setTime', when: askedWhen });
   if (place) actions.push({ type: 'flyTo', lat: place.lat, lon: place.lon, zoom: place.zoom, label: place.name });
   else if (labelOnly) actions.push({ type: 'flyTo', label: labelOnly, zoom: 7 });
-  if (layer) {
+  if (wantsRisk) {
+    // Sin lugar: se encuadra Colombia para que se vean las zonas.
+    if (!place && !labelOnly) actions.push({ type: 'flyTo', lat: 4.6, lon: -74.3, zoom: 4.8, label: 'Colombia' });
+    actions.push({ type: 'setLayer', layerId: 'risk', risk: riskKindOf(text) });
+    sources.push({ dataset: 'Google Earth Engine: SMAP L4, GPM IMERG, MODIS (NDVI, LST, ET, MNDWI), GRACE-FO, SRTM' });
+  } else if (layer) {
     actions.push({ type: 'setLayer', layerId: layer.layer });
     sources.push({ dataset: layer.dataset, url: 'https://earthdata.nasa.gov/gibs' });
   }
@@ -174,7 +207,16 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
   if (place) actions.push({ type: 'openRegion', lat: place.lat, lon: place.lon, name: place.name });
 
   let reply: string;
-  if (wantsAgroReport) {
+  if (wantsRisk) {
+    const kind = RISK_LABEL[riskKindOf(text)];
+    const outside = place && !inColombia(place.lon, place.lat);
+    const opened = place && !outside ? tr(l, ` y abrí **${place.name}**`, ` and opened **${place.name}**`) : '';
+    reply = tr(
+      l,
+      `**Te muestro las zonas de riesgo${kind.es} en el globo**${opened}. Cada municipio tiene un nivel (bajo, medio o alto) que combina datos NASA calculados en Google Earth Engine: humedad del suelo (SMAP), lluvia (GPM), calor y verdor (MODIS), agua subterránea (GRACE) y relieve (SRTM). El rayado marca el riesgo alto y los puntos el medio.\n\nToca un municipio para ver **cómo ha cambiado su terreno**: el estado inicial (2016–2018), el final (2023–2025), las flechas de cambio entre estados (cadena de Markov) y hacia dónde iría si todo sigue igual.${outside ? '\n\n**Por ahora las zonas de riesgo solo están en Colombia.**' : ''}\n\nEs el promedio del municipio, no de tu finca: confírmalo en el terreno.`,
+      `**Showing risk zones${kind.en} on the globe**${opened}. Each municipality gets a level (low, medium or high) that combines NASA data computed in Google Earth Engine: soil moisture (SMAP), rain (GPM), heat and greenness (MODIS), groundwater (GRACE) and relief (SRTM). Hatching marks high risk and dots mark medium.\n\nTap a municipality to see **how its land has changed**: the initial state (2016–2018), the final state (2023–2025), the arrows between states (Markov chain) and where it is heading if nothing changes.${outside ? '\n\n**For now, risk zones are only available in Colombia.**' : ''}\n\nIt is the municipality average, not your farm: check it on the ground.`,
+    );
+  } else if (wantsAgroReport) {
     actions.push({ type: 'agroReport', lat: place?.lat, lon: place?.lon, name: place?.name, when: askedWhen ?? undefined });
     const when = periodName ?? tr(l, 'los últimos 30 días', 'the last 30 days');
     reply = tr(
@@ -183,6 +225,13 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
       `**I prepared the agroclimatic report for ${at.name} for ${when}.** It has daily rain and temperature against normal (NASA POWER), weather events, emergencies recorded nearby (UNGRD, NASA EONET and the community) and what to watch.\n\nOpen it with the button below: you can **print it or save it as PDF** and **download the data as CSV**.`,
     );
     sources.push({ dataset: 'NASA POWER', url: 'https://power.larc.nasa.gov/' });
+  } else if (wantsListings) {
+    actions.push({ type: 'showListings', on: true });
+    reply = tr(
+      l,
+      '**Te muestro en el globo las fincas que venden** su cosecha en Colombia (puntos verdes; los huecos son ejemplos de la demo). Toca una para ver qué ofrece y **escribirle por WhatsApp**.\n\n¿Quieres vender lo tuyo? Marca tu finca con **Mi finca** y toca **Publicar mi finca**: es gratis y solo mostramos tu municipio.',
+      '**I am showing farms that sell** their harvest in Colombia on the globe (green dots; hollow ones are demo examples). Tap one to see what it offers and **message them on WhatsApp**.\n\nWant to sell yours? Mark your farm with **My farm** and tap **Publish my farm**: it is free and we only show your municipality.',
+    );
   } else if (wantsReport) {
     actions.push({ type: 'showEvents', on: true }, { type: 'reportEvent', kind: hazardKind, lat: place?.lat, lon: place?.lon });
     const what = hazardKind ? HAZARD_LABEL[hazardKind] : { es: 'el evento', en: 'the event' };

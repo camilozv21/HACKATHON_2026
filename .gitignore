@@ -25,3 +25,10 @@ playwright/.cache/
 .vercel
 npm-debug.log*
 pnpm-debug.log*
+
+# Límites exportados para subir a Google Earth Engine (node scripts/build-terrain-co.mjs --export-boundaries)
+scripts/gee/out/
+
+# Descargas sueltas (exports de GEE desde Drive) y el lock de npm: el proyecto usa pnpm.
+drive-download-*
+package-lock.json

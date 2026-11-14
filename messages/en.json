@@ -196,6 +196,15 @@
         "low": "Flat",
         "high": "Steep",
         "res": "30–90 m"
+      },
+      "risk": {
+        "name": "Risk zones",
+        "short": "Drought, waterlogging, heat and soil, by municipality.",
+        "description": "We combine NASA satellite data in Google Earth Engine: soil moisture (SMAP), rain (GPM), heat and greenness (MODIS), groundwater (GRACE) and slope (SRTM). Each municipality gets a level for each risk.",
+        "forCrops": "Red = more chance of losing the harvest to that risk. Tap the municipality to see why and how its land has changed.",
+        "low": "Low",
+        "high": "High",
+        "res": "Municipality"
       }
     },
     "overlays": "On the map",
@@ -692,6 +701,21 @@
         "title": "Gross income",
         "simple": "What you get for selling the harvest before paying for seed, fertilizer, labour and transport. It is not profit.",
         "example": "10 tonnes of plantain at $1,500 a kilo is $15 million in gross income; profit is what is left after costs."
+      },
+      "risk-zone": {
+        "title": "Risk zone",
+        "simple": "A place where weather or land are more likely to hurt the harvest: drought, waterlogging, heat or soil that is degrading. It comes from combining several satellite datasets.",
+        "example": "A municipality in red for drought had less rain and drier soil than normal: it pays to save water and keep the soil covered."
+      },
+      "land-state": {
+        "title": "Land state",
+        "simple": "How the land looks from the satellite: healthy plants, stressed plants, bare soil or water on top.",
+        "example": "A pasture that dries out and loses grass moves from “healthy” to “stressed” or to “bare soil”."
+      },
+      "markov": {
+        "title": "State changes (Markov chain)",
+        "simple": "It counts how much land moved from one state to another between two dates. From that we estimate where the land is heading if nothing changes.",
+        "example": "If 20 of every 100 healthy hectares became “stressed”, the arrow from healthy to stressed says 20 %."
       }
     }
   },
@@ -2394,6 +2418,158 @@
       "disclaimer": "Field Shift doesn’t sell or charge commissions: it connects buyers with producers. Agree on price, quality and delivery directly with the farmer.",
       "notFound": "This listing is no longer available.",
       "count": "{count, plural, =0 {No farms} one {# farm} other {# farms}}"
+    }
+  },
+  "terrain": {
+    "loading": "Loading land data…",
+    "error": "We could not load the land data.",
+    "retry": "Try again",
+    "noData": "There is no land data for this area.",
+    "simulated": "simulated",
+    "riskTitle": "Risk zones",
+    "riskIntro": "We combine soil moisture, rain, heat, greenness and relief from NASA satellites ({initial} vs {final}).",
+    "whatIsRisk": "What is this?",
+    "mostly": "mostly from {hazard}",
+    "seeOnMap": "See {hazard} on the map",
+    "kinds": {
+      "all": "Combined",
+      "drought": "Drought",
+      "water": "Waterlogging",
+      "heat": "Heat",
+      "soil": "Degraded soil"
+    },
+    "levels": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "none": "No data"
+    },
+    "legend": {
+      "chooseKind": "Which risk to show",
+      "levels": "Risk levels",
+      "relief": "Relief",
+      "on": "on",
+      "off": "off",
+      "goColombia": "Go to Colombia",
+      "loading": "Loading risk zones…",
+      "error": "We could not load the risk zones. Check your connection.",
+      "onlyColombia": "For now, risk zones are only available in Colombia.",
+      "hint": "Tap a municipality to see why and how its land has changed.",
+      "reliefMissing": "Relief is not available in data saver mode.",
+      "synthetic": "Simulated data for the demo: the Google Earth Engine calculation has not been run yet."
+    },
+    "evidence": {
+      "smAnomDown": "Soil {n} % drier in 2023–2025 than in 2016–2022",
+      "smAnomUp": "Soil {n} % wetter in 2023–2025 than in 2016–2022",
+      "pAnomDown": "In 2023–2025 rain was {n} % below normal",
+      "pAnomUp": "In 2023–2025 rain was {n} % above normal",
+      "etRatio": "In 2023–2025 plants got {n} % of the water they need",
+      "gwDown": "Water stored underground drops {amount} a year (regional trend)",
+      "gwUp": "Water stored underground rises {amount} a year (regional trend)",
+      "pHeavy": "{n} days a year with downpours over {rain} (2016–2025)",
+      "smWet": "Soil nearly saturated {n} % of the time",
+      "flat": "{n} % of the area is low and flat",
+      "waterShare": "{n} % of the area stays flooded or waterlogged",
+      "lstHot": "In 2023–2025 the ground was hotter than {temp} in {n} % of the weeks",
+      "lstWarmer": "The ground was {amount} warmer in 2023–2025 than in 2016–2022",
+      "lstCooler": "The ground was {amount} cooler in 2023–2025 than in 2016–2022",
+      "toBare": "{n} % of the area that had plants is now bare soil",
+      "ndviDown": "Greenness drops {n} NDVI points per decade",
+      "ndviUp": "Greenness rises {n} NDVI points per decade",
+      "mfi": "Erosive rain (index {n}) on slopes of {slope} %",
+      "slope": "Average slope of {n} %"
+    },
+    "indicators": {
+      "smAnom": "soil moisture (SMAP)",
+      "smWet": "saturated soil (SMAP)",
+      "pAnom": "rain (GPM)",
+      "pHeavy": "downpours (GPM)",
+      "mfi": "erosive rain (GPM)",
+      "etRatio": "water plants use (MODIS)",
+      "lstHot": "hot days (MODIS)",
+      "lstAnom": "ground temperature (MODIS)",
+      "gwTrend": "groundwater (GRACE)",
+      "slope": "slope (SRTM)",
+      "flat": "flat land (SRTM)",
+      "ndviTrend": "greenness trend (MODIS)",
+      "toBare": "change to bare soil",
+      "waterShare": "area with water (MODIS)"
+    },
+    "gaps": {
+      "title": "What we don’t know",
+      "synthetic": "These numbers are simulated: they do not come from the satellite calculation yet.",
+      "valid": "Satellites saw {n} % of the area clearly (clouds, cities and snow are left out).",
+      "grace": "Groundwater (GRACE) measures areas of about 300 km: it is a regional trend, not your farm.",
+      "missing": "No data for: {list}.",
+      "average": "It is the municipality average. Your farm may be better or worse: check it on the ground."
+    },
+    "changeTitle": "How the land is changing",
+    "changeIntro": "We compare the land state at the start and at the end, pixel by pixel, with NASA satellites.",
+    "whatAreStates": "What are the states?",
+    "initialFinal": "Initial state and final state",
+    "diagramTitle": "State changes",
+    "whatIsMarkov": "How to read it",
+    "diagramHint": "Each circle is a state (its size is how much it covers today). Arrows show how much moved from one state to another.",
+    "trendTitle": "Year by year and where it is heading",
+    "states": {
+      "healthy": {
+        "name": "Healthy vegetation",
+        "short": "Healthy",
+        "lower": "healthy vegetation"
+      },
+      "stressed": {
+        "name": "Stressed vegetation",
+        "short": "Stressed",
+        "lower": "stressed vegetation"
+      },
+      "bare": {
+        "name": "Bare soil",
+        "short": "Bare",
+        "lower": "bare soil"
+      },
+      "water": {
+        "name": "Water or waterlogged",
+        "short": "Water",
+        "lower": "water or waterlogged"
+      }
+    },
+    "chart": {
+      "same": "same",
+      "delta": "{sign}{n} pts"
+    },
+    "diagram": {
+      "stays": "stays {n} %",
+      "aria": "Land change diagram, {periods}. Stays the same: {stays}. Changes: {flows}.",
+      "ariaStay": "{state} {n} %",
+      "ariaFlow": "from {from} to {to} {n} %",
+      "ariaNoFlows": "none above 5 %"
+    },
+    "trend": {
+      "aria": "Share of the area in each state from {first} to {last}: {values}. The dotted line is the projection."
+    },
+    "table": {
+      "show": "Show as a table",
+      "hide": "Hide table",
+      "fromTo": "From ↓ to →",
+      "year": "Year",
+      "matrixCaption": "Chance of moving from one state (row) to another (column), {periods}",
+      "trendCaption": "Share of the area in each state, by year"
+    },
+    "change": {
+      "trend": {
+        "improving": "The land is improving: more healthy vegetation and less bare soil.",
+        "worsening": "The land is deteriorating: less healthy vegetation or more bare soil.",
+        "stable": "The land is staying about the same."
+      },
+      "biggest": "Biggest change: {state} went from {from} % to {to} % of the area.",
+      "mainFlow": "The largest move was from {from} to {to}: {n} % of the area.",
+      "projection": "If changes continue the same way, by {year} there would be {healthy} % healthy, {stressed} % stressed, {bare} % bare and {water} % water.",
+      "longRun": "If nothing changed for many years, the land would tend to: {list}."
+    },
+    "notes": {
+      "average": "It describes the municipality on average, not your farm.",
+      "projection": "The projection assumes changes continue the same way; your management, the weather and policies can change it.",
+      "support": "This tool supports you; it does not replace your judgment or local experts."
     }
   }
 }

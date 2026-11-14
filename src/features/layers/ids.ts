@@ -8,6 +8,8 @@ export const LAYER_IDS = [
   'evap',
   'groundwater',
   'relief',
+  /** Zonas de riesgo por municipio de Colombia (varios datos NASA combinados en Google Earth Engine). */
+  'risk',
 ] as const;
 
 export type LayerId = (typeof LAYER_IDS)[number];

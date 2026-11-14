@@ -3,6 +3,7 @@
 import clsx from 'clsx';
 import { CalendarDays, HelpCircle, Pause, Play, X } from 'lucide-react';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '@/lib/hooks/useMediaQuery';
 import { formatLegendValue, legendGradient, loadColormap, type Colormap } from './colormap';
@@ -10,6 +11,9 @@ import { monthOptions } from './dates';
 import { LayerIcon } from './LayerIcon';
 import { LAYER_BY_ID } from './layers.config';
 import { useLayerStore } from './store';
+
+/** Leyenda de zonas de riesgo: solo se descarga cuando esa capa está activa. */
+const RiskLegend = dynamic(() => import('@/features/terrain/RiskLegend'), { ssr: false });
 
 const SAT_NOTE_KEY = 'fieldshift:seen-satellite-note:v1';
 
@@ -175,6 +179,7 @@ export default function LayerBar() {
             <span>{t(`items.${id}.high`)}</span>
           </div>
         )}
+        {cfg.kind === 'vector' && <RiskLegend />}
 
         <p role="status" aria-live="polite" className="mt-2 text-sm">
           {tileError ? (

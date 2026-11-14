@@ -5,3 +5,6 @@ coverage
 playwright-report
 test-results
 public
+
+# Script del Code Editor de Earth Engine (ES5: sin comas finales)
+scripts/gee/

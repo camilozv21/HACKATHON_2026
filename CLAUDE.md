@@ -68,6 +68,7 @@ pnpm e2e          # playwright (Pixel 7, contra `pnpm build && pnpm start --port
 node scripts/build-gibs-meta.mjs   # refresca fechas válidas y leyendas de las capas NASA GIBS (antes de la demo)
 node scripts/build-admin-co.mjs    # regenera public/geo/co-{dpto,mpio}.json (límites DANE de Colombia)
 node scripts/build-market-co.mjs   # regenera el seed de mercado (SIPSA, EVA, TRM, insumos, Finagro)
+node scripts/build-terrain-co.mjs  # zonas de riesgo + Markov: sintético; --from=<csv de GEE> real (docs/terrain-risk.md)
 pnpm db:inspect   # lista schemas y tablas de DATABASE_URL (solo lectura)
 pnpm db:migrate   # aplica las migraciones del schema fieldshift (idempotente)
 node scripts/bundle-size.mjs <url> # mide el JS inicial
@@ -79,7 +80,8 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
 - Componentes en `src/components/<feature>/`.
 - Lógica del mapa en `src/features/globe/`, capas en `src/features/layers/`, rotaciones en `src/features/rotations/`,
   drawer de región en `src/features/region/`, radio en `src/features/radio/`, chat en `src/features/agent/`,
-  ubicación en `src/features/location/`, finca en `src/features/field/`, prioridades en `src/features/priorities/`.
+  ubicación en `src/features/location/`, finca en `src/features/field/`, prioridades en `src/features/priorities/`,
+  zonas de riesgo y cambios del terreno (Markov, Google Earth Engine) en `src/features/terrain/`.
 - Capa de datos en `src/lib/api/` (contrato zod, cliente, hooks, mocks, NASA POWER).
 - Textos de UI siempre vía next-intl (`messages/es.json`, `messages/en.json`); nunca strings sueltos en componentes.
 - `localStorage` / `sessionStorage` siempre envueltos en try/catch.
@@ -105,7 +107,10 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
 - Cada `dynamic()` del shell suma bytes al JS inicial: las piezas que llegan con el globo listo se agrupan en
   pocos módulos (`TopRight`, `TopCenter`, `FirstLayer` en `src/components/shell/`). Añade ahí, no en `AppShell`.
 - Diálogos propios encima del sheet: `createPortal` a `<body>` (vaul usa transform) y `data-overlay-dialog` para que
-  Esc cierre el diálogo y no el sheet.
+  Esc cierre el diálogo y no el sheet. **Si el diálogo tiene campos de texto (o debe usarse con teclado), usa Radix
+  `Dialog` de `radix-ui`** (con `data-overlay-dialog` en el contenedor): vaul no le pasa `modal` a Radix, así que el
+  sheet deja una trampa de foco aunque sea `modal={false}` y un `<input>` fuera de él no recibe el foco. La trampa de
+  Radix se apila y pausa la del sheet (ver `src/features/listings/PublishListingDialog.tsx`).
 - Preferencias (modo sol/alto contraste, unidades, modo sencillo, locutor, introducción vista) en `src/lib/prefs.ts`;
   unidades con `useUnits()` (`src/lib/units.ts`), nunca "mm"/"°C" fijos en los mensajes. Modo sol: `data-contrast="high"`.
 - Modo sencillo: `data-mode="lite"` en `<html>`; oculta detalle técnico con la variante CSS `lite:hidden` (sin JS) y

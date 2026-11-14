@@ -399,3 +399,73 @@ petición:
 - El `bbox` de la respuesta se dibuja en el mapa como **recuadro punteado** ("zona de los datos", con su tamaño en
   la leyenda del drawer), junto al borde del municipio y el de su departamento. Si el backend resume otra zona (una
   celda de 0,5°, el municipio entero…), basta con devolver ese `bbox`: el recuadro y el texto lo siguen.
+
+## Zonas de riesgo y cambios del terreno (archivos estáticos)
+
+No pasan por el backend. Los genera `node scripts/build-terrain-co.mjs` a partir del export de Google Earth Engine
+(`scripts/gee/terrain-co.js`) y se validan con `src/lib/api/terrain.ts`. Método, tramos y pasos: `docs/terrain-risk.md`.
+
+- `GET /geo/terrain-co.json`: índice de todos los municipios y departamentos (lo usa la capa `risk`).
+  ```json
+  {
+    "version": 1,
+    "source": "gee",
+    "generatedAt": "2026-11-14T20:00:00Z",
+    "periods": { "initial": { "label": "2016–2018", "years": [2016, 2018] }, "final": { "label": "2023–2025", "years": [2023, 2025] }, "years": [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025], "stepYears": 7 },
+    "datasets": ["MODIS/061/MOD13Q1", "NASA/SMAP/SPL4SMGP/008", "…"],
+    "items": {
+      "44001": {
+        "a": 3120.4, "v": 0.91,
+        "p0": [310, 420, 250, 20], "p1": [260, 430, 290, 20],
+        "i": { "smAnom": -21.4, "smWet": 3.1, "pAnom": -24.8, "pHeavy": 0.9, "mfi": 68, "etRatio": 0.41, "lstHot": 52.3, "lstAnom": 1.4, "gwTrend": -1.2, "slope": 4.2, "flat": 61.5, "ndviTrend": -0.031, "toBare": 4.8 }
+      }
+    }
+  }
+  ```
+  - `a`: área en km². `v`: fracción del área con dato válido.
+  - `p0` / `p1`: estado inicial y final en milésimas (sana, con estrés, suelo expuesto, agua).
+  - `i`: indicadores. Cualquiera puede ser `null`.
+- `GET /geo/terrain/<dpto>.json`: detalle de un departamento y sus municipios (lo usa el drawer).
+  - `t`: las 16 fracciones (estado inicial → estado final), fila por fila.
+  - `y`: el reparto de cada año.
+  ```json
+  { "version": 1, "source": "gee", "dpto": "44", "items": { "44001": { "t": [250, 50, 10, 0, 10, 330, 80, 0, 0, 50, 200, 0, 0, 0, 0, 20], "y": [[300, 430, 250, 20], "…"] } } }
+  ```
+- `source: "synthetic"`: datos simulados para la demo. La leyenda y el drawer lo dicen, y la confianza baja.
+
+
+## Mercado de Colombia (opcional, desde noviembre 2026)
+
+Campos **opcionales** que el backend puede llenar; el mock los llena en Colombia (ver [`market-data.md`](market-data.md)):
+
+- `AnalysisResponse.market`: `{ deptCode, deptName, nearestMarket: { name, distanceKm } | null, trmCop, fertilizerChange12mPct, asOf, source: "db" | "seed" }`.
+- `RotationStrategy.market` (`StrategyMarket`): `{ summary, crops: MarketCrop[] (≤ 6), confidence, risks, gaps, asOf }`.
+  Cada `MarketCrop`: `{ crop, product, priceCopKg, market, distanceKm, month, change12mPct, volatility, supplyTrend,
+  yieldTHa, yieldScope, revenueCopHa, monthsToFirstHarvest, credit, factor, outlook }`.
+- `DataSource` suma `SIPSA`, `EVA`, `TRM`, `Finagro`, `UPRA` y `Análisis IA` (para `Evidence.source`).
+
+Ejemplo de `strategy.market`:
+
+```json
+{
+  "summary": "Fríjol: $11.953/kg en Armenia, Mercar (5 km) · mercado a favor.",
+  "crops": [{ "crop": "beans", "product": "frijol", "priceCopKg": 11953, "market": "Armenia, Mercar", "distanceKm": 5,
+              "month": "2026-10", "change12mPct": 88.4, "volatility": "medium", "supplyTrend": "flat", "yieldTHa": 1.49,
+              "yieldScope": "dept", "revenueCopHa": 17810000, "monthsToFirstHarvest": null,
+              "credit": null, "factor": 1.12, "outlook": { "label": "favorable", "why": "…", "by": "claude", "confidence": "medium" } }],
+  "confidence": "medium",
+  "risks": ["Hoy el precio de fríjol está alto, pero puede bajar si muchos siembran lo mismo."],
+  "gaps": ["Son precios mayoristas (lo que se paga en la central): en finca te pagan menos, y no descontamos tus costos de producción."],
+  "asOf": "2026-10-01"
+}
+```
+
+## Rutas propias de la app (no pasan por `NEXT_PUBLIC_API_BASE_URL`)
+
+| Ruta | Contrato | Doc |
+|---|---|---|
+| `GET /api/market?lat&lon&locale&products` | `MarketResponse` (`src/lib/api/market.ts`) | [`market-data.md`](market-data.md) |
+| `POST /api/market/jobs/refresh?sources=…` · `POST /api/market/jobs/outlook` | Header `X-FieldShift-Secret` | [`market-data.md`](market-data.md) |
+| `/api/listings`, `/api/listings/[id]`, `…/flag`, `…/contact` | `src/lib/api/listings.ts` | [`listings.md`](listings.md) |
+
+En el cliente se llaman con `fetch` + zod (no con `apiFetch`, que antepone `/api/mock` o el backend del equipo).

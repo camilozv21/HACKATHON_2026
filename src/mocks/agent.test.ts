@@ -116,3 +116,18 @@ describe('agente mock: informe agroclimático', () => {
     expect(a?.when).toBeUndefined();
   });
 });
+
+describe('agente mock: fincas que venden', () => {
+  it('"¿dónde compro café?" muestra las fincas que venden y explica cómo publicar', () => {
+    const res = buildMockAgentResponse({
+      sessionId: 'test-session-listings',
+      message: '¿Dónde compro café cerca de Armenia?',
+      locale: 'es',
+      userLocation: null,
+      view: { center: [-75.68, 4.53], zoom: 7 },
+      history: [],
+    });
+    expect((res.actions as { type: string }[]).map((a) => a.type)).toContain('showListings');
+    expect(res.reply).toContain('Publicar mi finca');
+  });
+});
