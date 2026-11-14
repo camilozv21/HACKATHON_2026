@@ -74,7 +74,7 @@ describe('factor de mercado del ingreso', () => {
 describe('análisis con mercado (finca demo de Quindío)', () => {
   it('sin mercado no cambia nada; con mercado suma el bloque "Mercado", evidencia SIPSA y cumple el contrato', async () => {
     const demo = DEMO_FARMS.find((d) => d.id === 'cafe-quindio')!;
-    const field = toFieldInput(demoField(demo), demo.currentRotation ?? []);
+    const field = toFieldInput(demoField(demo, 'es'));
     const req = { field, priorities: DEFAULT_PRIORITIES, locale: 'es' as const };
     const [lon, lat] = demo.center;
     const market = await marketForPoint({ lat, lon, products: [...new Set(Object.values(CROP_PRODUCT))], maxProducts: 16 });
