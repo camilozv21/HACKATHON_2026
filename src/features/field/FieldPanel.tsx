@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { OfflineBanner } from '@/components/shell/OfflineBanner';
 import { PrioritiesUrlSync } from '@/features/priorities/PrioritiesUrlSync';
 import { DEFAULT_MARKETS, usePrioritiesStore } from '@/features/priorities/store';
+import { SellSuggestion } from '@/features/listings/SellSuggestion';
 import { useSurvey } from '@/features/survey/store';
 import { useTimeStore } from '@/features/time/store';
 import { TimeBanner } from '@/features/time/TimeBanner';
@@ -288,6 +289,7 @@ export default function FieldPanel() {
                   onSave={(r) => setRotation(r)}
                 />
               </Section>
+              <SellSuggestion field={field} survey={survey} />
               <button
                 type="button"
                 onClick={() => setTab('priorities')}

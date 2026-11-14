@@ -2,9 +2,10 @@
  * Mercado de Colombia en el motor de recomendaciones.
  *
  * El puntaje de "ingresos" sigue saliendo de `Agro.value` (margen relativo genérico entre cultivos), pero cada
- * cultivo se multiplica por un FACTOR LOCAL ACOTADO (0,5–1,5) que sale de datos públicos:
+ * cultivo se multiplica por un FACTOR LOCAL ACOTADO (0,6–1,4) que sale de datos públicos:
  *  - ingreso bruto local vs. nacional del mismo cultivo: precio mayorista de la central más cercana (mediana de
- *    12 meses, DANE SIPSA) × rendimiento del departamento (EVA), frente a la mediana nacional × rendimiento nacional;
+ *    12 meses, DANE SIPSA) × rendimiento del departamento (EVA), frente a la mediana nacional × rendimiento nacional
+ *    (media geométrica, acotada 0,75–1,3);
  *  - tendencia del precio (suave: perseguir picos lleva a sobreoferta), volatilidad, sobreoferta (más área sembrada
  *    o más producto llegando a la central con el precio bajando), distancia a la central para lo perecedero y
  *    subida de fertilizantes para los cultivos que más nitrógeno piden.
@@ -26,12 +27,14 @@ export type Purpose = 'home' | 'sale' | 'both' | null | undefined;
 /** Cultivos que más nitrógeno piden: les pega más la subida de fertilizantes. */
 const FEEDERS = new Set<ProductId>(['maiz', 'papa', 'papa-criolla', 'arroz', 'tomate', 'hortalizas', 'cebolla-cabezona', 'cebolla-larga']);
 
-/** Factor local (0,5–1,5) del ingreso de un producto. 1 = el mercado no cambia nada. */
+/** Factor local (0,6–1,4) del ingreso de un producto. 1 = el mercado no cambia nada. */
 export function incomeFactor(p: ProductMarket, fertChange12mPct: number | null): number {
   let f = 1;
   const priceRatio = p.priceCopKg !== null && p.nationalPriceCopKg ? clamp(p.priceCopKg / p.nationalPriceCopKg, 0.7, 1.3) : 1;
   const yieldRatio = p.yieldScope === 'dept' && p.yieldTHa !== null && p.nationalYieldTHa ? clamp(p.yieldTHa / p.nationalYieldTHa, 0.6, 1.4) : 1;
-  f *= clamp(priceRatio * yieldRatio, 0.6, 1.4);
+  // Media geométrica: el precio de la central y el rendimiento del departamento son señales ruidosas frente a lo
+  // que pasa en una finca; la raíz conserva la dirección y modera la magnitud (0,72 → 0,85).
+  f *= clamp(Math.sqrt(priceRatio * yieldRatio), 0.75, 1.3);
   const c = p.change12mPct;
   if (c !== null) f *= c >= 15 ? 1.04 : c <= -15 ? 0.94 : 1;
   if (p.volatility === 'high') f *= 0.94;
@@ -43,7 +46,7 @@ export function incomeFactor(p: ProductMarket, fertChange12mPct: number | null):
   else if (p.perishable && km > 250) f *= 0.9;
   else if (km > 400) f *= 0.93;
   if (fertChange12mPct !== null && fertChange12mPct >= 10 && FEEDERS.has(p.product as ProductId)) f *= 0.97;
-  return Math.round(clamp(f, 0.5, 1.5) * 100) / 100;
+  return Math.round(clamp(f, 0.6, 1.4) * 100) / 100;
 }
 
 const DAMPING: Record<'home' | 'sale' | 'both', number> = { home: 0.3, both: 0.7, sale: 1 };
@@ -90,7 +93,13 @@ function productRisks(p: ProductMarket, l: Loc): string[] {
     out.push(tr(l, `Sobreoferta de ${name}: llega más a la central y el precio baja. Vende por contrato o busca otro comprador.`, `${name} oversupply: more is reaching the market and the price is falling. Sell under contract or find another buyer.`));
   else if (c !== null && c <= -15) out.push(tr(l, `El precio mayorista de ${name} bajó ${pct(c, l)} frente al año pasado.`, `The wholesale price of ${name} fell ${pct(c, l)} from last year.`));
   else if (c !== null && c >= 25)
-    out.push(tr(l, `El ${name} está caro hoy, pero un precio alto puede bajar si muchos siembran lo mismo.`, `${name} is expensive today, but a high price can drop if many people plant the same crop.`));
+    out.push(
+      tr(
+        l,
+        `Hoy el precio de ${name} está alto, pero puede bajar si muchos siembran lo mismo.`,
+        `The price of ${name} is high today, but it can drop if many people plant the same crop.`,
+      ),
+    );
   if (p.volatility === 'high') out.push(tr(l, `El precio de ${name} sube y baja mucho de un mes a otro: escalona la siembra.`, `The ${name} price swings a lot month to month: stagger your planting.`));
   if (p.perishable && p.market?.distanceKm && p.market.distanceKm > 250)
     out.push(tr(l, `La central más cercana con precio de ${name} está a ${p.market.distanceKm} km: cuenta el transporte.`, `The nearest market pricing ${name} is ${p.market.distanceKm} km away: count transport costs.`));
@@ -98,8 +107,8 @@ function productRisks(p: ProductMarket, l: Loc): string[] {
     out.push(
       tr(
         l,
-        `El ${name} tarda unos ${p.monthsToFirstHarvest} meses en dar la primera cosecha: necesitas con qué vivir mientras tanto.`,
-        `${name} takes about ${p.monthsToFirstHarvest} months to its first harvest: you need income in the meantime.`,
+        `Desde la siembra, la primera cosecha de ${name} tarda unos ${p.monthsToFirstHarvest} meses: necesitas con qué vivir mientras tanto.`,
+        `From planting, the first ${name} harvest takes about ${p.monthsToFirstHarvest} months: you need income in the meantime.`,
       ),
     );
   return out;
@@ -205,7 +214,7 @@ export function marketEvidence(market: StrategyMarket | undefined, l: Loc): Omit
     const name = productName(local.product as ProductId, l);
     out.push({
       source: 'EVA',
-      statement: tr(l, `EVA: el ${name} rinde ~${local.yieldTHa!.toLocaleString('es-CO')} t/ha en tu departamento.`, `EVA: ${name} yields ~${local.yieldTHa!.toLocaleString('en-US')} t/ha in your department.`),
+      statement: tr(l, `EVA: en tu departamento, ${name} rinde ~${local.yieldTHa!.toLocaleString('es-CO')} t/ha.`, `EVA: ${name} yields ~${local.yieldTHa!.toLocaleString('en-US')} t/ha in your department.`),
       rule: tr(l, 'Con el rendimiento local estimamos el ingreso bruto por hectárea.', 'Local yield gives the gross income per hectare.'),
     });
   }

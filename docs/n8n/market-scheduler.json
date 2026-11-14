@@ -1,0 +1,142 @@
+{
+  "name": "Field Shift · Mercado de Colombia (programado)",
+  "nodes": [
+    {
+      "id": "b1f3c0de-0001-4f00-9a00-000000000001",
+      "name": "Cada día 06:30",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "30 6 * * *" }] } }
+    },
+    {
+      "id": "b1f3c0de-0002-4f00-9a00-000000000002",
+      "name": "TRM e insumos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 0],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "Field Shift · X-FieldShift-Secret" } },
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-APP.example.com/api/market/jobs/refresh?sources=trm,inputs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 120000 }
+      }
+    },
+    {
+      "id": "b1f3c0de-0003-4f00-9a00-000000000003",
+      "name": "Miércoles 15:30 (después del boletín SIPSA)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 220],
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "30 15 * * 3" }] } }
+    },
+    {
+      "id": "b1f3c0de-0004-4f00-9a00-000000000004",
+      "name": "SIPSA precios",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 220],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000,
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "Field Shift · X-FieldShift-Secret" } },
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-APP.example.com/api/market/jobs/refresh?sources=sipsa",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 300000 }
+      }
+    },
+    {
+      "id": "b1f3c0de-0005-4f00-9a00-000000000005",
+      "name": "SIPSA abastecimiento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 220],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000,
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "Field Shift · X-FieldShift-Secret" } },
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-APP.example.com/api/market/jobs/refresh?sources=sipsa-supply",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 300000 }
+      }
+    },
+    {
+      "id": "b1f3c0de-0006-4f00-9a00-000000000006",
+      "name": "Conclusiones con Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 220],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000,
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "Field Shift · X-FieldShift-Secret" } },
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-APP.example.com/api/market/jobs/outlook",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 300000 }
+      }
+    },
+    {
+      "id": "b1f3c0de-0007-4f00-9a00-000000000007",
+      "name": "Día 5 de cada mes 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 440],
+      "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 7 5 * *" }] } }
+    },
+    {
+      "id": "b1f3c0de-0008-4f00-9a00-000000000008",
+      "name": "EVA y Finagro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 440],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000,
+      "credentials": { "httpHeaderAuth": { "id": "", "name": "Field Shift · X-FieldShift-Secret" } },
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-APP.example.com/api/market/jobs/refresh?sources=eva,finagro",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 300000 }
+      }
+    },
+    {
+      "id": "b1f3c0de-0009-4f00-9a00-000000000009",
+      "name": "¿Alguna fuente falló?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 220],
+      "parameters": {
+        "jsCode": "// El endpoint responde 200 (todo bien) o 207 (alguna fuente falló) con { report: [{ source, ok, rows, error }] }.\n// Si algo falló, la ejecución termina en error: n8n lo marca y puede avisar con un Error Workflow.\nconst bad = $input.all().flatMap((i) => (i.json.report || []).filter((r) => r.ok === false));\nif (bad.length) throw new Error('Fuentes con error: ' + bad.map((b) => `${b.source}: ${b.error}`).join(' · '));\nreturn $input.all();"
+      }
+    }
+  ],
+  "connections": {
+    "Cada día 06:30": { "main": [[{ "node": "TRM e insumos", "type": "main", "index": 0 }]] },
+    "TRM e insumos": { "main": [[{ "node": "¿Alguna fuente falló?", "type": "main", "index": 0 }]] },
+    "Miércoles 15:30 (después del boletín SIPSA)": { "main": [[{ "node": "SIPSA precios", "type": "main", "index": 0 }]] },
+    "SIPSA precios": { "main": [[{ "node": "SIPSA abastecimiento", "type": "main", "index": 0 }]] },
+    "SIPSA abastecimiento": { "main": [[{ "node": "Conclusiones con Claude", "type": "main", "index": 0 }]] },
+    "Conclusiones con Claude": { "main": [[{ "node": "¿Alguna fuente falló?", "type": "main", "index": 0 }]] },
+    "Día 5 de cada mes 07:00": { "main": [[{ "node": "EVA y Finagro", "type": "main", "index": 0 }]] },
+    "EVA y Finagro": { "main": [[{ "node": "¿Alguna fuente falló?", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "timezone": "America/Bogota", "saveDataErrorExecution": "all", "saveDataSuccessExecution": "all" },
+  "pinData": {},
+  "meta": { "templateCredsSetupCompleted": false }
+}

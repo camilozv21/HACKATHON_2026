@@ -128,3 +128,14 @@ Hallazgos corregidos en esta revisión:
   páginas (el 404 vive en el layout): ahora es un SVG en línea.
 - El vuelo de la intro (`IntroFlight`) y los controles del globo pasaron a módulos diferidos.
 - `/favicon.ico` daba 404.
+
+## Mercado y fincas que venden (noviembre 2026)
+
+- Nada nuevo en `AppShell`. En el JS inicial solo entran piezas livianas: `src/features/listings/store.ts` (zustand,
+  sin zod), `ListingsUrlSync`, `hit.ts` (import de maplibre solo de tipos) y `src/lib/market/colombia.ts`.
+- La capa, la tarjeta, el formulario "Publicar mi finca" y "Mi publicación" van en un solo chunk diferido
+  (`ListingsRuntime`, montado desde `FirstLayer` solo si la capa está visible o hay un panel abierto).
+- `MarketSection` (detalle de la estrategia) y `MarketNearby` (drawer de región) viajan en sus chunks ya diferidos.
+  Los esquemas zod completos viven en `src/lib/api/market.ts` y `src/lib/api/listings.ts`.
+- `/[locale]/fincas` y `/[locale]/fincas/[id]` son RSC sin el globo: no cuentan para el presupuesto de `/es`.
+- El seed de mercado (`src/server/market/seed-co.json`, ~450 KB) es solo de servidor.

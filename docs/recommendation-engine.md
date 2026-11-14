@@ -69,7 +69,7 @@ Todos se calculan mes a mes, con la misma cuenta para lo de hoy y para cada opci
 | Nitrógeno | Leguminosas (pesan más si son cobertura que se incorpora) + cobertura que atrapa el N en meses de lavado + cultivo exigente después o al lado de una leguminosa − cultivos exigentes sin leguminosa. |
 | Erosión | Lógica de RUSLE: lluvia erosiva (Fournier) × pendiente (factor S) × (1 − cobertura). La cobertura se pondera por la lluvia de cada mes (p²) e incluye el mantillo. En zonas secas se suma el riesgo de viento. |
 | Corte de plagas | Cambios de familia entre cultivos seguidos, número de cultivos y familias, asociaciones y coberturas de otra familia. |
-| Ingresos | Σ valor relativo × rendimiento esperado × parte de la asociación. El rendimiento esperado combina frío/calor con el agua (FAO-33, Ky). La parte de la asociación sale del LER = 1 + 0,1 × valor medio de las parejas; si hay una pareja curada cereal + leguminosa, el LER es al menos 1,25. Los mercados cercanos suben el valor. **No son precios locales.** |
+| Ingresos | Σ valor relativo × rendimiento esperado × parte de la asociación × **factor local de mercado** (Colombia). El rendimiento esperado combina frío/calor con el agua (FAO-33, Ky). La parte de la asociación sale del LER = 1 + 0,1 × valor medio de las parejas; si hay una pareja curada cereal + leguminosa, el LER es al menos 1,25. Los mercados cercanos que dijo la persona suben el valor. En Colombia, el factor local (0,6–1,4) sale de precios mayoristas DANE SIPSA y rendimientos EVA del departamento frente a los nacionales, tendencia, volatilidad, sobreoferta, distancia a la central y fertilizantes; se atenúa si la cosecha es para la casa. Ver [`market-data.md`](market-data.md). Fuera de Colombia: valores relativos genéricos. |
 | Forraje | Coberturas y forrajes pastoreables por mes + rastrojo de los granos. En un cafetal, ×0,4. |
 
 "Menos trabajo" no viene del motor: lo calcula el teléfono con las siembras por año. Una mezcla de cobertura sembrada
@@ -102,6 +102,8 @@ el mismo mes cuenta como una sola siembra.
   - riego: si lo de hoy solo se da con riego y la persona marcó "sin riego", se supone que riega lo de hoy y se avisa;
   - maquinaria: siembras sin tractor ni animales;
   - mercados: valor y avisos de comprador.
+- `field.survey.purpose` (casa / venta / ambos) atenúa el factor de mercado del ingreso.
+- Mercado de la zona (`market`, lo pide la ruta con `marketForPoint`): factor local del ingreso, bloque `strategy.market`, evidencia SIPSA/EVA, riesgos de mercado y el vacío de precios.
 - `field.soil` **no** entra en los puntajes del motor: lo aplica `src/mocks/farmerData.ts` después, para no contar dos
   veces.
 
@@ -114,7 +116,7 @@ el mismo mes cuenta como una sola siembra.
 
 - Paso mensual con promedios de 20+ años. No ve semanas secas, olas de calor ni años extremos. El escenario "¿y si…?"
   (`src/features/rotations/whatIf.ts`) es aparte.
-- Los valores relativos de ingreso son genéricos. El backend real debería usar precios y rendimientos locales.
+- En Colombia el ingreso usa precios mayoristas (SIPSA) y rendimientos del departamento (EVA), pero no hay costos por hectárea abiertos: no es un margen. Fuera de Colombia los valores relativos siguen siendo genéricos.
 - Sin pendiente real fuera de las fincas demo. Un servicio SRTM (p. ej. OpenTopoData) la daría, pero enviaría la
   ubicación a un tercero.
 - La rotación supuesta cuando la persona no da la suya es una conjetura por zona (en el delta del Mekong, por ejemplo,

@@ -3,12 +3,13 @@
 import { scaleBand, scaleLinear } from '@visx/scale';
 import clsx from 'clsx';
 import { Home, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Ranked } from '@/features/priorities/ranking';
 import { SCORE_KEYS, type RotationStrategy, type ScoreKey } from '@/lib/api/contract';
 import { seriesColor } from './colors';
+import { formatCop } from '@/features/market/format';
 import { Diff } from './parts';
 
 type Item = Ranked<RotationStrategy>;
@@ -123,8 +124,19 @@ export default function CompareTable({
   onClose: () => void;
 }) {
   const t = useTranslations('rotations');
+  const tm = useTranslations('market');
+  const tp = useTranslations('products');
+  const locale = useLocale();
   const closeRef = useRef<HTMLButtonElement>(null);
   const current = ranked.find((r) => r.strategy.isCurrent);
+  const hasMarket = ranked.some((r) => r.strategy.market);
+  /** Cultivo de mayor ingreso bruto con precio: "Fríjol $11.953/kg · A favor". */
+  const marketCell = (s: RotationStrategy) => {
+    const lead = [...(s.market?.crops ?? [])].filter((c) => c.priceCopKg !== null).sort((a, b) => (b.revenueCopHa ?? 0) - (a.revenueCopHa ?? 0))[0];
+    if (!lead) return '—';
+    const outlook = lead.outlook ? ` · ${tm(`outlook.${lead.outlook.label}`)}` : '';
+    return `${tp(lead.product as 'cafe')} ${formatCop(lead.priceCopKg!, locale)}/kg${outlook}`;
+  };
   const colorOf = (id: string) => seriesColor(colorIndex[id] ?? 0);
 
   const onCloseRef = useRef(onClose);
@@ -243,6 +255,18 @@ export default function CompareTable({
                     </td>
                   ))}
                 </tr>
+                {hasMarket && (
+                  <tr className="border-t border-line">
+                    <th scope="row" className="py-2 pr-2 font-normal text-ink-muted">
+                      {tm('compareRow')}
+                    </th>
+                    {ranked.map((r) => (
+                      <td key={r.strategy.id} className="px-1.5 py-2">
+                        {marketCell(r.strategy)}
+                      </td>
+                    ))}
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
