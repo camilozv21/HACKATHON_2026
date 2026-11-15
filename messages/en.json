@@ -1225,6 +1225,7 @@
       "text": "We help you care for your soil and choose what to plant, with data from NASA satellites.",
       "hint": "Play for about 3 minutes: you learn to read NASA data and we set up the app for you.",
       "spokenEnd": "Tap the green button below to play.",
+      "spokenMute": "If you don’t want to hear the voice, tap Mute the voice.",
       "play": "7 short challenges",
       "learn": "Learn to read satellites",
       "profile": "An app made for you"
@@ -1232,6 +1233,8 @@
     "voice": {
       "listen": "Listen with voice",
       "on": "Voice on",
+      "mute": "Mute the voice",
+      "tap": "Tap the screen to hear the welcome.",
       "toggle": "Voice that reads aloud",
       "note": "It uses your phone’s voice.",
       "unsupported": "This browser cannot read aloud."

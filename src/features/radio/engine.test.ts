@@ -13,11 +13,14 @@ vi.mock('@/features/onboarding/profile', () => ({ agentProfile: () => ({ mode: '
 // Voz del teléfono simulada: habla una utterance a la vez (start → end en unos milisegundos).
 type FakeU = { text: string; onstart?: () => void; onend?: () => void; onerror?: (e: { error: string }) => void };
 const spoken: string[] = [];
+/** Frases que la voz "suelta" sin avisar (nunca llegan su start ni su end), como pasa a veces en Chrome y Android. */
+const dropped = new Set<string>();
 let queue: FakeU[] = [];
 function pump() {
   setTimeout(() => {
     const u = queue.shift();
     if (!u) return;
+    if (dropped.has(u.text)) return pump();
     spoken.push(u.text);
     u.onstart?.();
     setTimeout(() => {
@@ -113,6 +116,24 @@ describe('motor de la radio con el programa del día', async () => {
     await vi.waitFor(() => expect(spoken).toContain('weather dos.'), { timeout: 3000 });
     await new Promise((r) => setTimeout(r, 400));
     expect(actions).toEqual([]);
+  });
+
+  it('si la voz suelta una frase sin avisar, la radio no queda muda: sigue con la siguiente', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      dropped.add('intro dos.');
+      radioEngine.toggle();
+      await vi.advanceTimersByTimeAsync(500);
+      expect(spoken).toContain('intro uno.');
+      expect(spoken).not.toContain('intro tres.');
+      // El vigilante espera el doble de lo que dura la frase (más 3 s) y, como la voz ya no habla, sigue.
+      await vi.advanceTimersByTimeAsync(8000);
+      expect(spoken).toContain('intro tres.');
+      expect(useRadioStore.getState().status).toBe('playing');
+    } finally {
+      dropped.clear();
+      vi.useRealTimers();
+    }
   });
 
   it('al pausar y volver a tocar play retoma desde la frase en que iba (sin repetir la identificación)', async () => {

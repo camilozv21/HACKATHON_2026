@@ -5,7 +5,9 @@ import { create } from 'zustand';
  *  - contrast: 'auto' sigue prefers-contrast del sistema; 'high' = modo sol directo; 'normal' lo apaga.
  *  - units: métrico (mm, °C, ha) o imperial (pulgadas, °F, acres).
  *  - mode: 'lite' (modo sencillo: menos datos técnicos, lo importante primero) o 'full' (todo el detalle).
- *  - narrator: el locutor lee en voz alta la introducción, el panel de región y las respuestas del asistente.
+ *  - narrator: el locutor lee en voz alta el panel de región y las respuestas del asistente.
+ *  - introVoice: la introducción (bienvenida y retos) se lee sola en voz alta, salvo que la persona haya apagado la
+ *    voz (NARRATOR_KEY = '0'). Sin elegir nada, la introducción habla y el resto de la app queda en silencio.
  *  - onboarded: ya respondió (o saltó) la bienvenida y las preguntas de inicio.
  *  - mapMarkers: mostrar en el globo los puntos de fincas de ejemplo y de emisoras (los que pulsan).
  * data-contrast y data-mode se aplican también antes del primer pintado con un script en el <head> (layout).
@@ -56,6 +58,7 @@ type PrefsState = {
   units: Units;
   mode: Mode;
   narrator: boolean;
+  introVoice: boolean;
   onboarded: boolean;
   mapMarkers: boolean;
   setContrast: (c: Contrast) => void;
@@ -76,6 +79,7 @@ export const usePrefsStore = create<PrefsState>()((set) => ({
   units: savedUnits === 'imperial' ? 'imperial' : 'metric',
   mode: read(MODE_KEY) === 'lite' ? 'lite' : 'full',
   narrator: read(NARRATOR_KEY) === '1',
+  introVoice: read(NARRATOR_KEY) !== '0',
   onboarded: read(ONBOARDED_KEY) === '1',
   mapMarkers: read(MARKERS_KEY) !== '0',
   setContrast: (contrast) => {
@@ -94,7 +98,7 @@ export const usePrefsStore = create<PrefsState>()((set) => ({
   },
   setNarrator: (narrator) => {
     write(NARRATOR_KEY, narrator ? '1' : '0');
-    set({ narrator });
+    set({ narrator, introVoice: narrator });
   },
   setOnboarded: (onboarded) => {
     write(ONBOARDED_KEY, onboarded ? '1' : '0');
@@ -104,7 +108,10 @@ export const usePrefsStore = create<PrefsState>()((set) => ({
     write(MARKERS_KEY, mapMarkers ? '1' : '0');
     set({ mapMarkers });
   },
-  reload: () => set({ narrator: read(NARRATOR_KEY) === '1', onboarded: read(ONBOARDED_KEY) === '1' }),
+  reload: () => {
+    const voice = read(NARRATOR_KEY);
+    set({ narrator: voice === '1', introVoice: voice !== '0', onboarded: read(ONBOARDED_KEY) === '1' });
+  },
 }));
 
 /** Modo sencillo activo (para cambios de estructura; para ocultar detalles basta la variante CSS `lite:`). */

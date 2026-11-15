@@ -1225,6 +1225,7 @@
       "text": "Te ayudamos a cuidar tu suelo y a escoger qué sembrar, con datos de los satélites de la NASA.",
       "hint": "Juega unos 3 minutos: aprendes a leer los datos de la NASA y dejamos la app a tu medida.",
       "spokenEnd": "Toca el botón verde de abajo para jugar.",
+      "spokenMute": "Si no quieres oír la voz, toca Silenciar la voz.",
       "play": "7 retos cortos",
       "learn": "Aprende a leer los satélites",
       "profile": "La app a tu medida"
@@ -1232,6 +1233,8 @@
     "voice": {
       "listen": "Escuchar con voz",
       "on": "Voz encendida",
+      "mute": "Silenciar la voz",
+      "tap": "Toca la pantalla para oír la bienvenida.",
       "toggle": "Voz que lee en voz alta",
       "note": "Usa la voz de tu teléfono.",
       "unsupported": "Este navegador no puede leer en voz alta."

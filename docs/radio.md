@@ -61,6 +61,13 @@ Los esquemas zod están en `src/lib/api/contract.ts` (`RadioStation`, `RadioSegm
 - Al empezar una emisora, la radio se identifica en voz ("Estás escuchando Radio Campo Salento, 101.3 FM")
   mientras llega el programa del día. Esa frase va dentro del toque, como piden los navegadores para hablar.
 - Media Session: título, emisora y controles en la pantalla bloqueada.
+- Voz del teléfono (`src/features/narrator/voices.ts`, la misma del locutor y la bienvenida): se elige por puntaje,
+  no la primera de la lista. Acento de Colombia/Latinoamérica primero, nunca las voces de novedad de Apple (Eddy,
+  Grandpa, Albert…, que salen primero en Mac y iPhone y sonaban robóticas) y, si hay, una natural o mejorada.
+- Las cifras se pasan a la voz sin formato de Colombia (`speakable`): "1.917 pesos" se dice "1917 pesos" (una voz de
+  México o EE. UU. leía un decimal), "2,5" → "2 coma 5" y "96.4 FM" → "96 punto 4 FM". Los subtítulos no cambian.
+- Si la voz suelta una frase sin avisar (Chrome, Android), un vigilante sigue con la siguiente para que la radio no
+  quede muda.
 - Baja el volumen (ducking) mientras el asistente responde; se pausa si el locutor de la app empieza a leer.
 - Antes de la demo: revisar que los audios IA tengan derechos de uso.
 

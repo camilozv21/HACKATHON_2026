@@ -37,7 +37,8 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
   const tRules = useTranslations('onboarding.rules');
   const locale = useLocale() as NarratorLang;
   const reduced = useReducedMotion() ?? false;
-  const narrator = usePrefsStore((s) => s.narrator);
+  // La introducción habla sola salvo que la persona haya apagado la voz (el resto de la app decide con `narrator`).
+  const introVoice = usePrefsStore((s) => s.introVoice);
   const [screen, setScreen] = useState<Screen>('role');
   const [answers, setAnswers] = useState<Partial<OnboardingAnswers>>({});
   const [quest, setQuest] = useState<{ index: number; results: QuestResults }>({ index: 0, results: {} });
@@ -62,19 +63,19 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
   // Estable: los retos lo usan en sus efectos de montaje (leer la instrucción una sola vez).
   const say = useCallback(
     (text: string) => {
-      if (usePrefsStore.getState().narrator) speak(text, { lang: locale, id: 'onboarding' });
+      if (usePrefsStore.getState().introVoice) speak(text, { lang: locale, id: 'onboarding' });
     },
     [locale],
   );
 
-  // Toma el relevo de la bienvenida en línea: la oculta y lee la primera pregunta si la voz está encendida.
+  // Toma el relevo de la bienvenida en línea: la oculta y lee la primera pregunta (salvo que apagaran la voz).
   useEffect(() => {
     alive.current = true;
     markQuizTaken();
     usePrefsStore.getState().reload();
     const intro = document.getElementById('onboarding');
     if (intro) intro.hidden = true;
-    if (usePrefsStore.getState().narrator) {
+    if (usePrefsStore.getState().introVoice) {
       const opts = QUESTION_OPTIONS.role.map((o) => t(`questions.role.${o.value}.spoken`));
       speak([t('questions.role.title'), ...opts, t('questions.spokenEnd')].join(' '), { lang: locale, id: 'onboarding' });
     }
@@ -131,11 +132,12 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
   const sayOption = (s: QuestionStep, value: string) => say(t('questions.selected', { option: t(`questions.${s}.${value}.label`) }));
   const choose = (s: QuestionStep, value: string) => {
     setAnswers((a) => ({ ...a, [s]: value }));
-    // "Escuchando": la voz se enciende de inmediato (quien no lee la necesita para los retos) y anuncia la elección
-    // (el onClick de la opción corre antes que este onChange, todavía sin voz).
+    // "Escuchando": la voz se enciende de inmediato (quien no lee la necesita para los retos y en el resto de la app).
+    // Si la persona la había apagado, el onClick de la opción corrió en silencio: se anuncia la elección aquí.
     if (s === 'reading' && value === 'listen' && canSpeak && !usePrefsStore.getState().narrator) {
+      const wasSilent = !usePrefsStore.getState().introVoice;
       usePrefsStore.getState().setNarrator(true);
-      sayOption(s, value);
+      if (wasSilent) sayOption(s, value);
     }
   };
 
@@ -191,7 +193,7 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
   };
 
   const toggleVoice = () => {
-    const on = !usePrefsStore.getState().narrator;
+    const on = !usePrefsStore.getState().introVoice;
     usePrefsStore.getState().setNarrator(on);
     if (screen === 'suggestion') setVoice(on);
     if (!on) return stop();
@@ -263,15 +265,15 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={toggleVoice}
-              aria-pressed={narrator}
+              aria-pressed={introVoice}
               aria-label={t('voice.toggle')}
               title={t('voice.toggle')}
               className={clsx(
                 'grid size-11 place-items-center rounded-full ring-1',
-                narrator ? 'bg-field-500 text-black ring-field-400' : 'bg-white/5 ring-line hover:bg-white/10',
+                introVoice ? 'bg-field-500 text-black ring-field-400' : 'bg-white/5 ring-line hover:bg-white/10',
               )}
             >
-              {narrator ? <Volume2 aria-hidden className="size-5" /> : <VolumeX aria-hidden className="size-5" />}
+              {introVoice ? <Volume2 aria-hidden className="size-5" /> : <VolumeX aria-hidden className="size-5" />}
             </button>
           )}
           {(screen === 'role' || screen === 'reading') && (

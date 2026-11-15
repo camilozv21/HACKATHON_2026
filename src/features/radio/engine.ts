@@ -9,12 +9,13 @@
  * - Al empezar una emisora, la radio se identifica en voz ("Estás en Radio Campo…") mientras llega el programa;
  *   esa primera frase va dentro del toque, como piden los navegadores para hablar.
  */
-import { pickVoice } from '@/features/narrator/narrator';
+// Desde narrator (no voices): ese módulo pide las voces al cargar, y Chrome las entrega tarde.
+import { pickVoice, speakable } from '@/features/narrator/narrator';
 import { useNarratorStore } from '@/features/narrator/store';
 import type { RadioSegment } from '@/lib/api/contract';
 import { runCues } from './cues';
 import { useRadioLive } from './live';
-import { sentenceAt, sentenceStarts, splitSentences } from './sentences';
+import { sentenceAt, sentenceStarts, speechSeconds, splitSentences } from './sentences';
 import { currentSegment, currentStation, useRadioStore } from './store';
 
 type Hooks = {
@@ -175,6 +176,9 @@ class RadioEngine {
       useRadioLive.getState().setSentence(0);
     }
     a.volume = this.ducked ? 0.25 : 1;
+    // El mp3 pasa por Web Audio: si el contexto quedó suspendido (iOS al bloquear la pantalla, una llamada…), el
+    // audio "suena" en silencio. Se reanuda antes de cada play.
+    if (this.ctx && this.ctx.state !== 'running') void this.ctx.resume().catch(() => undefined);
     try {
       await a.play();
       useRadioStore.getState().setStatus('playing');
@@ -284,7 +288,7 @@ class RadioEngine {
   }
 
   private utter(text: string, lang: 'es' | 'en') {
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(speakable(text, lang));
     const voice = pickVoice(speechSynthesis.getVoices(), lang);
     u.lang = voice?.lang ?? (lang === 'en' ? 'en-US' : 'es-ES');
     if (voice) u.voice = voice;
@@ -316,15 +320,35 @@ class RadioEngine {
         this.next();
         return;
       }
-      const u = this.utter(this.sentences[k]!, lang);
+      const text = this.sentences[k]!;
+      const u = this.utter(text, lang);
+      let settled = false;
+      let guard: ReturnType<typeof setTimeout> | undefined;
+      const advance = () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(guard);
+        say(k + 1);
+      };
       u.onstart = () => token === this.voiceToken && this.onSentence(k);
-      u.onend = () => say(k + 1);
+      u.onend = advance;
       u.onerror = (e) => {
-        // Los cortes propios (pausa, salto) ya cambiaron el token; "interrupted" de otro lado no deja la radio muda.
+        // Los cortes propios (pausa, salto) ya cambiaron el token; un "interrupted" de otro lado lo resuelve el
+        // vigilante (sigue con la frase siguiente en vez de dejar la radio muda).
         if (token !== this.voiceToken || e.error === 'interrupted' || e.error === 'canceled') return;
+        settled = true;
+        clearTimeout(guard);
         this.voiceActive = false;
         useRadioStore.getState().setStatus('empty');
       };
+      // Vigilante: Chrome y Android a veces sueltan una frase sin avisar (nunca llega su `end`) y la radio quedaba
+      // muda con el botón en "pausa". Pasado el doble de lo que dura la frase, si la voz ya no habla, sigue.
+      const check = () => {
+        if (settled || token !== this.voiceToken) return;
+        if (speechSynthesis.speaking || speechSynthesis.pending) guard = setTimeout(check, 2000);
+        else advance();
+      };
+      guard = setTimeout(check, speechSeconds(text, u.rate) * 2000 + 3000);
       speechSynthesis.speak(u);
     };
     const wasBusy = speechSynthesis.speaking || speechSynthesis.pending;

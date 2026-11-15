@@ -1,29 +1,15 @@
 import { useNarratorStore } from './store';
+import { pickVoice, speakable, type NarratorLang } from './voices';
 
 /**
  * Locutor con la voz del teléfono (Web Speech API, speechSynthesis): gratis, sin descargas y funciona sin internet
- * en la mayoría de teléfonos. La calidad depende del teléfono. El primer speak() necesita un toque previo de la
- * persona (regla de los navegadores); después de ese toque se puede leer solo.
+ * en la mayoría de teléfonos. La calidad depende del teléfono (la voz se elige en voices.ts). El primer speak()
+ * necesita un toque previo de la persona (regla de los navegadores); después de ese toque se puede leer solo.
  */
-export type NarratorLang = 'es' | 'en';
+export { pickVoice, speakable, type NarratorLang };
 
 export const isSpeechSupported = () =>
   typeof window !== 'undefined' && 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance === 'function';
-
-// Español de Colombia y Latinoamérica primero (la app nació para fincas de Colombia), luego cualquier español.
-const PREFERRED: Record<NarratorLang, string[]> = {
-  es: ['es-co', 'es-419', 'es-mx', 'es-us', 'es-es'],
-  en: ['en-us', 'en-gb'],
-};
-
-export function pickVoice<V extends { lang: string }>(voices: readonly V[], lang: NarratorLang): V | null {
-  const norm = (s: string) => s.replace('_', '-').toLowerCase();
-  for (const tag of PREFERRED[lang]) {
-    const v = voices.find((x) => norm(x.lang) === tag);
-    if (v) return v;
-  }
-  return voices.find((x) => norm(x.lang).startsWith(lang)) ?? null;
-}
 
 /**
  * Trozos de hasta `max` caracteres cortados por frases (y, si una frase es muy larga, por comas o palabras).
@@ -101,7 +87,7 @@ export function speak(text: string, opts: { lang: NarratorLang; id?: string; onE
     if (my !== session) return;
     synth.resume();
     chunks.forEach((chunk, i) => {
-      const u = new SpeechSynthesisUtterance(chunk);
+      const u = new SpeechSynthesisUtterance(speakable(chunk, opts.lang));
       u.lang = voice?.lang ?? (opts.lang === 'en' ? 'en-US' : 'es-ES');
       if (voice) u.voice = voice;
       u.rate = 0.95;

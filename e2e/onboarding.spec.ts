@@ -26,6 +26,68 @@ async function firstVisit(page: Page) {
   return welcome;
 }
 
+/**
+ * Voz del teléfono simulada, como la de Chrome: sin un toque previo, cada frase falla con "not-allowed"; después
+ * habla cada frase en 1,5 s. `window.__said` guarda lo que dijo. Así la prueba no depende de las voces de la máquina.
+ */
+async function fakeVoice(page: Page) {
+  await page.addInitScript(() => {
+    type U = { text: string; onstart?: () => void; onend?: () => void; onerror?: (e: { error: string }) => void };
+    let active = false;
+    for (const ev of ['pointerup', 'click', 'keydown']) window.addEventListener(ev, () => (active = true), true);
+    const said: string[] = [];
+    (window as unknown as { __said: string[] }).__said = said;
+    let current: U | null = null;
+    let queue: U[] = [];
+    const next = () => {
+      const u = (current = queue.shift() ?? null);
+      if (!u) return;
+      setTimeout(() => {
+        if (current !== u) return;
+        if (u.text.trim()) said.push(u.text);
+        u.onstart?.();
+        setTimeout(() => {
+          if (current !== u) return;
+          u.onend?.();
+          next();
+        }, 1500);
+      }, 10);
+    };
+    const synth = {
+      get speaking() {
+        return current !== null;
+      },
+      get pending() {
+        return queue.length > 0;
+      },
+      getVoices: () => [{ name: 'Paulina', lang: 'es-MX', voiceURI: 'Paulina', default: false, localService: true }],
+      speak(u: U) {
+        if (!active) return void setTimeout(() => u.onerror?.({ error: 'not-allowed' }), 0);
+        queue.push(u);
+        if (!current) next();
+      },
+      cancel() {
+        const all = current ? [current, ...queue] : queue;
+        current = null;
+        queue = [];
+        all.forEach((u) => u.onerror?.({ error: 'interrupted' }));
+      },
+      resume() {},
+      pause() {},
+      addEventListener() {},
+      removeEventListener() {},
+    };
+    Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: synth });
+    (window as unknown as { SpeechSynthesisUtterance: unknown }).SpeechSynthesisUtterance = class {
+      text: string;
+      constructor(text: string) {
+        this.text = text;
+      }
+    };
+  });
+}
+const said = (page: Page) => page.evaluate(() => (window as unknown as { __said: string[] }).__said.slice());
+
 /** ¿Quién eres? y ¿Cómo quieres jugar? → empieza el primer reto. */
 async function profileQuestions(page: Page, role: string, reading: string) {
   const quiz = quizOf(page);
@@ -170,8 +232,8 @@ test('los 7 retos del glosario se juegan con roles accesibles y arman el perfil 
 
 test('agricultor que prefiere escuchar: modo sencillo con voz y el panel de su zona', async ({ page }) => {
   const welcome = await firstVisit(page);
-  // El botón del locutor está en la bienvenida (antes de leer nada).
-  await expect(welcome.getByRole('button', { name: 'Escuchar con voz' })).toBeVisible();
+  // El botón de la voz está en la bienvenida (antes de leer nada): "Silenciar" si ya habla, "Escuchar" si espera un toque.
+  await expect(welcome.getByRole('button', { name: /Silenciar la voz|Escuchar con voz/ })).toBeVisible();
   await welcome.getByRole('button', { name: '¡A jugar!', exact: true }).tap();
 
   const quiz = await profileQuestions(page, 'Agricultor o agricultora', 'Escuchando');
@@ -235,7 +297,41 @@ test('técnico que quiere ver satélites: modo completo y el catálogo de capas'
   await expect(page.getByRole('dialog', { name: 'Capas de datos NASA' })).toBeVisible();
 });
 
+test('la bienvenida se lee sola con el primer toque y se silencia con otro (y se recuerda)', async ({ page }) => {
+  await fakeVoice(page);
+  const welcome = await firstVisit(page);
+  // El navegador no la deja hablar antes de un toque: lo dice en pantalla.
+  await expect(welcome.getByText('Toca la pantalla para oír la bienvenida.')).toBeVisible();
+  await welcome.getByRole('heading', { name: 'Hola, te damos la bienvenida' }).tap();
+  const mute = welcome.getByRole('button', { name: 'Silenciar la voz' });
+  await expect(mute).toBeVisible();
+  await expect.poll(() => said(page)).toContain('Hola, te damos la bienvenida.');
+  await mute.tap();
+  await expect(welcome.getByRole('button', { name: 'Escuchar con voz' })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem('fieldshift:narrator'))).toBe('0');
+  const count = (await said(page)).length;
+  // Silenciada: el inicio tampoco habla.
+  await welcome.getByRole('button', { name: '¡A jugar!', exact: true }).tap();
+  const quiz = quizOf(page);
+  await expect(page.getByRole('dialog', { name: '¿Quién eres?' })).toBeVisible();
+  await expect(quiz.getByRole('button', { name: 'Voz que lee en voz alta' })).toHaveAttribute('aria-pressed', 'false');
+  await page.waitForTimeout(500);
+  expect((await said(page)).length).toBe(count);
+});
+
+test('si el primer toque es "¡A jugar!", la primera pregunta se lee sola', async ({ page }) => {
+  await fakeVoice(page);
+  const welcome = await firstVisit(page);
+  await welcome.getByRole('button', { name: '¡A jugar!', exact: true }).tap();
+  await expect(page.getByRole('dialog', { name: '¿Quién eres?' })).toBeVisible();
+  await expect(quizOf(page).getByRole('button', { name: 'Voz que lee en voz alta' })).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(async () => (await said(page)).join(' ')).toContain('¿Quién eres?');
+  // Sin elegir nada, el resto de la app sigue en silencio (lo decide el perfil al final).
+  expect(await page.evaluate(() => localStorage.getItem('fieldshift:narrator'))).toBeNull();
+});
+
 test('la voz encendida en la bienvenida sigue encendida aunque elija "Con dibujos"', async ({ page }) => {
+  await fakeVoice(page);
   const welcome = await firstVisit(page);
   await welcome.getByRole('button', { name: 'Escuchar con voz' }).tap();
   await welcome.getByRole('button', { name: '¡A jugar!', exact: true }).tap();

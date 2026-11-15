@@ -14,9 +14,12 @@ export const useNarratorStore = create<NarratorState>()((set) => ({
   setSpeaking: (speakingId) => set({ speakingId }),
 }));
 
-// La bienvenida en línea (OnboardingScript, sin React) avisa con un evento cuando lee en voz alta.
+// La bienvenida en línea (OnboardingScript, sin React) avisa con un evento cuando lee en voz alta. Al callar solo
+// borra su propia lectura: si la cortó la primera pregunta del inicio, esa sigue marcada.
 if (typeof window !== 'undefined') {
   window.addEventListener('fieldshift:narrator', (e) => {
-    useNarratorStore.getState().setSpeaking((e as CustomEvent<boolean>).detail ? 'welcome' : null);
+    const s = useNarratorStore.getState();
+    if ((e as CustomEvent<boolean>).detail) s.setSpeaking('welcome');
+    else if (s.speakingId === 'welcome') s.setSpeaking(null);
   });
 }
