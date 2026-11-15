@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TermIcon } from '@/features/glossary/TermIcon';
@@ -32,6 +32,13 @@ export default async function GlossaryPage({ params }: Props) {
         <p className="text-xs font-semibold tracking-wider text-field-300 uppercase">Field Shift</p>
         <h1 className="text-3xl font-bold">{t('title')}</h1>
         <p className="mt-2 text-ink-muted">{t('intro')}</p>
+        <a
+          href={`/${locale}/academy`}
+          className="mt-3 flex min-h-12 w-fit items-center gap-2 rounded-2xl bg-field-500/15 px-3 font-semibold ring-1 ring-field-500/50 hover:bg-field-500/25"
+        >
+          <GraduationCap aria-hidden className="size-5 text-field-300" />
+          {t('academy')}
+        </a>
       </header>
 
       <nav aria-label={t('index')}>

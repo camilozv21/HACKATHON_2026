@@ -1229,7 +1229,8 @@
       "farmer": "Farmer",
       "technician": "Technician",
       "none": "Not answered"
-    }
+    },
+    "academy": "AgroAcademy: learn to use the app"
   },
   "onboarding": {
     "brand": "Field Shift · NASA data",
@@ -1757,8 +1758,8 @@
       "stars": "{stars} of {max} stars",
       "mastered": "You've mastered",
       "review": "To review",
-      "note": "The assistant will explain these terms when they come up. They are also in the glossary, in Settings.",
-      "noteAll": "You can review all the terms any time in the glossary, in Settings.",
+      "note": "The assistant will explain these terms when they come up. You can practise them in AgroAcademy, in Settings.",
+      "noteAll": "Learn everything the app offers in AgroAcademy, in Settings.",
       "continue": "See how my app looks",
       "spoken": "Your field profile: {archetype}. Level {level}. You earned {stars} of {max} stars."
     }
@@ -1768,7 +1769,8 @@
     "intro": "The technical words in the app explained in one sentence, with a farm example.",
     "back": "Back to the globe",
     "index": "Terms",
-    "note": "Satellite data shows trends for an area; your experience and a local advisor complete the picture."
+    "note": "Satellite data shows trends for an area; your experience and a local advisor complete the picture.",
+    "academy": "Practise these terms by playing in AgroAcademy"
   },
   "a11y": {
     "skipToPlaces": "Skip to the list of places (no map)",
@@ -3194,6 +3196,482 @@
         "label": "Publish your farm",
         "rule": "Per published farm",
         "done": "Farm published"
+      }
+    }
+  },
+  "academy": {
+    "meta": {
+      "title": "AgroAcademy",
+      "description": "Interactive lessons to learn how to use Field Shift and NASA data."
+    },
+    "back": "Back to the globe",
+    "title": "AgroAcademy",
+    "intro": "Learn to use Field Shift with one-minute lessons: you tap a sample phone, answer a question and try it on the globe. You can also practise the glossary challenges.",
+    "note": "The app supports you with NASA data, but it does not replace your experience or your local advisors.",
+    "tour": "90-second guided tour",
+    "unitN": "Unit {n}",
+    "unitCount": "{done}/{total}",
+    "status": {
+      "done": "Done",
+      "todo": "1 min"
+    },
+    "progress": {
+      "title": "Your progress",
+      "count": "{done} of {total} activities done",
+      "loading": "Loading your progress…",
+      "stars": "{stars} of {max} stars in practice",
+      "badges": "Badges",
+      "badgeGot": "earned",
+      "badgeTodo": "to earn",
+      "start": "Start the first lesson",
+      "continue": "Keep learning",
+      "allLessons": "You did all the lessons!"
+    },
+    "units": {
+      "globe": {
+        "title": "Get to know the globe",
+        "text": "Move around the planet and find your area's data.",
+        "badge": "Exploration"
+      },
+      "nasa": {
+        "title": "NASA's eyes",
+        "text": "Satellite layers, the time machine, events and risk zones.",
+        "badge": "Satellite eye"
+      },
+      "farm": {
+        "title": "Your farm",
+        "text": "Mark your farm, say what matters to you, compare what to plant and check the market.",
+        "badge": "My farm"
+      },
+      "help": {
+        "title": "We're with you",
+        "text": "The assistant, the radio, the reading voice and your points.",
+        "badge": "Companion"
+      },
+      "practice": {
+        "title": "Practise the terms",
+        "text": "Play the 7 glossary challenges again and improve your stars.",
+        "badge": "Glossary"
+      }
+    },
+    "lesson": {
+      "close": "Close",
+      "what": "What it is",
+      "why": "How it helps you",
+      "stepOf": "Step {n} of {total}",
+      "simDone": "That's how it's done! Now a short question.",
+      "simDoneKicker": "Done",
+      "replay": "Watch again",
+      "quizKicker": "Check what you learned",
+      "right": "Correct!",
+      "wrong": "Almost.",
+      "done": "Lesson complete!",
+      "badge": "You earned the {name} badge!",
+      "tryIt": "Try it on the globe",
+      "next": "Next lesson",
+      "backToAcademy": "Back to AgroAcademy"
+    },
+    "practice": {
+      "kicker": "Glossary practice",
+      "back": "Back to AgroAcademy",
+      "best": "Best score: {stars, plural, one {# star} other {# stars}}",
+      "notPlayed": "Not played"
+    },
+    "sim": {
+      "label": "Sample phone. Tap what glows.",
+      "ask": "Ask the field…",
+      "myFarm": "My farm",
+      "time": "See another date",
+      "timePast": "May 2024",
+      "timeNow": "Today",
+      "location": "Use my exact location",
+      "radio": "Field radio",
+      "yourFarm": "Your farm",
+      "search": {
+        "typed": "Armenia",
+        "result": "Armenia, Quindío"
+      },
+      "region": {
+        "title": "Quindío, Colombia",
+        "moisture": "Soil moisture",
+        "rain": "30-day rain",
+        "ndvi": "Greenness",
+        "heat": "Ground heat"
+      },
+      "risk": {
+        "title": "Sample municipality",
+        "drought": "Drought",
+        "water": "Waterlogging",
+        "heat": "Heat",
+        "soil": "Degraded soil",
+        "level": {
+          "high": "high",
+          "mid": "medium",
+          "low": "low"
+        },
+        "change": "How the land changes"
+      },
+      "layers": {
+        "title": "NASA data layers"
+      },
+      "events": {
+        "fire": "Fire 12 km away",
+        "flood": "River in flood",
+        "storm": "Strong storm",
+        "report": "Report what I see"
+      },
+      "farm": {
+        "title": "Your farm",
+        "tabs": {
+          "motor": "Plan",
+          "conditions": "Data",
+          "priorities": "Priorities",
+          "rotations": "Rotations",
+          "plan": "Plan"
+        },
+        "priorities": {
+          "water": "Save water",
+          "soil": "Care for soil",
+          "income": "Earn more"
+        },
+        "rotations": {
+          "a": "Maize then beans",
+          "b": "Coffee with plantain",
+          "confidence": "medium confidence",
+          "risk": "risk: drought",
+          "edit": "Priorities"
+        },
+        "plan": {
+          "calendar": "Sow in March, harvest in July",
+          "print": "Print summary"
+        },
+        "motor": {
+          "data": "Your area data is ready",
+          "plan": "Maize → beans → green manure",
+          "finding": "Finding: acid soil"
+        }
+      },
+      "chat": {
+        "title": "Field assistant",
+        "question": "How is the rain in my area?",
+        "answer": "It rained 20% less than normal this month (GPM). I moved the globe to your area."
+      },
+      "radioPanel": {
+        "play": "Listen",
+        "now": "Tip: cover the soil before the downpour"
+      },
+      "settings": {
+        "title": "Settings",
+        "voice": "Reading voice",
+        "lite": "Simple mode",
+        "sun": "Sun mode"
+      },
+      "points": {
+        "title": "Your points",
+        "layer": "See a new layer: +{n}",
+        "glossary": "Learn a term: +{n}",
+        "account": "Create an account and save: +{n}"
+      }
+    },
+    "lessons": {
+      "globe": {
+        "title": "The globe and the crosshair",
+        "short": "Spin the planet and find your area.",
+        "what": "The globe shows the Earth with NASA data. You spin it with one finger and zoom with two.",
+        "why": "You reach your region without typing, and the crosshair tells you which spot you're looking at.",
+        "steps": {
+          "0": "Tap the globe to zoom in on your area.",
+          "1": "The crosshair in the middle marks the place you're looking at. Tap it.",
+          "2": "Prefer typing? Tap the magnifier at the top.",
+          "3": "Tap the result: the globe flies there."
+        },
+        "quiz": {
+          "q": "What does the crosshair in the middle of the globe mark?",
+          "a0": "The place you're looking at",
+          "a1": "Where it is raining now",
+          "a2": "Someone else's farm",
+          "why": "The crosshair points to the spot you're looking at: the data you see is from there."
+        }
+      },
+      "location": {
+        "title": "Your location",
+        "short": "The globe flies to where you are.",
+        "what": "When it opens, the app works out your approximate area. If you allow it, it uses the phone's GPS to go right to your farm.",
+        "why": "You first see the data for where you live, without searching.",
+        "steps": {
+          "0": "Tap 'Use my exact location' and allow it.",
+          "1": "If you get lost on the globe, this button takes you back to your area. Tap it."
+        },
+        "quiz": {
+          "q": "What is your location used for?",
+          "a0": "To publish your farm online",
+          "a1": "To bring the globe to your area and answer you about it",
+          "a2": "To charge you for the service",
+          "why": "Your location is only used to show your area and answer your questions about it."
+        }
+      },
+      "region": {
+        "title": "Your area's panel",
+        "short": "Satellite data for a place.",
+        "what": "Tap a region on the globe and a panel opens with that area's soil moisture, rain, plant greenness and heat.",
+        "why": "Each value says which satellite it comes from and its date, and has a 'what is this?' that explains it.",
+        "steps": {
+          "0": "Tap a region on the globe.",
+          "1": "The panel opened. Tap a value to see where it comes from."
+        },
+        "quiz": {
+          "q": "What does a region's panel show?",
+          "a0": "Market prices",
+          "a1": "That area's satellite data, with source and date",
+          "a2": "Your neighbours' farms",
+          "why": "The panel brings together data from SMAP, GPM, MODIS and other missions for that place."
+        }
+      },
+      "layers": {
+        "title": "Satellite layers",
+        "short": "Paint the globe with NASA data.",
+        "what": "With the layers button you paint the globe with plant greenness, soil moisture, rain, heat, evaporation, groundwater or terrain.",
+        "why": "You see at a glance which areas are dry, green or hot.",
+        "steps": {
+          "0": "Tap the layers button, top right.",
+          "1": "Choose 'Soil moisture'.",
+          "2": "The globe got painted: blue is more water, orange is drier. Tap the globe."
+        },
+        "quiz": {
+          "q": "What are layers for?",
+          "a0": "To paint the globe with satellite data",
+          "a1": "To change the language",
+          "a2": "To call an advisor",
+          "why": "Each layer is a NASA dataset painted on the map, with its colour legend."
+        }
+      },
+      "time": {
+        "title": "Time machine",
+        "short": "See how your area was in another month.",
+        "what": "With 'See another date' you choose a past month or day, back to 1981. The globe and the panel show the data for that moment.",
+        "why": "You compare this year with previous years: is it raining less than in the last drought?",
+        "steps": {
+          "0": "Tap 'See another date'.",
+          "1": "Choose May 2024.",
+          "2": "Now the globe shows that month. Tap the globe to see its data."
+        },
+        "quiz": {
+          "q": "What does the time machine show you?",
+          "a0": "Tomorrow's weather",
+          "a1": "The data for a past month or day",
+          "a2": "Photos of your farm",
+          "why": "It shows what already happened, back to 1981. It's not a forecast: the future has no data."
+        }
+      },
+      "events": {
+        "title": "Events and emergencies",
+        "short": "Fires, floods and storms nearby.",
+        "what": "The events layer shows recent fires, floods, storms and other natural events. You can also report what you see in your area.",
+        "why": "You find out in time and help your neighbours stay alert.",
+        "steps": {
+          "0": "Tap the layers button.",
+          "1": "Choose 'Events and emergencies'.",
+          "2": "Tap the fire to see what is happening and how close it is."
+        },
+        "quiz": {
+          "q": "What can you do with 'Events and emergencies'?",
+          "a0": "Buy seeds",
+          "a1": "Change your password",
+          "a2": "See nearby fires or floods and report what you see",
+          "why": "It shows recent natural events and other people's reports, and you can report your own."
+        }
+      },
+      "risk": {
+        "title": "Risk zones",
+        "short": "Which municipalities face more risk.",
+        "what": "The 'Risk zones' layer combines NASA data to show, for each municipality in Colombia, the risk of drought, waterlogging, heat and degraded soil.",
+        "why": "It also shows how the land has changed over the years, to see where your area is heading.",
+        "steps": {
+          "0": "Tap the layers button.",
+          "1": "Choose 'Risk zones'.",
+          "2": "Red means more risk. Tap a municipality.",
+          "3": "Tap 'How the land changes' to see its history."
+        },
+        "quiz": {
+          "q": "What does the risk zones layer show?",
+          "a0": "The risk of drought, waterlogging, heat or degraded soil per municipality",
+          "a1": "Where there is phone signal",
+          "a2": "The roads",
+          "why": "It combines several NASA datasets for each municipality in Colombia. Each level has a name, not just a colour."
+        }
+      },
+      "field": {
+        "title": "Mark your farm",
+        "short": "Put your farm on the map.",
+        "what": "With 'My farm' you tap your farm's spot or draw its edge. When you finish drawing, the app builds your rotation plan on its own.",
+        "why": "Everything else (priorities, rotations and plan) is worked out for your farm.",
+        "steps": {
+          "0": "Tap 'My farm', bottom left.",
+          "1": "Tap your farm's spot on the globe."
+        },
+        "quiz": {
+          "q": "How do you put your farm on the map?",
+          "a0": "By calling NASA",
+          "a1": "You can't",
+          "a2": "With 'My farm': tap the spot or draw the outline",
+          "why": "A spot is enough to start; if you draw the outline, the analysis is more accurate."
+        }
+      },
+      "motor": {
+        "title": "Your rotation plan",
+        "short": "What to plant next and why.",
+        "what": "The agronomic engine combines NASA data for your area with what you told us and suggests what to plant next. It shows what it found, how sure it is and what data it is missing.",
+        "why": "Rotating crops protects the soil and breaks pest cycles. The plan tells you where to start.",
+        "steps": {
+          "0": "Tap the rotation plan to see the sequence.",
+          "1": "Tap the finding to see why and how sure it is."
+        },
+        "quiz": {
+          "q": "Where does your rotation plan come from?",
+          "a0": "The app picks it at random",
+          "a1": "From the agronomic engine, with NASA data for your area and what you told us",
+          "a2": "From today's price",
+          "why": "Each plan says what data it used, its confidence and what is missing. Check it with your local expert: the app supports, it does not replace your judgment."
+        }
+      },
+      "priorities": {
+        "title": "Your priorities",
+        "short": "Say what matters most to you.",
+        "what": "You tell the app what matters to you: saving water, caring for the soil, earning more, working less or lowering risk.",
+        "why": "With that it ranks the rotations: the best option depends on you, not just the weather.",
+        "steps": {
+          "0": "Tap the 'Options' tab.",
+          "1": "Tap 'Priorities'.",
+          "2": "Tap 'Save water' to give it more weight."
+        },
+        "quiz": {
+          "q": "What are your priorities for?",
+          "a0": "To change the colours",
+          "a1": "To rank the rotations by what matters to you",
+          "a2": "To delete your farm",
+          "why": "The same rotations end up in a different order if water matters more to you than profit."
+        }
+      },
+      "rotations": {
+        "title": "Rotations",
+        "short": "Compare what to plant.",
+        "what": "You see several rotations for your farm: how they care for the soil, how much water they need and their risks.",
+        "why": "Each option shows the evidence, how sure we are and what data is missing. You can try 'what if it rains less?'.",
+        "steps": {
+          "0": "Tap the 'Rotations' tab.",
+          "1": "Tap a rotation to see its evidence and risks."
+        },
+        "quiz": {
+          "q": "What does each rotation show besides the result?",
+          "a0": "The evidence, the confidence and the risks",
+          "a1": "Only the price",
+          "a2": "Nothing else",
+          "why": "The app is honest: it says where each recommendation comes from and how sure it is."
+        }
+      },
+      "plan": {
+        "title": "Plan and summary",
+        "short": "Your calendar and a printable summary.",
+        "what": "The plan gives you a sowing and harvest calendar, and a summary you can print or share.",
+        "why": "You take the information to the field or show it to your advisor.",
+        "steps": {
+          "0": "Tap the 'Plan' tab.",
+          "1": "Tap 'Print summary'."
+        },
+        "quiz": {
+          "q": "What can you do with the summary?",
+          "a0": "Sell it",
+          "a1": "Delete it",
+          "a2": "Print it or share it with your advisor",
+          "why": "The summary brings together your farm, the chosen rotation, the evidence and the risks on one page."
+        }
+      },
+      "market": {
+        "title": "Market and farms for sale",
+        "short": "Prices and who sells nearby.",
+        "what": "In your farm you see product prices in Colombian markets and whether they go up or down. With the 'Farms selling' layer you see who sells nearby and you can publish yours.",
+        "why": "You decide what to plant thinking also about what sells well.",
+        "steps": {
+          "0": "Tap the layers button.",
+          "1": "Choose 'Farms selling'.",
+          "2": "Each green shop is a farm that sells. Tap the globe to see them."
+        },
+        "quiz": {
+          "q": "What do you find in 'Farms selling'?",
+          "a0": "The weather forecast",
+          "a1": "Farms offering their harvest and how to contact them",
+          "a2": "NASA's satellites",
+          "why": "You can see who sells nearby and publish your own harvest, for free."
+        }
+      },
+      "agent": {
+        "title": "Field assistant",
+        "short": "Ask and the globe moves.",
+        "what": "In the bar at the bottom you type or speak: 'how is the rain in my area?'. The assistant answers with NASA data and moves the globe, turns on layers or opens panels.",
+        "why": "You ask the way you'd ask a neighbour. It always says where the data comes from.",
+        "steps": {
+          "0": "Tap the 'Ask the field' bar.",
+          "1": "Tap the sample question.",
+          "2": "The assistant answered and moved the globe. Tap the answer."
+        },
+        "quiz": {
+          "q": "What does the assistant do besides answering?",
+          "a0": "Moves the globe and opens the layers or panels you need",
+          "a1": "Waters your farm",
+          "a2": "Calls your neighbours",
+          "why": "It answers and takes you to the place and the data. Check important decisions with an advisor."
+        }
+      },
+      "radio": {
+        "title": "Field radio",
+        "short": "Warnings and tips for your region.",
+        "what": "Above the chat there is a radio with warnings, tips and alerts for your region, made with satellite data.",
+        "why": "You stay informed while you work, without having to read.",
+        "steps": {
+          "0": "Tap the radio, above the chat.",
+          "1": "Tap 'Listen'."
+        },
+        "quiz": {
+          "q": "What do you hear on the field radio?",
+          "a0": "Dance music",
+          "a1": "World news",
+          "a2": "Warnings and tips for your region",
+          "why": "The radio changes with the region you are looking at on the globe."
+        }
+      },
+      "access": {
+        "title": "For everyone",
+        "short": "Voice, simple mode and sun mode.",
+        "what": "In Settings you turn on the voice that reads aloud, simple mode (fewer numbers), sun mode (more contrast to read outdoors) and choose the units.",
+        "why": "Everyone uses the app their own way, even if they read little or there is strong sun.",
+        "steps": {
+          "0": "Tap the Settings gear.",
+          "1": "Tap 'Reading voice' to turn it on."
+        },
+        "quiz": {
+          "q": "What is sun mode for?",
+          "a0": "To read better in the sun, with more contrast",
+          "a1": "To see tomorrow's weather",
+          "a2": "To turn off the screen",
+          "why": "Sun mode uses higher-contrast colours, designed for daylight."
+        }
+      },
+      "points": {
+        "title": "Your points",
+        "short": "Earn points by exploring and learning.",
+        "what": "The trophy at the top adds points when you explore layers, learn terms, play the challenges or use the app every day. With more points you level up.",
+        "why": "If you create an account, your points are saved and show on your farm when you publish it.",
+        "steps": {
+          "0": "Tap the trophy at the top.",
+          "1": "Tap 'Create an account' to save your points."
+        },
+        "quiz": {
+          "q": "How do you earn points?",
+          "a0": "By paying",
+          "a1": "By exploring layers, learning terms and playing the challenges",
+          "a2": "By inviting strangers",
+          "why": "Points reward using and learning with the app. They don't rate your farm."
+        }
       }
     }
   },

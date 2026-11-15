@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { BookOpen, Check, Download, Languages, LayoutGrid, MapPin, PlayCircle, Ruler, Satellite, Sun, UserRound, Volume2, X } from 'lucide-react';
+import { BookOpen, Check, Download, GraduationCap, Languages, LayoutGrid, MapPin, PlayCircle, Ruler, Satellite, Sun, UserRound, Volume2, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
@@ -250,6 +250,13 @@ export default function SettingsSheet({ onClose }: { onClose: () => void }) {
               <PlayCircle aria-hidden className="size-5 text-field-300" />
               {t('replayIntro')}
             </button>
+            <a
+              href={`/${locale}/academy`}
+              className="flex min-h-12 items-center gap-2 rounded-2xl bg-field-500/15 px-3 font-semibold ring-1 ring-field-500/50 hover:bg-field-500/25"
+            >
+              <GraduationCap aria-hidden className="size-5 text-field-300" />
+              {t('academy')}
+            </a>
             <a
               href={`/${locale}/glossary`}
               className="flex min-h-12 items-center gap-2 rounded-2xl bg-white/5 px-3 font-semibold ring-1 ring-line hover:bg-white/10"

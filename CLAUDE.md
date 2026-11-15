@@ -24,6 +24,12 @@ una API con contrato definido en `src/lib/api/contract.ts` y **debe funcionar co
   sin poder inventar cifras (`/api/radio/program`, `src/server/radio/`). Se lee frase por frase con subtítulos y
   "¿qué es esto?", y **mueve el globo** con pistas por frase (mismas acciones del agente). Además, segmentos mp3 del
   mock (`public/audio/`). Detalle: `docs/radio.md`.
+- **Plan de rotación (motor agronómico del equipo):** primera pestaña del drawer de la finca ("Recomendación").
+  Al terminar de dibujar una finca el drawer se abre solo y el plan arranca sin otro toque. Primero se piden los datos
+  de la zona (rectángulo de los extremos de la finca, no el polígono; si toca varias celdas de NASA POWER, el máximo
+  de cada día) y luego se llama al motor (`POST /api/v1/evaluaciones`, FastAPI en Railway) desde el servidor.
+  **La salida del motor pasa por AgroAstro** (agente de Claude en Managed Agents, `src/server/motor/advisor.ts`)
+  **antes de servirse**: el teléfono solo recibe planes revisados (NDJSON con etapas). Detalle: `docs/motor-api.md`.
 - **Chat con agente IA (n8n):** la persona pregunta por las condiciones de una región; el agente responde y además
   mueve el globo (vuela, activa capas, abre el drawer) mediante acciones estructuradas en su respuesta.
   El chat vive en la zona media inferior de la pantalla.
@@ -88,14 +94,21 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
   drawer de región en `src/features/region/`, radio en `src/features/radio/`, chat en `src/features/agent/`,
   ubicación en `src/features/location/`, finca en `src/features/field/`, prioridades en `src/features/priorities/`,
   zonas de riesgo y cambios del terreno (Markov, Google Earth Engine) en `src/features/terrain/`,
+  plan de rotación del motor agronómico en `src/features/motor/` (servidor en `src/server/motor/`, contrato en
+  `src/lib/api/motor.ts`, catálogo en `src/lib/motorCatalog.ts`),
   puntaje en `src/features/points/` (servidor en `src/server/accounts/`, reglas compartidas en `src/lib/points.ts`).
+- AgroAcademy (`/[locale]/academy`, enlazada desde Ajustes y el glosario) en `src/features/academy/`: lecciones de
+  un minuto (`lessons.ts`: pasos del simulador `PhoneSim`, pregunta y enlace "Pruébalo en el globo" con parámetros
+  de la URL) + práctica de los 7 retos del glosario (reutiliza `onboarding/games/registry.ts` y `Learned.tsx`).
+  Avance en localStorage (`fieldshift:academy:v1`), cargado después de hidratar. Si añades una función a la app,
+  añade su lección.
 - API abierta del terreno (solo lectura, CORS `*`, filtros `campo=op.valor`, ubicación × tiempo) en `/api/terrain`,
   lógica en `src/server/terrain/`, contrato zod en `src/lib/api/terrainApi.ts` (ver `docs/terrain-api.md`).
 - Capa de datos en `src/lib/api/` (contrato zod, cliente, hooks, mocks, NASA POWER).
 - Textos de UI siempre vía next-intl (`messages/es.json`, `messages/en.json`); nunca strings sueltos en componentes.
 - `localStorage` / `sessionStorage` siempre envueltos en try/catch.
 - Variables solo de servidor (`N8N_WEBHOOK_URL`, `N8N_WEBHOOK_SECRET`, `DEFAULT_LAT`, `DEFAULT_LON`, `DATABASE_URL`,
-  `MARKET_JOB_SECRET`, `DATOS_GOV_APP_TOKEN`) nunca con prefijo `NEXT_PUBLIC_`. La URL de Postgres solo en `.env.local`.
+  `MARKET_JOB_SECRET`, `DATOS_GOV_APP_TOKEN`, `MOTOR_API_URL`, `MOTOR_API_KEY`) nunca con prefijo `NEXT_PUBLIC_`. La URL de Postgres solo en `.env.local`.
 - Código de servidor en `src/server/` (base de datos en `src/server/db/`, schema `fieldshift`); ESLint prohíbe importarlo
   desde `src/features/**` y `src/components/**`.
 - Commits pequeños con **Conventional Commits** (`feat:`, `fix:`, `perf:`, `docs:`, `chore:`…).
@@ -125,7 +138,7 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
 - Modo sencillo: `data-mode="lite"` en `<html>`; oculta detalle técnico con la variante CSS `lite:hidden` (sin JS) y
   usa `useLite()` solo si cambia la estructura. Nunca ocultes confianza, riesgos ni avisos de honestidad.
 - Locutor (voz del teléfono): `src/features/narrator/` (`speak`/`stop`, `SpeakButton`). La radio baja el volumen o
-  pausa su voz de respaldo mientras habla. Inicio tipo juego: bienvenida en línea (`OnboardingScript`) → personaje y
+  pausa su voz de respaldo mientras habla. La voz se elige con `src/features/narrator/voices.ts` (sin voces robóticas de Apple). Inicio tipo juego: bienvenida en línea (`OnboardingScript`, se lee sola en voz alta salvo que la persona la silencie: `fieldshift:narrator` = '0'; `introVoice` en prefs) → personaje y
   "cómo quieres jugar" en `src/features/onboarding/RoleQuiz.tsx` (diferido en `FirstLayer`) → 7 retos del glosario en
   `src/features/onboarding/games/` (reglas puras en `logic.ts`, una por reto; textos en `onboarding.games`) → primera
   misión → "Tu perfil de campo" → `/api/profile` (Claude → reglas). El agente recibe `profile` (rol, modo, voz y, si

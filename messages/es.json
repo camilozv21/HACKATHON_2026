@@ -1229,7 +1229,8 @@
       "farmer": "Agricultor o agricultora",
       "technician": "Técnico o técnica",
       "none": "Sin responder"
-    }
+    },
+    "academy": "AgroAcademy: aprende a usar la app"
   },
   "onboarding": {
     "brand": "Field Shift · datos de la NASA",
@@ -1757,8 +1758,8 @@
       "stars": "{stars} de {max} estrellas",
       "mastered": "Ya dominas",
       "review": "Para repasar",
-      "note": "El asistente te explicará estos términos cuando aparezcan. También están en el glosario, en Ajustes.",
-      "noteAll": "Puedes repasar todos los términos cuando quieras en el glosario, en Ajustes.",
+      "note": "El asistente te explicará estos términos cuando aparezcan. Puedes practicarlos en la AgroAcademy, en Ajustes.",
+      "noteAll": "Aprende todo lo que tiene la app en la AgroAcademy, en Ajustes.",
       "continue": "Ver cómo queda mi app",
       "spoken": "Tu perfil de campo: {archetype}. Nivel {level}. Ganaste {stars} de {max} estrellas."
     }
@@ -1768,7 +1769,8 @@
     "intro": "Las palabras técnicas de la app explicadas en una frase, con un ejemplo del campo.",
     "back": "Volver al globo",
     "index": "Términos",
-    "note": "Los datos de satélite muestran tendencias de una zona; tu experiencia y un técnico local completan la foto."
+    "note": "Los datos de satélite muestran tendencias de una zona; tu experiencia y un técnico local completan la foto.",
+    "academy": "Practica estos términos jugando en la AgroAcademy"
   },
   "a11y": {
     "skipToPlaces": "Saltar a la lista de lugares (sin mapa)",
@@ -3194,6 +3196,482 @@
         "label": "Publicar tu finca",
         "rule": "Por cada finca publicada",
         "done": "Finca publicada"
+      }
+    }
+  },
+  "academy": {
+    "meta": {
+      "title": "AgroAcademy",
+      "description": "Lecciones interactivas para aprender a usar Field Shift y los datos de la NASA."
+    },
+    "back": "Volver al globo",
+    "title": "AgroAcademy",
+    "intro": "Aprende a usar Field Shift con lecciones de un minuto: tocas un teléfono de ejemplo, respondes una pregunta y lo pruebas en el globo. También puedes practicar los retos del glosario.",
+    "note": "La app te apoya con datos de la NASA, pero no reemplaza tu experiencia ni a los técnicos de tu zona.",
+    "tour": "Recorrido guiado de 90 s",
+    "unitN": "Unidad {n}",
+    "unitCount": "{done}/{total}",
+    "status": {
+      "done": "Hecha",
+      "todo": "1 min"
+    },
+    "progress": {
+      "title": "Tu avance",
+      "count": "{done} de {total} actividades hechas",
+      "loading": "Cargando tu avance…",
+      "stars": "{stars} de {max} estrellas en la práctica",
+      "badges": "Insignias",
+      "badgeGot": "ganada",
+      "badgeTodo": "por ganar",
+      "start": "Empezar la primera lección",
+      "continue": "Seguir aprendiendo",
+      "allLessons": "¡Hiciste todas las lecciones!"
+    },
+    "units": {
+      "globe": {
+        "title": "Conoce el globo",
+        "text": "Muévete por el planeta y encuentra los datos de tu zona.",
+        "badge": "Exploración"
+      },
+      "nasa": {
+        "title": "Los ojos de la NASA",
+        "text": "Capas de satélite, la máquina del tiempo, los eventos y las zonas de riesgo.",
+        "badge": "Ojo satelital"
+      },
+      "farm": {
+        "title": "Tu finca",
+        "text": "Marca tu finca, di qué te importa, compara qué sembrar y mira el mercado.",
+        "badge": "Mi finca"
+      },
+      "help": {
+        "title": "Te acompañamos",
+        "text": "El asistente, la radio, la voz que lee y tus puntos.",
+        "badge": "Compañía"
+      },
+      "practice": {
+        "title": "Practica los términos",
+        "text": "Juega otra vez los 7 retos del glosario y mejora tus estrellas.",
+        "badge": "Glosario"
+      }
+    },
+    "lesson": {
+      "close": "Cerrar",
+      "what": "Qué es",
+      "why": "Para qué te sirve",
+      "stepOf": "Paso {n} de {total}",
+      "simDone": "¡Así se hace! Ahora una pregunta corta.",
+      "simDoneKicker": "Listo",
+      "replay": "Ver otra vez",
+      "quizKicker": "Comprueba lo que aprendiste",
+      "right": "¡Correcto!",
+      "wrong": "Casi.",
+      "done": "¡Lección completa!",
+      "badge": "¡Ganaste la insignia {name}!",
+      "tryIt": "Pruébalo en el globo",
+      "next": "Siguiente lección",
+      "backToAcademy": "Volver a la AgroAcademy"
+    },
+    "practice": {
+      "kicker": "Práctica del glosario",
+      "back": "Volver a la AgroAcademy",
+      "best": "Mejor marca: {stars, plural, one {# estrella} other {# estrellas}}",
+      "notPlayed": "Sin jugar"
+    },
+    "sim": {
+      "label": "Teléfono de ejemplo. Toca lo que brilla.",
+      "ask": "Pregúntale al campo…",
+      "myFarm": "Mi finca",
+      "time": "Ver otra fecha",
+      "timePast": "Mayo 2024",
+      "timeNow": "Hoy",
+      "location": "Usar mi ubicación exacta",
+      "radio": "Radio del campo",
+      "yourFarm": "Tu finca",
+      "search": {
+        "typed": "Armenia",
+        "result": "Armenia, Quindío"
+      },
+      "region": {
+        "title": "Quindío, Colombia",
+        "moisture": "Humedad del suelo",
+        "rain": "Lluvia de 30 días",
+        "ndvi": "Verdor",
+        "heat": "Calor del suelo"
+      },
+      "risk": {
+        "title": "Municipio de ejemplo",
+        "drought": "Sequía",
+        "water": "Encharcamiento",
+        "heat": "Calor",
+        "soil": "Suelo degradado",
+        "level": {
+          "high": "alto",
+          "mid": "medio",
+          "low": "bajo"
+        },
+        "change": "Cómo cambia el terreno"
+      },
+      "layers": {
+        "title": "Capas de datos NASA"
+      },
+      "events": {
+        "fire": "Incendio a 12 km",
+        "flood": "Río crecido",
+        "storm": "Tormenta fuerte",
+        "report": "Reportar lo que veo"
+      },
+      "farm": {
+        "title": "Tu finca",
+        "tabs": {
+          "motor": "Plan",
+          "conditions": "Datos",
+          "priorities": "Prioridades",
+          "rotations": "Rotaciones",
+          "plan": "Plan"
+        },
+        "priorities": {
+          "water": "Cuidar el agua",
+          "soil": "Cuidar el suelo",
+          "income": "Ganar más"
+        },
+        "rotations": {
+          "a": "Maíz y luego frijol",
+          "b": "Café con plátano",
+          "confidence": "confianza media",
+          "risk": "riesgo: sequía",
+          "edit": "Prioridades"
+        },
+        "plan": {
+          "calendar": "Siembra en marzo, cosecha en julio",
+          "print": "Imprimir resumen"
+        },
+        "motor": {
+          "data": "Datos de tu zona listos",
+          "plan": "Maíz → frijol → abono verde",
+          "finding": "Hallazgo: suelo ácido"
+        }
+      },
+      "chat": {
+        "title": "Asistente del campo",
+        "question": "¿Cómo está la lluvia en mi zona?",
+        "answer": "Llovió 20 % menos de lo normal este mes (GPM). Moví el globo a tu zona."
+      },
+      "radioPanel": {
+        "play": "Escuchar",
+        "now": "Consejo: cubre el suelo antes del aguacero"
+      },
+      "settings": {
+        "title": "Ajustes",
+        "voice": "Voz que lee",
+        "lite": "Modo sencillo",
+        "sun": "Modo sol"
+      },
+      "points": {
+        "title": "Tus puntos",
+        "layer": "Ver una capa nueva: +{n}",
+        "glossary": "Aprender un término: +{n}",
+        "account": "Crear cuenta y guardar: +{n}"
+      }
+    },
+    "lessons": {
+      "globe": {
+        "title": "El globo y la mira",
+        "short": "Gira el planeta y encuentra tu zona.",
+        "what": "El globo muestra la Tierra con datos de la NASA. Lo giras con un dedo y lo acercas con dos.",
+        "why": "Llegas a tu región sin escribir nada, y la mira te dice qué punto estás mirando.",
+        "steps": {
+          "0": "Toca el globo para acercarte a tu zona.",
+          "1": "La mira del centro marca el lugar que miras. Tócala.",
+          "2": "¿Prefieres escribir? Toca la lupa de arriba.",
+          "3": "Toca el resultado: el globo vuela hasta allá."
+        },
+        "quiz": {
+          "q": "¿Qué marca la mira del centro del globo?",
+          "a0": "El lugar que estás mirando",
+          "a1": "Dónde está lloviendo ahora",
+          "a2": "La finca de otra persona",
+          "why": "La mira señala el punto que miras: los datos que ves son de ahí."
+        }
+      },
+      "location": {
+        "title": "Tu ubicación",
+        "short": "El globo vuela a donde estás.",
+        "what": "Al abrir, la app calcula tu zona aproximada. Si das permiso, usa el GPS del teléfono para ir justo a tu finca.",
+        "why": "Ves primero los datos de donde vives, sin buscar.",
+        "steps": {
+          "0": "Toca 'Usar mi ubicación exacta' y da permiso.",
+          "1": "Si te pierdes en el globo, este botón te devuelve a tu zona. Tócalo."
+        },
+        "quiz": {
+          "q": "¿Para qué se usa tu ubicación?",
+          "a0": "Para publicar tu finca en internet",
+          "a1": "Para llevar el globo a tu zona y responderte sobre ella",
+          "a2": "Para cobrarte el servicio",
+          "why": "Tu ubicación solo sirve para mostrarte tu zona y responder tus preguntas sobre ella."
+        }
+      },
+      "region": {
+        "title": "El panel de tu zona",
+        "short": "Los datos de los satélites de un lugar.",
+        "what": "Toca una región del globo y se abre un panel con la humedad del suelo, la lluvia, el verdor de las plantas y el calor de esa zona.",
+        "why": "Cada dato dice de qué satélite viene y de qué fecha es, y tiene un '¿qué es esto?' que lo explica.",
+        "steps": {
+          "0": "Toca una región del globo.",
+          "1": "Se abrió el panel. Toca un dato para ver de dónde viene."
+        },
+        "quiz": {
+          "q": "¿Qué muestra el panel de una región?",
+          "a0": "Los precios de la plaza de mercado",
+          "a1": "Los datos de los satélites de esa zona, con fuente y fecha",
+          "a2": "Las fincas de tus vecinos",
+          "why": "El panel junta los datos de SMAP, GPM, MODIS y otras misiones para ese lugar."
+        }
+      },
+      "layers": {
+        "title": "Capas de satélite",
+        "short": "Pinta el globo con datos de la NASA.",
+        "what": "Con el botón de capas pintas el globo con el verdor de las plantas, la humedad del suelo, la lluvia, el calor, la evaporación, el agua subterránea o el relieve.",
+        "why": "Ves de un vistazo qué zonas están secas, verdes o calientes.",
+        "steps": {
+          "0": "Toca el botón de capas, arriba a la derecha.",
+          "1": "Elige 'Humedad del suelo'.",
+          "2": "El globo se pintó: azul es más agua, naranja es más seco. Toca el globo."
+        },
+        "quiz": {
+          "q": "¿Para qué sirven las capas?",
+          "a0": "Para pintar el globo con datos de los satélites",
+          "a1": "Para cambiar el idioma",
+          "a2": "Para llamar a un técnico",
+          "why": "Cada capa es un dato de la NASA pintado sobre el mapa, con su leyenda de colores."
+        }
+      },
+      "time": {
+        "title": "Máquina del tiempo",
+        "short": "Mira cómo estaba tu zona otro mes.",
+        "what": "Con 'Ver otra fecha' eliges un mes o un día del pasado, desde 1981. El globo y el panel muestran los datos de ese momento.",
+        "why": "Comparas este año con años anteriores: ¿llueve menos que en la última sequía?",
+        "steps": {
+          "0": "Toca 'Ver otra fecha'.",
+          "1": "Elige mayo de 2024.",
+          "2": "Ahora el globo muestra ese mes. Toca el globo para ver sus datos."
+        },
+        "quiz": {
+          "q": "¿Qué te muestra la máquina del tiempo?",
+          "a0": "El clima de mañana",
+          "a1": "Los datos de un mes o un día del pasado",
+          "a2": "Fotos de tu finca",
+          "why": "Muestra lo que ya pasó, desde 1981. No es un pronóstico: el futuro no tiene datos."
+        }
+      },
+      "events": {
+        "title": "Eventos y emergencias",
+        "short": "Incendios, crecientes y tormentas cerca.",
+        "what": "La capa de eventos muestra incendios, inundaciones, tormentas y otros eventos naturales recientes. También puedes reportar lo que ves en tu zona.",
+        "why": "Te enteras a tiempo y ayudas a tus vecinos a estar atentos.",
+        "steps": {
+          "0": "Toca el botón de capas.",
+          "1": "Elige 'Eventos y emergencias'.",
+          "2": "Toca el incendio para ver qué pasa y qué tan cerca está."
+        },
+        "quiz": {
+          "q": "¿Qué puedes hacer con 'Eventos y emergencias'?",
+          "a0": "Comprar semillas",
+          "a1": "Cambiar tu contraseña",
+          "a2": "Ver incendios o inundaciones cerca y reportar lo que ves",
+          "why": "Muestra eventos naturales recientes y los reportes de otras personas, y puedes reportar los tuyos."
+        }
+      },
+      "risk": {
+        "title": "Zonas de riesgo",
+        "short": "Qué municipios tienen más riesgo.",
+        "what": "La capa 'Zonas de riesgo' combina datos de la NASA para mostrar, por municipio de Colombia, el riesgo de sequía, encharcamiento, calor y suelo degradado.",
+        "why": "También muestra cómo ha cambiado el terreno con los años, para ver hacia dónde va tu zona.",
+        "steps": {
+          "0": "Toca el botón de capas.",
+          "1": "Elige 'Zonas de riesgo'.",
+          "2": "Rojo es más riesgo. Toca un municipio.",
+          "3": "Toca 'Cómo cambia el terreno' para ver su historia."
+        },
+        "quiz": {
+          "q": "¿Qué muestra la capa de zonas de riesgo?",
+          "a0": "El riesgo de sequía, encharcamiento, calor o suelo degradado por municipio",
+          "a1": "Dónde hay señal de celular",
+          "a2": "Las carreteras",
+          "why": "Combina varios datos de la NASA para cada municipio de Colombia. Cada nivel tiene su nombre, no solo su color."
+        }
+      },
+      "field": {
+        "title": "Marca tu finca",
+        "short": "Pon tu finca en el mapa.",
+        "what": "Con 'Mi finca' tocas el punto de tu finca o dibujas su borde. Al terminar el dibujo, la app arma sola tu plan de rotación.",
+        "why": "Todo lo demás (prioridades, rotaciones y plan) se calcula para tu finca.",
+        "steps": {
+          "0": "Toca 'Mi finca', abajo a la izquierda.",
+          "1": "Toca el lugar de tu finca en el globo."
+        },
+        "quiz": {
+          "q": "¿Cómo pones tu finca en el mapa?",
+          "a0": "Llamando a la NASA",
+          "a1": "No se puede",
+          "a2": "Con 'Mi finca': tocas el punto o dibujas el borde",
+          "why": "Con un punto basta para empezar; si dibujas el borde, el análisis es más preciso."
+        }
+      },
+      "motor": {
+        "title": "Tu plan de rotación",
+        "short": "Qué sembrar después y por qué.",
+        "what": "El motor agronómico junta los datos de la NASA de tu zona con lo que nos contaste y te propone qué sembrar después. Muestra lo que encontró, qué tan seguro está y qué datos le faltan.",
+        "why": "Rotar cultivos cuida el suelo y corta las plagas. El plan te dice por dónde empezar.",
+        "steps": {
+          "0": "Toca el plan de rotación para ver la secuencia.",
+          "1": "Toca el hallazgo para ver por qué y qué tan seguro es."
+        },
+        "quiz": {
+          "q": "¿De dónde sale tu plan de rotación?",
+          "a0": "Lo elige la app al azar",
+          "a1": "Del motor agronómico, con datos de la NASA de tu zona y lo que nos contaste",
+          "a2": "Del precio del día",
+          "why": "Cada plan dice qué datos usó, su confianza y lo que falta. Revísalo con tu técnico: la app apoya, no reemplaza tu criterio."
+        }
+      },
+      "priorities": {
+        "title": "Tus prioridades",
+        "short": "Di qué te importa más.",
+        "what": "Le dices a la app qué te importa: cuidar el agua, cuidar el suelo, ganar más, trabajar menos o bajar el riesgo.",
+        "why": "Con eso ordena las rotaciones: la mejor opción depende de ti, no solo del clima.",
+        "steps": {
+          "0": "Toca la pestaña 'Opciones'.",
+          "1": "Toca 'Prioridades'.",
+          "2": "Toca 'Cuidar el agua' para darle más peso."
+        },
+        "quiz": {
+          "q": "¿Para qué sirven tus prioridades?",
+          "a0": "Para cambiar los colores",
+          "a1": "Para ordenar las rotaciones según lo que te importa",
+          "a2": "Para borrar tu finca",
+          "why": "Las mismas rotaciones quedan en otro orden si te importa más el agua que las ganancias."
+        }
+      },
+      "rotations": {
+        "title": "Rotaciones",
+        "short": "Compara qué sembrar.",
+        "what": "Ves varias rotaciones para tu finca: cómo cuidan el suelo, cuánta agua piden y qué riesgos tienen.",
+        "why": "Cada opción muestra la evidencia, qué tan seguros estamos y qué datos faltan. Puedes probar '¿y si llueve menos?'.",
+        "steps": {
+          "0": "Toca la pestaña 'Rotaciones'.",
+          "1": "Toca una rotación para ver su evidencia y sus riesgos."
+        },
+        "quiz": {
+          "q": "¿Qué muestra cada rotación además del resultado?",
+          "a0": "La evidencia, la confianza y los riesgos",
+          "a1": "Solo el precio",
+          "a2": "Nada más",
+          "why": "La app es honesta: dice de dónde sale cada recomendación y qué tan segura es."
+        }
+      },
+      "plan": {
+        "title": "Plan y resumen",
+        "short": "Tu calendario y un resumen para imprimir.",
+        "what": "El plan te da un calendario de siembra y cosecha, y un resumen que puedes imprimir o compartir.",
+        "why": "Llevas la información al campo o se la muestras a tu técnico.",
+        "steps": {
+          "0": "Toca la pestaña 'Plan'.",
+          "1": "Toca 'Imprimir resumen'."
+        },
+        "quiz": {
+          "q": "¿Qué puedes hacer con el resumen?",
+          "a0": "Venderlo",
+          "a1": "Borrarlo",
+          "a2": "Imprimirlo o compartirlo con tu técnico",
+          "why": "El resumen junta tu finca, la rotación elegida, la evidencia y los riesgos en una página."
+        }
+      },
+      "market": {
+        "title": "Mercado y fincas que venden",
+        "short": "Precios y quién vende cerca.",
+        "what": "En tu finca ves los precios de los productos en las plazas de Colombia y si suben o bajan. Con la capa 'Fincas que venden' ves quién vende cerca y puedes publicar la tuya.",
+        "why": "Decides qué sembrar pensando también en lo que se vende bien.",
+        "steps": {
+          "0": "Toca el botón de capas.",
+          "1": "Elige 'Fincas que venden'.",
+          "2": "Cada tienda verde es una finca que vende. Toca el globo para verlas."
+        },
+        "quiz": {
+          "q": "¿Qué encuentras en 'Fincas que venden'?",
+          "a0": "El pronóstico del tiempo",
+          "a1": "Fincas que ofrecen su cosecha y cómo contactarlas",
+          "a2": "Los satélites de la NASA",
+          "why": "Puedes ver quién vende cerca y publicar tu propia cosecha, gratis."
+        }
+      },
+      "agent": {
+        "title": "Asistente del campo",
+        "short": "Pregunta y el globo se mueve.",
+        "what": "En la barra de abajo escribes o hablas: '¿cómo está la lluvia en mi zona?'. El asistente responde con datos de la NASA y mueve el globo, activa capas o abre paneles.",
+        "why": "Preguntas como le preguntarías a un vecino. Siempre dice de dónde salen los datos.",
+        "steps": {
+          "0": "Toca la barra 'Pregúntale al campo'.",
+          "1": "Toca la pregunta de ejemplo.",
+          "2": "El asistente respondió y movió el globo. Toca la respuesta."
+        },
+        "quiz": {
+          "q": "¿Qué hace el asistente además de responder?",
+          "a0": "Mueve el globo y abre las capas o paneles que necesitas",
+          "a1": "Riega tu finca",
+          "a2": "Llama a tus vecinos",
+          "why": "Responde y te lleva al lugar y al dato. Las decisiones importantes, confírmalas con un técnico."
+        }
+      },
+      "radio": {
+        "title": "Radio del campo",
+        "short": "Avisos y consejos para tu región.",
+        "what": "Encima del chat hay una radio con avisos, consejos y alertas de tu región, hechos con los datos de los satélites.",
+        "why": "Te informas mientras trabajas, sin tener que leer.",
+        "steps": {
+          "0": "Toca la radio, encima del chat.",
+          "1": "Toca 'Escuchar'."
+        },
+        "quiz": {
+          "q": "¿Qué escuchas en la radio del campo?",
+          "a0": "Música para bailar",
+          "a1": "Las noticias del mundo",
+          "a2": "Avisos y consejos para tu región",
+          "why": "La radio cambia según la región que miras en el globo."
+        }
+      },
+      "access": {
+        "title": "Para todas las personas",
+        "short": "Voz, modo sencillo y modo sol.",
+        "what": "En Ajustes enciendes la voz que lee en voz alta, el modo sencillo (menos números), el modo sol (más contraste para leer al aire libre) y eliges las unidades.",
+        "why": "Cada quien usa la app a su manera, aunque lea poco o haya mucho sol.",
+        "steps": {
+          "0": "Toca el engranaje de Ajustes.",
+          "1": "Toca 'Voz que lee' para encenderla."
+        },
+        "quiz": {
+          "q": "¿Para qué sirve el modo sol?",
+          "a0": "Para leer mejor bajo el sol, con más contraste",
+          "a1": "Para ver el clima de mañana",
+          "a2": "Para apagar la pantalla",
+          "why": "El modo sol usa colores con más contraste, pensados para la luz del día."
+        }
+      },
+      "points": {
+        "title": "Tus puntos",
+        "short": "Gana puntos explorando y aprendiendo.",
+        "what": "El trofeo de arriba suma puntos cuando exploras capas, aprendes términos, juegas los retos o usas la app cada día. Con más puntos subes de nivel.",
+        "why": "Si creas una cuenta, tus puntos quedan guardados y se ven en tu finca cuando la publicas.",
+        "steps": {
+          "0": "Toca el trofeo de arriba.",
+          "1": "Toca 'Crear cuenta' para guardar tus puntos."
+        },
+        "quiz": {
+          "q": "¿Cómo ganas puntos?",
+          "a0": "Pagando",
+          "a1": "Explorando capas, aprendiendo términos y jugando los retos",
+          "a2": "Invitando desconocidos",
+          "why": "Los puntos premian que uses y aprendas con la app. No califican tu finca."
+        }
       }
     }
   },
