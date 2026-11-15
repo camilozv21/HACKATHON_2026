@@ -66,6 +66,9 @@ o "a convenir", y ventana de cosecha. Los compradores lo encuentran en el globo,
 | POST | `/api/listings/[id]/flag` | Denuncia (una por IP). |
 | GET | `/api/listings/[id]/contact?locale&product` | 302 a WhatsApp. |
 
+Si la finca está enlazada a una cuenta, cada publicación trae además `score: { points, level }`, el puntaje de
+esa cuenta (nunca el usuario). Ver `docs/points.md`.
+
 Esquemas zod: `src/lib/api/listings.ts`. Catálogo de productos y unidades: `src/lib/market/catalog.ts`. Es más
 amplio que `CROP_IDS`: incluye cacao, aguacate y frutas, con un enlace opcional al cultivo del motor.
 
@@ -73,6 +76,8 @@ amplio que `CROP_IDS`: incluye cacao, aguacate y frutas, con un enlace opcional 
 
 - **Con `DATABASE_URL`:** Postgres `fieldshift.listings` y `fieldshift.listing_flags` (migración `002_listings`).
 - **Sin ella** (desarrollo y e2e): memoria del servidor (`memoryRepo`).
+- **Dueño:** `listings.account_id` (migración `003_accounts_points`). Se llena cuando la persona entra a su cuenta
+  en el teléfono donde publicó: el token de edición prueba que la finca es suya.
 - Una escritura que falla en Postgres devuelve 503: **nunca** cae a memoria en silencio.
 - Los e2e fijan `DATABASE_URL=''` en `playwright.config.ts` para no tocar la base real.
 
