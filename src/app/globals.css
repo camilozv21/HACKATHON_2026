@@ -509,6 +509,31 @@
   }
 }
 
+/* "+N puntos" junto al botón de puntos: aparece, se queda y se va (sin movimiento con prefers-reduced-motion) */
+.points-pop {
+  animation: points-pop 2.8s ease-out both;
+}
+@keyframes points-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.8);
+  }
+  10%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .points-pop {
+    animation: none;
+  }
+}
+
 /* Punto consultado en una capa de datos */
 .probe-marker {
   width: 26px;

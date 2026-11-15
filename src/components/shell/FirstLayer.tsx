@@ -9,6 +9,7 @@ import { listingsActive, useListingsStore } from '@/features/listings/store';
 import PlacesAlternative from '@/features/globe/PlacesAlternative';
 import IntroFlight from '@/features/location/IntroFlight';
 import { OnboardingGate } from '@/features/onboarding/OnboardingGate';
+import PointsRuntime from '@/features/points/PointsRuntime';
 import { useTimeStore } from '@/features/time/store';
 import TimeRuntime from '@/features/time/TimeRuntime';
 import { UrlStateProvider } from '@/lib/url/UrlStateProvider';
@@ -25,7 +26,7 @@ const ListingsRuntime = dynamic(() => import('@/features/listings/ListingsRuntim
 /**
  * Primera capa de la página (carga diferida, con el globo listo): vuelo de la intro hacia tu zona, alternativa
  * textual al globo, la máquina del tiempo (?t=), los eventos y emergencias (?ev=), las fincas que venden (?shop=) y
- * el recorrido guiado con ?demo=1.
+ * el recorrido guiado con ?demo=1. También el puntaje (PointsRuntime: cuenta lo que hace la persona).
  */
 export default function FirstLayer() {
   const pickerOpen = useTimeStore((s) => s.pickerOpen);
@@ -44,6 +45,7 @@ export default function FirstLayer() {
       {eventsActive && <EventsRuntime />}
       {shopActive && <ListingsRuntime />}
       <PlacesAlternative />
+      <PointsRuntime />
       <OnboardingGate />
       {demo && <DemoTour />}
     </>

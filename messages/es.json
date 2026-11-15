@@ -2589,5 +2589,145 @@
       "projection": "La proyección supone que los cambios siguen igual; tu manejo, el clima y las políticas pueden cambiarla.",
       "support": "Esta herramienta te apoya; no reemplaza tu criterio ni a los técnicos de tu zona."
     }
+  },
+  "points": {
+    "button": {
+      "aria": "Tu puntaje: {points} puntos. Abrir tu cuenta",
+      "ariaGuest": "Tu puntaje: {points} puntos sin guardar. Crear cuenta o entrar"
+    },
+    "flash": {
+      "plus": "+{points}",
+      "saved": "Puntos guardados",
+      "sr": "Ganaste {points} puntos: {what}",
+      "srGuest": "Ganaste {points} puntos: {what}. Crea tu cuenta para guardarlos."
+    },
+    "levels": {
+      "semilla": "Semilla",
+      "brote": "Brote",
+      "raiz": "Raíz firme",
+      "cosecha": "Cosecha",
+      "bosque": "Bosque"
+    },
+    "farm": {
+      "badge": "{points} puntos · {level}",
+      "what": "El puntaje mide cuánto usa y aprende con Field Shift quien publica la finca. No califica la finca ni sus productos."
+    },
+    "myFarm": {
+      "title": "Puntaje de tu finca: {points} · {level}",
+      "hint": "Se ve en tu finca cuando la publicas.",
+      "guestTitle": "Llevas {points} puntos sin guardar",
+      "guestHint": "Crea tu cuenta para guardarlos y verlos en tu finca."
+    },
+    "dialog": {
+      "kicker": "Puntos del campo",
+      "titleGuest": "Tu puntaje",
+      "titleSignedIn": "Hola, {username}",
+      "close": "Cerrar",
+      "summary": "Resumen de tu puntaje",
+      "points": "{points} puntos",
+      "level": "Nivel {rank}: {level}",
+      "unsaved": "sin guardar",
+      "progress": "Avance al siguiente nivel",
+      "toNext": "Te faltan {points} puntos para llegar a {level}.",
+      "topLevel": "¡Llegaste al nivel más alto!",
+      "guestNote": "Estos puntos solo están en este teléfono. Crea una cuenta para guardarlos: tu puntaje se verá en cada finca que publiques.",
+      "farmNote": "Tu puntaje se ve en cada finca que publiques desde este teléfono.",
+      "logout": "Cerrar sesión",
+      "loggedOut": "Cerraste sesión. Tus puntos siguen guardados en tu cuenta.",
+      "welcome": "¡Listo, {username}! Tu cuenta está creada y tus puntos quedaron guardados.",
+      "welcomeBack": "Hola de nuevo, {username}. Tus puntos están al día."
+    },
+    "form": {
+      "signupTab": "Crear cuenta",
+      "loginTab": "Ya tengo cuenta",
+      "username": "Usuario",
+      "usernameHint": "De 3 a 20 letras o números, sin espacios ni tildes.",
+      "password": "Contraseña",
+      "passwordHint": "Mínimo {min} caracteres.",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "signupSubmit": "Crear cuenta y ganar {points} puntos",
+      "loginSubmit": "Entrar",
+      "busy": "Un momento…",
+      "privacy": "Solo pedimos usuario y contraseña: nada de correo ni teléfono. Si olvidas la contraseña no se puede recuperar, así que guárdala bien."
+    },
+    "errors": {
+      "username": "El usuario debe tener de 3 a 20 letras o números, sin espacios ni tildes.",
+      "password": "La contraseña debe tener al menos {min} caracteres.",
+      "taken": "Ese usuario ya existe. Prueba con otro o entra con tu cuenta.",
+      "credentials": "El usuario o la contraseña no coinciden.",
+      "rate": "Demasiados intentos. Espera unos minutos y vuelve a probar.",
+      "invalid": "Revisa los datos e inténtalo de nuevo.",
+      "storage": "No pudimos guardar ahora. Inténtalo en un rato.",
+      "network": "Sin conexión. Revisa tu internet y vuelve a probar."
+    },
+    "earn": {
+      "title": "Cómo ganar puntos",
+      "plus": "+{points}",
+      "questPoints": "hasta {max}",
+      "earned": "llevas {points}"
+    },
+    "actions": {
+      "signup": {
+        "label": "Crear tu cuenta",
+        "rule": "Una sola vez",
+        "done": "Cuenta creada"
+      },
+      "quest": {
+        "label": "Completar los retos de inicio",
+        "rule": "30 por terminarlos y 20 por estrella. Si repites y mejoras, suma la diferencia",
+        "done": "Retos de inicio"
+      },
+      "visit": {
+        "label": "Entrar a la app",
+        "rule": "Una vez al día",
+        "done": "Visita del día"
+      },
+      "field": {
+        "label": "Marcar tu finca en el mapa",
+        "rule": "Por cada finca, hasta 5",
+        "done": "Finca marcada"
+      },
+      "analyze": {
+        "label": "Analizar una finca",
+        "rule": "Por cada finca, hasta 5",
+        "done": "Finca analizada"
+      },
+      "region": {
+        "label": "Explorar una región del globo",
+        "rule": "Hasta 10 al día",
+        "done": "Región explorada"
+      },
+      "layer": {
+        "label": "Ver una capa de datos NASA",
+        "rule": "Por cada capa nueva",
+        "done": "Capa NASA nueva"
+      },
+      "radio": {
+        "label": "Escuchar la radio del campo",
+        "rule": "Una vez al día",
+        "done": "Radio del día"
+      },
+      "ask": {
+        "label": "Preguntarle al asistente",
+        "rule": "Hasta 5 al día",
+        "done": "Pregunta al asistente"
+      },
+      "glossary": {
+        "label": "Aprender un término (¿qué es esto?)",
+        "rule": "Por cada término nuevo",
+        "done": "Término aprendido"
+      },
+      "report": {
+        "label": "Reportar un evento en tu zona",
+        "rule": "Hasta 3 al día",
+        "done": "Evento reportado"
+      },
+      "publish": {
+        "label": "Publicar tu finca",
+        "rule": "Por cada finca publicada",
+        "done": "Finca publicada"
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@
 import { BadgeCheck, CalendarRange, MapPin, Package } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { formatCop, formatMonth, formatNumber } from '@/features/market/format';
+import { FarmScore } from '@/features/points/FarmScore';
 import type { Listing, ListingProduct } from '@/lib/api/listings';
 
 /** Línea de un producto publicado: nombre, cantidad, precio y ventana de cosecha. */
@@ -36,11 +37,22 @@ export function ProductLine({ p }: { p: ListingProduct }) {
 }
 
 /** Cuerpo común de una publicación (tarjeta del globo, vista previa del formulario). */
-export function ListingDetails({ listing }: { listing: Pick<Listing, 'place' | 'areaHa' | 'products' | 'certifications' | 'description'> }) {
+export function ListingDetails({
+  listing,
+}: {
+  listing: Pick<Listing, 'place' | 'areaHa' | 'products' | 'certifications' | 'description'> & Partial<Pick<Listing, 'score'>>;
+}) {
   const t = useTranslations('listings');
+  const tp = useTranslations('points');
   const locale = useLocale();
   return (
     <div className="flex flex-col gap-3 text-sm">
+      {listing.score && (
+        <div>
+          <FarmScore points={listing.score.points} level={listing.score.level} />
+          <p className="mt-1 text-xs text-ink-faint">{tp('farm.what')}</p>
+        </div>
+      )}
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-ink-muted">
         <MapPin aria-hidden className="size-4 text-field-300" />
         <span>{listing.place}</span>
