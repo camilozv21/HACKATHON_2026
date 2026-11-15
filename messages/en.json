@@ -2405,10 +2405,6 @@
       "empty": "No published farms match that filter.",
       "backToGlobe": "Back to the globe",
       "seeOnGlobe": "See on the globe",
-      "satellite": "Satellite view of the area",
-      "satelliteCredit": "Imagery: Esri World Imagery. Approximate location (~5 km).",
-      "ndvi": "Greenness of the area (NASA MODIS NDVI, {month})",
-      "ndviNote": "Each square is ~1 km: it shows the area, not the farm. Greener = more active vegetation.",
       "products": "What they sell",
       "about": "About the farm",
       "marketTitle": "Reference prices in the area",
@@ -2418,6 +2414,27 @@
       "disclaimer": "Field Shift doesn’t sell or charge commissions: it connects buyers with producers. Agree on price, quality and delivery directly with the farmer.",
       "notFound": "This listing is no longer available.",
       "count": "{count, plural, =0 {No farms} one {# farm} other {# farms}}"
+    },
+    "zone": {
+      "eyebrow": "Change over time",
+      "title": "How has the area changed?",
+      "viewLabel": "What to compare",
+      "viewPhoto": "Satellite photo",
+      "viewNdvi": "NASA greenness",
+      "base": "Base year",
+      "compare": "Compare with",
+      "hint": "Drag the line or tap the image to compare the two years.",
+      "sliderLabel": "Compare {before} and {after}",
+      "sliderValue": "{pct}% shows {before}; the rest, {after}",
+      "loadError": "Couldn’t load the {label} image.",
+      "altPhoto": "Satellite photo of the area in {year}",
+      "altNdvi": "Greenness of the area (NASA MODIS NDVI), {date}",
+      "photoNote": "Each image combines many photos from that year to remove clouds. The tone changes with the season and processing: look at shapes (forest, pastures, roads, rivers), not only at color.",
+      "ndviNote": "It compares the same month in both years. Greener = more active vegetation. A dry or rainy year also changes greenness, even if the area stays the same.",
+      "ndviBox": "Each square is ~1 km: it shows the region, not the farm. The dashed box is the area in the photo.",
+      "approx": "Approximate area about 6 km across: not the exact farm.",
+      "creditPhoto": "Imagery: Sentinel-2 cloudless (s2maps.eu) by EOX IT Services GmbH, with modified Copernicus Sentinel data.",
+      "creditNdvi": "Data: NASA MODIS Terra (monthly NDVI), served by NASA GIBS."
     }
   },
   "terrain": {

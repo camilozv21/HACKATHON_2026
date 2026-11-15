@@ -1,10 +1,12 @@
-import { ArrowLeft, Globe2, Info, Leaf, MessageCircle, Satellite, Store } from 'lucide-react';
+import { ArrowLeft, Globe2, Info, MessageCircle, Store } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { formatCop, formatDate, formatMonth, formatPct } from '@/features/market/format';
-import { ListingDetails } from '@/features/listings/ListingDetails';
 import gibsMeta from '@/features/layers/gibs-meta.json';
+import { ListingDetails } from '@/features/listings/ListingDetails';
+import { ZoneChange } from '@/features/listings/ZoneChange';
+import { NDVI_LAYER, ndviYears } from '@/features/listings/zoneImagery';
 import { listingContactUrl } from '@/lib/api/listings';
 import type { ProductId } from '@/lib/market/catalog';
 import { getListing } from '@/server/listings';
@@ -14,21 +16,12 @@ export const dynamic = 'force-dynamic';
 
 type Props = { params: Promise<{ locale: string; id: string }>; searchParams: Promise<{ ejemplo?: string }> };
 
-const NDVI_LAYER = 'MODIS_Terra_L3_NDVI_Monthly';
-
-/** Imagen satelital (Esri World Imagery) de la celda pública de ~5 km: nunca la finca exacta. */
-function satelliteUrl(lat: number, lon: number) {
-  const d = 0.03;
-  const bbox = [lon - d, lat - d, lon + d, lat + d].map((n) => n.toFixed(4)).join(',');
-  return `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=640,640&format=jpg&f=image`;
-}
-
-/** Verdor NASA MODIS (NDVI mensual, ~1 km/píxel) de una caja de 0,3°: muestra la zona, no la finca. */
-function ndviUrl(lat: number, lon: number, date: string) {
-  const d = 0.15;
-  // WMS 1.3.0 con EPSG:4326: el orden de la caja es lat,lon.
-  const bbox = [lat - d, lon - d, lat + d, lon + d].map((n) => n.toFixed(4)).join(',');
-  return `https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=${NDVI_LAYER}&STYLES=&CRS=EPSG:4326&BBOX=${bbox}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TIME=${date}`;
+/** Mes del último NDVI de NASA y los años que lo tienen (para comparar siempre el mismo mes). */
+function ndviInfo() {
+  const meta = (gibsMeta as { layers: Record<string, { defaultTime: string; ranges: string[] }> }).layers[NDVI_LAYER];
+  if (!meta) return null;
+  const month = Number(meta.defaultTime.slice(5, 7));
+  return { month, years: ndviYears(meta.ranges, month) };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -73,8 +66,8 @@ async function MarketBlock({ m, products, locale }: { m: MarketArea; products: s
   );
 }
 
-/** Página pública de una finca que vende: productos, zona aproximada con imagen satelital y verdor NASA, precios de
- * referencia y botón de WhatsApp (pasa por /contact: el teléfono no está en el HTML). */
+/** Página pública de una finca que vende: productos, comparador de la zona aproximada en el tiempo (foto satelital y
+ * verdor NASA), precios de referencia y botón de WhatsApp (pasa por /contact: el teléfono no está en el HTML). */
 export default async function FincaPage({ params, searchParams }: Props) {
   const { locale, id } = await params;
   setRequestLocale(locale);
@@ -88,7 +81,6 @@ export default async function FincaPage({ params, searchParams }: Props) {
     locale: locale === 'en' ? 'en' : 'es',
     products: listing.products.map((p) => p.product),
   }).catch(() => null);
-  const ndviDate = (gibsMeta as { layers: Record<string, { defaultTime: string }> }).layers[NDVI_LAYER]?.defaultTime ?? null;
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-5 px-4 pt-[calc(var(--safe-top)+1.5rem)] pb-12">
@@ -141,39 +133,7 @@ export default async function FincaPage({ params, searchParams }: Props) {
         )}
       </section>
 
-      <section aria-labelledby="zn" className="grid gap-3 sm:grid-cols-2">
-        <h2 id="zn" className="sr-only">
-          {t('page.satellite')}
-        </h2>
-        <figure className="overflow-hidden rounded-2xl bg-white/5 ring-1 ring-line">
-          {/* eslint-disable-next-line @next/next/no-img-element -- imagen externa estática, sin optimizar */}
-          <img src={satelliteUrl(listing.lat, listing.lon)} alt={t('page.satellite')} width={640} height={640} loading="lazy" className="aspect-square w-full object-cover" />
-          <figcaption className="flex items-start gap-1.5 p-3 text-xs text-ink-muted">
-            <Satellite aria-hidden className="mt-0.5 size-3.5 shrink-0" />
-            {t('page.satelliteCredit')}
-          </figcaption>
-        </figure>
-        {ndviDate && (
-          <figure className="overflow-hidden rounded-2xl bg-white/5 ring-1 ring-line">
-            {/* eslint-disable-next-line @next/next/no-img-element -- mosaico WMS de NASA GIBS */}
-            <img
-              src={ndviUrl(listing.lat, listing.lon, ndviDate)}
-              alt={t('page.ndvi', { month: formatMonth(ndviDate.slice(0, 7), locale) })}
-              width={256}
-              height={256}
-              loading="lazy"
-              className="aspect-square w-full bg-black object-cover [image-rendering:pixelated]"
-            />
-            <figcaption className="p-3 text-xs text-ink-muted">
-              <span className="flex items-start gap-1.5 font-semibold text-ink">
-                <Leaf aria-hidden className="mt-0.5 size-3.5 shrink-0 text-field-300" />
-                {t('page.ndvi', { month: formatMonth(ndviDate.slice(0, 7), locale) })}
-              </span>
-              {t('page.ndviNote')}
-            </figcaption>
-          </figure>
-        )}
-      </section>
+      <ZoneChange lat={listing.lat} lon={listing.lon} ndvi={ndviInfo()} />
 
       {market && <MarketBlock m={market} products={listing.products.map((p) => p.product)} locale={locale} />}
 

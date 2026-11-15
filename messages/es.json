@@ -2405,10 +2405,6 @@
       "empty": "No hay fincas publicadas con ese filtro.",
       "backToGlobe": "Volver al globo",
       "seeOnGlobe": "Ver en el globo",
-      "satellite": "Vista satelital de la zona",
-      "satelliteCredit": "Imagen: Esri World Imagery. Ubicación aproximada (~5 km).",
-      "ndvi": "Verdor de la zona (NASA MODIS NDVI, {month})",
-      "ndviNote": "Cada cuadrito mide ~1 km: muestra la zona, no la finca. Más verde = más vegetación activa.",
       "products": "Lo que vende",
       "about": "Sobre la finca",
       "marketTitle": "Precios de referencia en la zona",
@@ -2418,6 +2414,27 @@
       "disclaimer": "Field Shift no vende ni cobra comisiones: conecta a quien compra con quien produce. Acuerda precio, calidad y entrega directamente con el agricultor.",
       "notFound": "Esta publicación ya no está disponible.",
       "count": "{count, plural, =0 {Ninguna finca} one {# finca} other {# fincas}}"
+    },
+    "zone": {
+      "eyebrow": "Comparación en el tiempo",
+      "title": "¿Cómo ha cambiado la zona?",
+      "viewLabel": "Qué comparar",
+      "viewPhoto": "Foto del satélite",
+      "viewNdvi": "Verdor NASA",
+      "base": "Año base",
+      "compare": "Comparar con",
+      "hint": "Desliza la línea o toca la imagen para comparar los dos años.",
+      "sliderLabel": "Comparar {before} y {after}",
+      "sliderValue": "{pct} % muestra {before}; el resto, {after}",
+      "loadError": "No se pudo cargar la imagen de {label}.",
+      "altPhoto": "Foto satelital de la zona en {year}",
+      "altNdvi": "Verdor de la zona (NASA MODIS NDVI), {date}",
+      "photoNote": "Cada imagen junta muchas fotos del año para quitar las nubes. El tono cambia con la época y el procesamiento: fíjate en las formas (bosque, potreros, caminos, ríos), no solo en el color.",
+      "ndviNote": "Compara el mismo mes en los dos años. Más verde = más vegetación activa. Un año seco o lluvioso también cambia el verdor, aunque la zona siga igual.",
+      "ndviBox": "Cada cuadrito mide ~1 km: muestra la región, no la finca. El recuadro punteado es la zona de la foto.",
+      "approx": "Zona aproximada de unos 6 km de lado: no es la finca exacta.",
+      "creditPhoto": "Imágenes: Sentinel-2 cloudless (s2maps.eu) de EOX IT Services GmbH, con datos modificados de Copernicus Sentinel.",
+      "creditNdvi": "Datos: NASA MODIS Terra (NDVI mensual), servidos por NASA GIBS."
     }
   },
   "terrain": {

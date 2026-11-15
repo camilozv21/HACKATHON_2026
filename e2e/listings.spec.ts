@@ -57,10 +57,16 @@ test('publicar mi finca: 3 pasos, sin teléfono en la página y contacto por Wha
   expect(res.status()).toBe(302);
   expect(res.headers()['location']).toMatch(/^https:\/\/wa\.me\/573001234567\?text=/);
 
-  // Página pública: sin teléfono, con la zona aproximada y el verdor NASA.
+  // Página pública: sin teléfono, con el comparador de la zona aproximada (foto y verdor NASA).
   await page.goto(href!);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Finca E2E');
-  await expect(page.getByText(/Verdor de la zona \(NASA MODIS NDVI/)).toBeVisible();
+  const slider = page.getByRole('slider', { name: 'Comparar 2016 y 2025' });
+  await expect(slider).toHaveAttribute('aria-valuenow', '50');
+  await slider.focus();
+  await page.keyboard.press('End');
+  await expect(slider).toHaveAttribute('aria-valuenow', '100');
+  await page.getByRole('button', { name: 'Verdor NASA' }).tap();
+  await expect(page.getByRole('img', { name: /Verdor de la zona \(NASA MODIS NDVI\)/ }).first()).toBeVisible();
   expect(await page.content()).not.toContain('3001234567');
 });
 
