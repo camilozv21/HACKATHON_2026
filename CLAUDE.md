@@ -23,7 +23,8 @@ una API con contrato definido en `src/lib/api/contract.ts` y **debe funcionar co
   hecho con sus datos (NASA POWER, sensores, eventos, terreno, mercado), escrito por plantillas y reescrito por Claude
   sin poder inventar cifras (`/api/radio/program`, `src/server/radio/`). Se lee frase por frase con subtítulos y
   "¿qué es esto?", y **mueve el globo** con pistas por frase (mismas acciones del agente). Además, segmentos mp3 del
-  mock (`public/audio/`). Detalle: `docs/radio.md`.
+  mock (`public/audio/`). Detalle: `docs/radio.md`. **Hoy, por defecto, solo suenan los mp3 grabados del equipo**
+  (`NEXT_PUBLIC_RADIO_AUDIO_ONLY`, `env.radioAudioOnly` en `src/lib/env.ts`); con `false` vuelve el programa del día.
 - **Plan de rotación (motor agronómico del equipo):** primera pestaña del drawer de la finca ("Recomendación").
   Al terminar de dibujar una finca el drawer se abre solo y el plan arranca sin otro toque. Primero se piden los datos
   de la zona (rectángulo de los extremos de la finca, no el polígono; si toca varias celdas de NASA POWER, el máximo

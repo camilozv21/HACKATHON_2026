@@ -9,6 +9,7 @@ import { useGlobeStore } from '@/features/globe/store';
 import { getUserLocation } from '@/features/location/store';
 import { useNarratorStore } from '@/features/narrator/store';
 import { RadioStationsResponse } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { usePrefsStore } from '@/lib/prefs';
 import { radioSteering } from './cues';
 import { radioEngine } from './engine';
@@ -47,8 +48,10 @@ export default function RadioRuntime() {
       .catch(() => useRadioStore.getState().setStatus('error'));
   }, []);
 
-  // El motor pide el programa al empezar una emisora y se identifica en voz mientras llega.
+  // El motor pide el programa al empezar una emisora y se identifica en voz mientras llega. Con solo audios
+  // grabados no hay ni lo uno ni lo otro: el play pone el mp3 directo.
   useEffect(() => {
+    if (env.radioAudioOnly) return;
     radioEngine.setHooks({
       beforePlay: () => ensureProgram(),
       ident: () => {

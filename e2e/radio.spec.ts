@@ -14,8 +14,9 @@ test('la radio sintoniza la emisora más cercana, no suena sola y muestra la tra
 
   await radio.getByRole('button', { name: 'Ver transcripción y próximos segmentos' }).tap();
   await expect(radio.getByText('Transcripción', { exact: true })).toBeVisible();
-  // El audio destacado del equipo suena primero; la alerta de GPM de la emisora viene después.
+  // Solo audios grabados (NEXT_PUBLIC_RADIO_AUDIO_ONLY, por defecto): suena el del equipo y nada más; ni los
+  // ejemplos sin mp3 ni el interruptor de "la radio mueve el mapa" (no hay programa con pistas).
   await expect(radio.getByText('Mensaje de la Radio del Campo').first()).toBeVisible();
-  await expect(radio.getByText('Lluvias fuertes en octubre y noviembre')).toBeVisible();
-  await expect(radio.getByText('Anuncio').first()).toBeVisible();
+  await expect(radio.getByText('Lluvias fuertes en octubre y noviembre')).toHaveCount(0);
+  await expect(radio.getByRole('switch')).toHaveCount(0);
 });

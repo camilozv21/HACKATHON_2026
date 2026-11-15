@@ -13,6 +13,7 @@
 import { pickVoice, speakable } from '@/features/narrator/narrator';
 import { useNarratorStore } from '@/features/narrator/store';
 import type { RadioSegment } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { runCues } from './cues';
 import { useRadioLive } from './live';
 import { sentenceAt, sentenceStarts, speechSeconds, splitSentences } from './sentences';
@@ -268,12 +269,15 @@ class RadioEngine {
     void this.play();
   }
 
-  /** El mp3 no cargó: voz del navegador si existe; si no, siguiente segmento (o estado vacío). */
+  /**
+   * El mp3 no cargó: voz del navegador si existe; si no (o con solo audios grabados), siguiente segmento o estado
+   * vacío.
+   */
   private onAudioError() {
     const seg = currentSegment();
     if (!seg || !this.isPlaying()) return;
     this.noAudio.add(seg.id);
-    if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window && !env.radioAudioOnly) {
       this.speakFrom(useRadioLive.getState().sentence);
       return;
     }

@@ -7,6 +7,7 @@
  */
 import { getMap } from '@/features/globe/store';
 import { RadioSegmentsResponse, type RadioStation } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { haversineKm } from '@/lib/geo';
 import { radioEngine } from './engine';
 import { useRadioLive } from './live';
@@ -59,18 +60,33 @@ export function markTuned(id: string) {
 
 let seq = 0;
 
+const sameQueue = (a: readonly { id: string }[], b: readonly { id: string }[]) =>
+  a.length > 0 && a.length === b.length && a.every((s, i) => s.id === b[i]!.id);
+
 /** Cambia de emisora. Si la radio sonaba, hace estática y la nueva empieza sola (identificación + programa). */
 export async function tuneTo(station: RadioStation, opts: { resume: boolean }) {
   const my = ++seq;
   cancelProgram();
+  const stations = useRadioStore.getState().stations;
+  const fillerId = station.local ? (nationalStation(stations)?.id ?? null) : station.id;
+  const loading = fillerId ? loadSegments(fillerId) : Promise.resolve([]);
+  loading.catch(() => undefined); // el error se atiende abajo; esto evita el aviso de promesa sin atender
+  if (env.radioAudioOnly) {
+    // Solo audios grabados: todas las emisoras ponen los mismos. Cambia el nombre y el audio sigue sin cortarse.
+    const segments = await loading.catch(() => null);
+    if (my !== seq) return;
+    if (segments && sameQueue(useRadioStore.getState().segments, segments)) {
+      useRadioStore.setState({ tunedId: station.id, station });
+      markTuned(station.id);
+      return;
+    }
+  }
   if (opts.resume) {
     radioEngine.pause();
     await radioEngine.staticBurst();
   }
   try {
-    const stations = useRadioStore.getState().stations;
-    const fillerId = station.local ? (nationalStation(stations)?.id ?? null) : station.id;
-    const segments = fillerId ? await loadSegments(fillerId) : [];
+    const segments = await loading;
     if (my !== seq) return;
     useRadioStore.getState().tune(station, segments);
     useRadioLive.getState().resetFor(station.id);

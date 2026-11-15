@@ -23,6 +23,7 @@ import { useGlossaryStore, type GlossaryTerm } from '@/features/glossary/terms';
 import { useLayerStore } from '@/features/layers/store';
 import { useRegionStore } from '@/features/region/store';
 import type { RadioSegment } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { useReducedMotion } from '@/lib/hooks/useMediaQuery';
 import { resyncCues } from './cues';
 import { radioEngine } from './engine';
@@ -313,37 +314,40 @@ export default function RadioMini() {
             </>
           )}
 
-          {/* La radio mueve el mapa mientras habla (se puede apagar; si la persona toma el mapa, espera). */}
-          <div className="mt-3 rounded-xl bg-white/5 p-2 ring-1 ring-line">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={follow}
-              onClick={() => useRadioLive.getState().setFollow(!follow)}
-              className="flex min-h-11 w-full items-center justify-between gap-3 text-left"
-            >
-              <span>
-                <span className="block font-medium">{t('follow')}</span>
-                <span className="block text-xs text-ink-muted">{t('followHint')}</span>
-              </span>
-              <span aria-hidden className={clsx('relative h-6 w-10 shrink-0 rounded-full transition-colors', follow ? 'bg-field-500' : 'bg-white/20')}>
-                <span className={clsx('absolute top-0.5 size-5 rounded-full bg-white transition-[left]', follow ? 'left-[1.125rem]' : 'left-0.5')} />
-              </span>
-            </button>
-            {follow && held && (
-              <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
-                <p className="text-xs text-ink-muted">{t('held')}</p>
-                <button
-                  type="button"
-                  onClick={resume}
-                  className="inline-flex min-h-11 items-center gap-1 rounded-full bg-field-500/15 px-3 text-xs font-semibold text-field-300 ring-1 ring-field-500/30"
-                >
-                  <Navigation aria-hidden className="size-4" />
-                  {t('resume')}
-                </button>
-              </div>
-            )}
-          </div>
+          {/* La radio mueve el mapa mientras habla (se puede apagar; si la persona toma el mapa, espera). Los audios
+              grabados no traen pistas: con solo esos, el interruptor no hace nada y no se muestra. */}
+          {!env.radioAudioOnly && (
+            <div className="mt-3 rounded-xl bg-white/5 p-2 ring-1 ring-line">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={follow}
+                onClick={() => useRadioLive.getState().setFollow(!follow)}
+                className="flex min-h-11 w-full items-center justify-between gap-3 text-left"
+              >
+                <span>
+                  <span className="block font-medium">{t('follow')}</span>
+                  <span className="block text-xs text-ink-muted">{t('followHint')}</span>
+                </span>
+                <span aria-hidden className={clsx('relative h-6 w-10 shrink-0 rounded-full transition-colors', follow ? 'bg-field-500' : 'bg-white/20')}>
+                  <span className={clsx('absolute top-0.5 size-5 rounded-full bg-white transition-[left]', follow ? 'left-[1.125rem]' : 'left-0.5')} />
+                </span>
+              </button>
+              {follow && held && (
+                <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-xs text-ink-muted">{t('held')}</p>
+                  <button
+                    type="button"
+                    onClick={resume}
+                    className="inline-flex min-h-11 items-center gap-1 rounded-full bg-field-500/15 px-3 text-xs font-semibold text-field-300 ring-1 ring-field-500/30"
+                  >
+                    <Navigation aria-hidden className="size-4" />
+                    {t('resume')}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {segments.length > 1 && (
             <>

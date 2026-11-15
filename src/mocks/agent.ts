@@ -4,6 +4,7 @@
  */
 import type { LayerId } from '@/features/layers/ids';
 import type { AgentRequest, AgentResponse, DataNeed, HazardKind } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { parseTimeParam, periodLabel, periodOf, presets } from '@/features/time/period';
 import { buildMockRegion } from './region';
 
@@ -209,7 +210,15 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
   if (place && !wantsRadio) actions.push({ type: 'openRegion', lat: place.lat, lon: place.lon, name: place.name });
 
   let reply: string;
-  if (wantsRadio) {
+  if (wantsRadio && env.radioAudioOnly) {
+    // Solo audios grabados: la radio no lee los datos del lugar, así que no se promete el boletín.
+    actions.push({ type: 'playRadio' });
+    reply = tr(
+      l,
+      '**Pongo la radio del campo.** Suena un mensaje grabado por el equipo de Field Shift. Puedes pausar cuando quieras en el reproductor.\n\nSi quieres los datos de una zona (lluvia, suelo, verdor), pregúntame por ella.',
+      '**Playing the field radio.** You will hear a message recorded by the Field Shift team. You can pause any time in the player.\n\nIf you want the data of an area (rain, soil, greenness), ask me about it.',
+    );
+  } else if (wantsRadio) {
     actions.push(place ? { type: 'playRadio', lat: place.lat, lon: place.lon, name: place.name } : { type: 'playRadio' });
     reply = tr(
       l,

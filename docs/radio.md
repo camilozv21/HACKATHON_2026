@@ -6,6 +6,23 @@ sirven con dos route handlers:
 - `GET /api/radio/stations?lat&lon` → emisoras ordenadas por cercanía (la nacional, sin ubicación, al final).
 - `GET /api/radio/stations/:id/segments` → segmentos de la emisora (más los de la nacional como relleno).
 
+## Solo audios grabados (modo por defecto)
+
+Con `NEXT_PUBLIC_RADIO_AUDIO_ONLY` sin definir o en `true`, la radio **solo pone los audios grabados por el
+equipo**: los segmentos con `regionId: "destacado"` (hoy `public/audio/radio-campo-1.mp3`).
+
+- No pide el programa del día (`/api/radio/program` no se llama), no se identifica en voz y nunca lee guiones con la
+  voz del teléfono: si un mp3 no carga, pasa al siguiente o muestra "Aún no hay audios".
+- Todas las emisoras ponen los mismos audios: al mover el globo cambia el nombre de la emisora y **el audio sigue
+  sin cortarse** (ni estática ni vuelta al inicio).
+- Sin pistas sobre el globo, el interruptor "La radio mueve el mapa" no se muestra.
+- El agente (Claude y el mock) no promete el boletín con datos: dice que suena el mensaje grabado del equipo.
+- Para sumar otro audio en este modo: el mp3 en `public/audio/` y un segmento con `"regionId": "destacado"` en
+  `src/mocks/radio.json` (con su transcripción fiel: es la alternativa accesible y el subtítulo).
+
+Con `NEXT_PUBLIC_RADIO_AUDIO_ONLY=false` (en Vercel, y hay que volver a desplegar porque se fija en el build) todo
+lo que sigue vuelve a funcionar como se describe.
+
 Mientras no existan los mp3, el reproductor **lee la transcripción con la voz del dispositivo**
 (`speechSynthesis`) y lo indica en la vista expandida ("Audio IA pendiente"). Si el navegador no tiene voz,
 muestra "Aún no hay audios para esta emisora" y no falla.

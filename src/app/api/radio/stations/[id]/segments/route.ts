@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { RadioSegmentsResponse, type RadioSegment, type RadioStation } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import data from '@/mocks/radio.json';
 
 /**
  * Mock de GET /api/radio/stations/:id/segments.
  * Orden: segmentos destacados (regionId "destacado", suenan primero en todas las emisoras),
  * luego los de la emisora y al final los de la nacional como relleno.
+ * Con solo audios grabados (NEXT_PUBLIC_RADIO_AUDIO_ONLY, por defecto) van solo los destacados: los demás son
+ * ejemplos cuyo mp3 no existe y sonarían con la voz del teléfono.
  */
 export async function GET(_request: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -15,7 +18,11 @@ export async function GET(_request: Request, ctx: { params: Promise<{ id: string
   const featured = all.filter((s) => s.regionId === 'destacado');
   const own = all.filter((s) => s.regionId === id);
   const national = all.filter((s) => s.regionId === 'campo-nacional');
-  const segments = id === 'campo-nacional' ? [...featured, ...national] : [...featured, ...own, ...national];
+  const segments = env.radioAudioOnly
+    ? featured
+    : id === 'campo-nacional'
+      ? [...featured, ...national]
+      : [...featured, ...own, ...national];
   return NextResponse.json(RadioSegmentsResponse.parse({ station, segments }), {
     headers: { 'Cache-Control': 'public, max-age=300' },
   });
