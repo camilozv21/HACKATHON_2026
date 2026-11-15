@@ -11,10 +11,9 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { betaJSONSchemaOutputFormat, betaTool } from '@anthropic-ai/sdk/helpers/beta/json-schema';
 import { DEMO_FARMS } from '@/features/field/demoFarms';
-import { LAYER_IDS } from '@/features/layers/ids';
-import { RISK_KINDS } from '@/features/terrain/kinds';
 import { eventWindow } from '@/features/events/window';
-import { AgentResponse, DATA_NEEDS, HAZARD_KINDS, type AgentRequest, type HazardEvent } from '@/lib/api/contract';
+import { AgentAction, AgentResponse, type AgentRequest, type HazardEvent } from '@/lib/api/contract';
+import { env } from '@/lib/env';
 import { buildMockRegion } from '@/mocks/region';
 import { parseTimeParam, periodLabel, periodOf } from '@/features/time/period';
 import { eventHistory } from './events';
@@ -28,6 +27,11 @@ const MODEL = 'claude-opus-5-5';
 let client: Anthropic | null = null;
 /** Lee ANTHROPIC_API_KEY del entorno del servidor. Timeout por intento: 25 s (el proxy corta a 30 s). */
 const getClient = () => (client ??= new Anthropic({ timeout: 25_000, maxRetries: 1 }));
+/**
+ * Tope de toda la conversación con Claude (todas las vueltas de herramientas y reintentos). El teléfono espera 35 s
+ * (ChatPanel): pasado este tiempo responde el agente local en vez de dejar a la persona con "tardó demasiado".
+ */
+const AGENT_DEADLINE_MS = 28_000;
 
 /** AGENT_FORCE_MOCK=true (p. ej. en los e2e) desactiva Claude para no gastar la clave ni depender de la red. */
 export const claudeAgentEnabled = () =>
@@ -60,7 +64,11 @@ Globe actions (the app runs them in order: flights first, then layers, then pane
 - clearLayers: only when the user asks to remove layers.
 - showStrategies: only for crop rotation questions and only if view.fieldId exists; otherwise tell the user to mark the farm with the "Mi finca" / "My farm" button.
 - askForData {need?}: opens the quick questions of the farm analysis at that need (one of view.missingData). Only if view.fieldId exists. Do not combine it with openRegion or showStrategies (they open on the same side of the screen).
-- playRadio {lat?, lon?, name?}: plays the farm radio. With lat/lon it plays the radio bulletin of that place: rain, soil, crop greenness, nearby events, land risk and prices, read aloud while the globe follows along. Use it when the user asks for the radio, a bulletin ("boletín"), or to listen to or hear the conditions of a place; put it after the flyTo to that place.
+${
+  env.radioAudioOnly
+    ? '- playRadio {}: plays the farm radio: a message recorded by the Field Shift team, the same everywhere. It does not read the data of a place, so never say it will tell the rain, soil or prices. Use it when the user asks for the radio or wants to listen to it.'
+    : '- playRadio {lat?, lon?, name?}: plays the farm radio. With lat/lon it plays the radio bulletin of that place: rain, soil, crop greenness, nearby events, land risk and prices, read aloud while the globe follows along. Use it when the user asks for the radio, a bulletin ("boletín"), or to listen to or hear the conditions of a place; put it after the flyTo to that place.'
+}
 - setTime {when}: when = "YYYY-MM" (a month) or "YYYY-MM-DD" (a day) moves the whole app to that past date (map layers, region panel, farm panel); when = null goes back to today. Put it before setLayer.
 - showEvents {on?, kind?}: shows events and emergencies on the globe (NASA EONET worldwide, the official UNGRD record for Colombia and community reports), optionally only one kind (landslide, flood, storm, wildfire, drought, frost, erosion, earthquake, volcano, other). It shows the period of view.when, or the last 90 days.
 - reportEvent {kind?, lat?, lon?}: opens the form so the user can report an event (landslide, flood, hail…). It only opens the form: the user reviews and sends it. Use it when the user wants to report or warn about something that happened.
@@ -78,7 +86,7 @@ Events and emergencies:
 - For questions about landslides, floods, fires, storms, emergencies or disasters in a place, call get_events (with month="YYYY-MM" for a past month) and add showEvents. UNGRD data is official but published with a delay (latest data: see the tool result) and located at the center of the municipality. Community reports are not verified: always say so.
 - If the user reports that people are in danger, tell them first to call 123 (Colombia) or their local emergency number. This app does not alert emergency services.
 
-Output: "reply" is short markdown (at most about 120 words, no HTML). "sources" lists the datasets you used with their dates. "suggestions" has 2 or 3 short follow-up questions in the user's language.`;
+Output: "reply" is short markdown (at most about 120 words, no HTML). Each item of "actions" is {"type": "<action>", "args": "<the action's fields as a JSON object, in a string>"}, for example {"type": "flyTo", "args": "{\\"lat\\": 4.64, \\"lon\\": -75.57, \\"zoom\\": 9, \\"label\\": \\"Salento\\"}"}; use "{}" for an action without fields. "sources" lists the datasets you used with their dates. "suggestions" has 2 or 3 short follow-up questions in the user's language.`;
 
 const OUTPUT_SCHEMA = {
   type: 'object',
@@ -86,12 +94,14 @@ const OUTPUT_SCHEMA = {
   required: ['reply', 'actions', 'sources', 'suggestions'],
   properties: {
     reply: { type: 'string' },
+    // Cada acción es { type, args }: sus campos van como objeto JSON en texto (`args`). Con los 16 campos opcionales
+    // en el esquema, la API tardaba ~60 s en compilar la gramática y respondía 400 "Schema is too complex".
     actions: {
       type: 'array',
       items: {
         type: 'object',
         additionalProperties: false,
-        required: ['type'],
+        required: ['type', 'args'],
         properties: {
           type: {
             type: 'string',
@@ -111,22 +121,7 @@ const OUTPUT_SCHEMA = {
               'showListings',
             ],
           },
-          need: { type: 'string', enum: [...DATA_NEEDS] },
-          on: { type: 'boolean' },
-          kind: { type: 'string', enum: [...HAZARD_KINDS] },
-          lat: { type: 'number' },
-          lon: { type: 'number' },
-          zoom: { type: 'number' },
-          label: { type: 'string' },
-          name: { type: 'string' },
-          layerId: { type: 'string', enum: [...LAYER_IDS] },
-          risk: { type: 'string', enum: [...RISK_KINDS] },
-          date: { type: 'string' },
-          bbox: { type: 'array', items: { type: 'number' } },
-          fieldId: { type: 'string' },
-          stationId: { type: 'string' },
-          listingId: { type: 'string' },
-          when: { type: ['string', 'null'] },
+          args: { type: 'string' },
         },
       },
     },
@@ -379,7 +374,7 @@ export async function runClaudeAgent(req: AgentRequest): Promise<AgentResponse> 
     tools: buildTools(req.locale),
     max_iterations: 5,
     messages,
-  });
+  }, { signal: AbortSignal.timeout(AGENT_DEADLINE_MS) });
 
   if (final.stop_reason === 'refusal') {
     return {
@@ -395,7 +390,28 @@ export async function runClaudeAgent(req: AgentRequest): Promise<AgentResponse> 
     .filter((b): b is Anthropic.Beta.BetaTextBlock => b.type === 'text')
     .map((b) => b.text)
     .join('');
-  const parsed = AgentResponse.safeParse(JSON.parse(text));
+  const out = JSON.parse(text) as Record<string, unknown>;
+  const parsed = AgentResponse.safeParse({ ...out, actions: expandActions(out.actions).slice(0, 12) });
   if (!parsed.success) throw new Error('claude_out_of_contract');
   return parsed.data;
+}
+
+/**
+ * Desarma las acciones de la salida ({ type, args } con los campos en texto JSON, ver OUTPUT_SCHEMA) en las del
+ * contrato. Una acción con `args` ilegible o que no valida se descarta (el resto de la respuesta sigue).
+ */
+export function expandActions(raw: unknown): AgentAction[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((item) => {
+    const { type, args } = (item ?? {}) as { type?: unknown; args?: unknown };
+    let fields: unknown;
+    try {
+      fields = typeof args === 'string' && args.trim() ? JSON.parse(args) : {};
+    } catch {
+      return [];
+    }
+    if (!fields || typeof fields !== 'object' || Array.isArray(fields)) return [];
+    const action = AgentAction.safeParse({ ...fields, type });
+    return action.success ? [action.data] : [];
+  });
 }
