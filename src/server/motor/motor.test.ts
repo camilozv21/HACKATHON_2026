@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { MotorPlanRequest } from '@/lib/api/motor';
 import sample from '@/mocks/motor/sample.json';
-import { buildPayload, clientRef, evaluate, toPowerSeries } from './client';
+import { buildPayload, clientRef, evaluate, motorBaseUrl, toPowerSeries } from './client';
 import { mockEvaluation } from './mock';
 import { normalizeMotor } from './normalize';
 
@@ -65,6 +65,39 @@ describe('salida del motor → plan', () => {
     expect(plan.cautions.length).toBeGreaterThan(0);
   });
 
+  it('en Antioquia muestra lo que vino del territorio (API canónica), no lo que midió la persona', () => {
+    const out = structuredClone(sample) as unknown as Record<string, Record<string, unknown>>;
+    out.territory!.coverage = { in_coverage: true, region: 'Antioquia', nearest_cell_km: 0.619, max_distance_km: 1.005 };
+    const plan = normalizeMotor({ id: 1, resultado: out }, { source: 'motor', accepted: 'full' });
+    expect(plan.territory).toMatchObject({ inCoverage: true, region: 'Antioquia', nearestKm: 0.619 });
+    const inputs = plan.territory!.inputs;
+    // El tipo de tierra lo midió la persona; la lluvia de 7 días del territorio es el mes repartido: ninguno va aquí.
+    expect(inputs.map((i) => i.variable)).toEqual(['soil_ph', 'altitude_masl', 'slope_pct', 'rain_month', 'ndvi']);
+    expect(inputs[0]).toMatchObject({ value: { text: '5 a 5.5', min: 5, max: 5.5 }, source: 'IGAC · SUELOS_ANTIOQUIA_100K' });
+    expect(inputs.at(-1)).toMatchObject({ value: { min: 0.746 }, period: '2026-05-01 a 2026-06-01' });
+  });
+
+  it('fuera de Antioquia: sin celda ni datos del territorio, y dice por qué', () => {
+    const out = structuredClone(sample) as unknown as Record<string, unknown>;
+    out.data_mode = 'fuera_de_cobertura';
+    out.territory = {
+      coverage: { in_coverage: false, region: 'Antioquia', nearest_cell_km: 131.936, max_distance_km: 1.005 },
+      cell: null,
+      agricultural: null,
+      context: null,
+      notes: ['El punto queda fuera de Antioquia: la celda más cercana de la grilla territorial está a 131.9 km.'],
+      variables_not_in_bundle: ['soil_ph', 'ndvi', 'temperature'],
+    };
+    out.input_provenance = {};
+    out.input_state = {};
+    const plan = normalizeMotor({ id: 2, grid_id: null, resultado: out }, { source: 'motor', accepted: 'full' });
+    expect(plan.cell).toBeNull();
+    expect(plan.territory).toMatchObject({ inCoverage: false, region: 'Antioquia', nearestKm: 131.936, inputs: [], soil: null, ndvi: null });
+    expect(plan.territory!.notes[0]).toContain('fuera de Antioquia');
+    // Un motor anterior (sin `coverage`) no dice nada: no se adivina.
+    expect(normalizeMotor({ resultado: sample }, { source: 'motor', accepted: 'full' }).territory?.inCoverage).toBeNull();
+  });
+
   it('tolera un registro sin envoltura y campos que faltan', () => {
     const plan = normalizeMotor({ schema_version: '4.2.0', inference: { findings: [{ rule_id: 'X', title: 'Algo' }] } }, { source: 'motor', accepted: 'minimal' });
     expect(plan.findings[0]).toMatchObject({ id: 'X', severity: 'unknown', certainty: 'baja' });
@@ -117,6 +150,14 @@ describe('pedido al motor', () => {
     expect(seen).toHaveLength(2);
     expect(seen[0]!.key).toBe('k-123');
     expect((record as { id: number }).id).toBe(7);
+  });
+
+  it('la URL del motor sin esquema (como la muestra Railway) se completa', () => {
+    expect(motorBaseUrl('motor-agronomico-production.up.railway.app/')).toBe('https://motor-agronomico-production.up.railway.app');
+    expect(motorBaseUrl(' localhost:8000 ')).toBe('http://localhost:8000');
+    expect(motorBaseUrl('http://127.0.0.1:8000')).toBe('http://127.0.0.1:8000');
+    expect(motorBaseUrl('')).toBe('');
+    expect(motorBaseUrl(undefined)).toBe('');
   });
 
   it('un 500 no se reintenta', async () => {

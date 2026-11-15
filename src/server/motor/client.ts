@@ -28,8 +28,18 @@ export class MotorError extends Error {
   }
 }
 
+/**
+ * Railway muestra el dominio sin esquema (`motor-….up.railway.app`) y `fetch` necesita una URL absoluta:
+ * sin esquema se asume https (http para localhost).
+ */
+export function motorBaseUrl(raw: string | undefined) {
+  const url = raw?.trim().replace(/\/+$/, '') ?? '';
+  if (!url || /^https?:\/\//i.test(url)) return url;
+  return `${/^(localhost|127\.|0\.0\.0\.0|\[::1\])/i.test(url) ? 'http' : 'https'}://${url}`;
+}
+
 export function motorConfig() {
-  const url = process.env.MOTOR_API_URL?.trim().replace(/\/$/, '') ?? '';
+  const url = motorBaseUrl(process.env.MOTOR_API_URL);
   const forceMock = process.env.MOTOR_FORCE_MOCK?.trim() === 'true';
   return { url: forceMock ? '' : url, key: process.env.MOTOR_API_KEY?.trim() ?? '' };
 }

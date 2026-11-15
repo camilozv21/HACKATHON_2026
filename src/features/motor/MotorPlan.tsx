@@ -13,6 +13,7 @@ import {
   Gauge,
   Info,
   Loader2,
+  MapPinOff,
   RotateCcw,
   ShieldAlert,
   SlidersHorizontal,
@@ -112,6 +113,9 @@ export default function MotorPlan({ field, seasons, soil, survey, onOpenConditio
         <>
           <div className="flex flex-col gap-2">
             {data.source === 'mock' && <Notice icon={FlaskConical}>{t('mockNote')}</Notice>}
+            {data.territory?.inCoverage === false && (
+              <Notice icon={MapPinOff}>{t('outsideCoverage', { region: data.territory.region ?? 'Antioquia' })}</Notice>
+            )}
             {data.accepted === 'no-series' && <Notice icon={Info}>{t('acceptedNoSeries')}</Notice>}
             {data.accepted === 'minimal' && <Notice icon={Info}>{t('acceptedMinimal')}</Notice>}
             {locale === 'en' && <p className="text-xs text-ink-faint">{t('spanishOnly')}</p>}
@@ -862,6 +866,7 @@ function DataUsed({ plan, zone, inputs }: { plan: Plan; zone: MotorZone; inputs:
             </div>
           ))}
         </dl>
+        <TerritoryData plan={plan} />
         <div>
           <p className="font-semibold">{td('told')}</p>
           <dl className="mt-1 grid grid-cols-1 gap-y-1">
@@ -891,6 +896,59 @@ function DataUsed({ plan, zone, inputs }: { plan: Plan; zone: MotorZone; inputs:
         </ul>
       </div>
     </Disclosure>
+  );
+}
+
+/**
+ * Datos del territorio (API canónica: suelos IGAC, verdor Sentinel-2, lluvia del mes) que usó el motor. Solo existen
+ * para Antioquia: fuera de ella se dice que no se usaron, en vez de mostrar los de la celda más cercana.
+ */
+function TerritoryData({ plan }: { plan: Plan }) {
+  const t = useTranslations('motor');
+  const td = useTranslations('motor.data');
+  const format = useFormatter();
+  const u = useUnits();
+  const ter = plan.territory;
+  if (!ter || (ter.inCoverage === null && !ter.inputs.length)) return null;
+  const region = ter.region ?? 'Antioquia';
+  if (ter.inCoverage === false) {
+    return (
+      <p className="text-ink-muted">
+        {td('territoryOutside', { region, km: ter.nearestKm != null ? format.number(ter.nearestKm, { maximumFractionDigits: 0 }) : '?' })}
+      </p>
+    );
+  }
+  const n = (x: number, digits: number) => format.number(x, { maximumFractionDigits: digits });
+  // Lluvia y altura en las unidades de la persona; lo que no es número (tipo de tierra) va como lo dice el motor.
+  const fmt: Record<string, (x: number) => string> = {
+    rain_month: u.rain,
+    altitude_masl: u.length,
+    slope_pct: (x) => `${n(x, 0)} %`,
+    ndvi: (x) => n(x, 2),
+    soil_ph: (x) => n(x, 1),
+  };
+  const shown = (variable: string, v: MotorValue) => (fmt[variable] ? range(v, fmt[variable]) : null) ?? v.text;
+  return (
+    <div>
+      <p className="font-semibold">{td('territory', { region })}</p>
+      <p className="text-xs text-ink-muted">{td('territoryNote')}</p>
+      {ter.inputs.length ? (
+        <dl className="mt-1 grid grid-cols-1 gap-y-1">
+          {ter.inputs.map((i) => (
+            <div key={i.variable}>
+              <dt className="text-xs text-ink-muted">
+                {i.variable === 'ndvi' ? <GlossaryLink term="ndvi">{varLabel(t, i.variable)}</GlossaryLink> : varLabel(t, i.variable)}
+              </dt>
+              <dd className="font-semibold tabular-nums">{shown(i.variable, i.value)}</dd>
+              <dd className="text-xs text-ink-faint">{[i.source, i.period].filter(Boolean).join(' · ')}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <p className="mt-1 text-ink-muted">{td('territoryEmpty')}</p>
+      )}
+      {ter.soil && <p className="mt-1 text-xs text-ink-muted">{td('igac', { text: ter.soil })}</p>}
+    </div>
   );
 }
 

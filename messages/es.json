@@ -3703,7 +3703,8 @@
       "advisorDone": "Revisión lista"
     },
     "mockNote": "Ejemplo: el motor agronómico del equipo todavía no está conectado. Los hallazgos vienen de un lote de Antioquia; tu cultivo, tu etapa y lo que sembraste antes sí se aplican.",
-    "acceptedNoSeries": "El motor no aceptó la serie diaria de NASA POWER: usó sus propios datos del territorio.",
+    "outsideCoverage": "Tu finca queda fuera de {region}. Los datos del territorio (suelos del IGAC, verdor y lluvia del mes) solo existen para {region}, así que el motor no los usó: tu plan sale de los datos de NASA POWER de tu zona y de lo que nos contaste.",
+    "acceptedNoSeries": "El motor no aceptó la serie diaria de NASA POWER, así que el plan no la usa.",
     "acceptedMinimal": "El motor solo aceptó la ubicación, el cultivo y la etapa. Lo que nos contaste del lote no entró esta vez.",
     "spanishOnly": "El motor responde en español.",
     "updating": "Actualizando tu plan…",
@@ -3874,7 +3875,12 @@
       "told": "Lo que nos contaste",
       "lastCrop": "Última siembra",
       "soilFarmer": "Suelo",
-      "none": "Sin dato"
+      "none": "Sin dato",
+      "territory": "Datos del territorio de {region}",
+      "territoryNote": "Vienen de la celda de cerca de 1 km² donde cae tu finca: describen la zona, no tu lote. Lo que midas en tu lote manda.",
+      "territoryEmpty": "La celda de tu finca no trae datos del territorio que sirvan (por ejemplo, es zona urbana o agua).",
+      "territoryOutside": "Datos del territorio: no se usaron. Tu finca queda fuera de {region} (la celda más cercana está a {km} km) y los suelos del IGAC, el verdor y la lluvia del mes solo existen para {region}.",
+      "igac": "Suelo según el IGAC: {text}"
     },
     "cautions": {
       "title": "Ten en cuenta",
@@ -3888,7 +3894,7 @@
     "error": {
       "zone": "No pudimos traer los datos de tu zona.",
       "motor": "El motor agronómico no respondió.",
-      "invalid": "El motor no aceptó los datos de esta finca. Puede que tu lote quede fuera de su cobertura.",
+      "invalid": "El motor no aceptó los datos de esta finca.",
       "busy": "Hiciste muchos planes seguidos. Espera un minuto.",
       "retry": "Intentar de nuevo",
       "advisor": "AgroAstro no pudo revisar el plan. Sin su revisión no te mostramos el plan.",

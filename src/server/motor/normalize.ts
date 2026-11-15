@@ -129,6 +129,27 @@ function candidate(raw: unknown): MotorCandidate | null {
 const ORDER: Record<MotorCandidate['status'], number> = { favorecido: 0, aceptable: 1, con_reservas: 2, desaconsejado: 3, sin_evaluar: 4 };
 const SEVERITY: Record<string, number> = { high: 0, medium: 1, low: 2, unknown: 3 };
 
+/**
+ * Datos del territorio (API canónica, solo Antioquia) que entraron al motor, en el orden en que se muestran.
+ * La lluvia de 7 días del territorio no se muestra: es el mes repartido por igual, no la lluvia de la última semana.
+ */
+const TERRITORY_VARS = ['soil_texture', 'soil_ph', 'altitude_masl', 'slope_pct', 'rain_month', 'ndvi'];
+const NOT_TERRITORY = ['Medición u observación en el lote', 'Serie diaria cargada'];
+
+function territoryInputs(out: J): NonNullable<MotorPlanBase['territory']>['inputs'] {
+  const prov = obj(out.input_provenance);
+  const state = obj(out.input_state);
+  return TERRITORY_VARS.flatMap((variable) => {
+    const p = obj(prov[variable]);
+    const source = str(p.source);
+    // Solo lo que vino del territorio: lo medido en el lote o la serie diaria manda y no se cuenta aquí.
+    if (!source || NOT_TERRITORY.some((s) => source.startsWith(s))) return [];
+    const text = str(state[variable]);
+    const shown = value(state[variable]) ?? (text ? { text, min: null, max: null } : null);
+    return shown ? [{ variable, value: shown, source, period: str(p.period) }] : [];
+  });
+}
+
 /** El registro de la API puede traer la salida en `resultado` (o ser la salida misma). */
 export function engineOutputOf(record: unknown): J {
   const r = obj(record);
@@ -149,6 +170,7 @@ export function normalizeMotor(
   const territory = obj(out.territory);
   const cell = obj(territory.cell);
   const tctx = obj(territory.context);
+  const coverage = obj(territory.coverage);
   const inference = obj(out.inference);
   const rotation = obj(out.rotation);
   const risk = obj(out.risk_overview);
@@ -193,6 +215,10 @@ export function normalizeMotor(
         : null,
     territory: Object.keys(territory).length
       ? {
+          inCoverage: typeof coverage.in_coverage === 'boolean' ? coverage.in_coverage : null,
+          region: str(coverage.region),
+          nearestKm: num(coverage.nearest_cell_km),
+          inputs: territoryInputs(out),
           landscape: str(tctx.landscape),
           climate: str(tctx.climate_class),
           soil: str(tctx.soil_description),

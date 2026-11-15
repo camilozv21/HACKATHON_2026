@@ -3703,7 +3703,8 @@
       "advisorDone": "Review ready"
     },
     "mockNote": "Example: the team's agronomic engine is not connected yet. The findings come from a plot in Antioquia; your crop, stage and previous crop are applied.",
-    "acceptedNoSeries": "The engine did not accept the NASA POWER daily series: it used its own land data.",
+    "outsideCoverage": "Your farm is outside {region}. Land data (IGAC soils, greenness and monthly rain) only exists for {region}, so the engine did not use it: your plan comes from your area's NASA POWER data and what you told us.",
+    "acceptedNoSeries": "The engine did not accept the NASA POWER daily series, so the plan does not use it.",
     "acceptedMinimal": "The engine only accepted the location, crop and stage. What you told us about the plot was not used this time.",
     "spanishOnly": "The engine answers in Spanish.",
     "updating": "Updating your plan…",
@@ -3874,7 +3875,12 @@
       "told": "What you told us",
       "lastCrop": "Last crop",
       "soilFarmer": "Soil",
-      "none": "No data"
+      "none": "No data",
+      "territory": "{region} land data",
+      "territoryNote": "It comes from the roughly 1 km² cell your farm falls in: it describes the area, not your plot. What you measure on your plot comes first.",
+      "territoryEmpty": "Your farm's cell has no usable land data (for example, it is urban land or water).",
+      "territoryOutside": "Land data: not used. Your farm is outside {region} (the nearest cell is {km} km away), and IGAC soils, greenness and monthly rain only exist for {region}.",
+      "igac": "Soil according to IGAC: {text}"
     },
     "cautions": {
       "title": "Keep in mind",
@@ -3888,7 +3894,7 @@
     "error": {
       "zone": "We could not get your area's data.",
       "motor": "The agronomic engine did not answer.",
-      "invalid": "The engine did not accept this farm's data. Your plot may be outside its coverage.",
+      "invalid": "The engine did not accept this farm's data.",
       "busy": "You made many plans in a row. Wait a minute.",
       "retry": "Try again",
       "advisor": "AgroAstro could not review the plan. Without its review we do not show the plan.",

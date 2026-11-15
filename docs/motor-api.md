@@ -88,6 +88,32 @@ Para que un formato distinto no deje a la persona sin plan, se reintenta así:
 El plan dice en `accepted` qué escalón entró, y la interfaz lo avisa. En el log del servidor queda dónde falló cada
 422 (`loc` y `msg`, sin el valor). Un 500 o un timeout de 25 s no se reintentan.
 
+## Datos del territorio: solo en Antioquia
+
+El motor toma los datos del territorio de la **API canónica**: suelos del IGAC, verdor (NDVI) de Sentinel-2 y lluvia
+del mes (GPM, NASA POWER, IDEAM). Esa API **solo tiene Antioquia**: 64.181 celdas de ~1 km².
+
+- **Finca en Antioquia**: el motor usa la celda donde cae el centro de la finca. Responde
+  `territory.coverage.in_coverage: true`.
+- **Finca fuera de Antioquia**: el motor no usa ningún dato del territorio. Antes usaba la celda de Antioquia más
+  cercana, aunque quedara a cientos de km.
+  - Responde `in_coverage: false`, `territory.cell: null` y `data_mode: "fuera_de_cobertura"`.
+  - El plan sale igual, con la serie de NASA POWER de la zona y lo que contó la persona.
+  - No es un error ni un 422.
+
+`normalizeMotor` lo pasa a `plan.territory`:
+
+- `inCoverage`: `null` si el motor es anterior y no lo dice. No se adivina.
+- `region` y `nearestKm`.
+- `inputs`: lo que entró desde el territorio, con fuente y periodo. Se excluye lo que la persona midió en el lote, la
+  serie diaria y la lluvia de 7 días, porque esa es el mes repartido por igual.
+
+En la interfaz:
+
+- Fuera de Antioquia sale un aviso arriba del plan, y una línea en "Qué datos usó el motor".
+- En Antioquia, "Qué datos usó el motor" muestra un bloque "Datos del territorio de Antioquia" con cada valor, su
+  fuente y su periodo, más la descripción del suelo del IGAC.
+
 ## Qué ve la persona
 
 Normalización: `normalizeMotor` toma la salida 4.x completa (o el registro con `resultado`) y es defensiva. Lo que no
@@ -115,8 +141,11 @@ En la pestaña, de arriba hacia abajo:
 6. **Prácticas sugeridas**: `practices`, ordenadas por relevancia.
 7. **Lo que falta saber**: reglas revisadas y no revisadas, los datos que más reglas habilitarían, la edad de los
    datos del territorio y qué verificar antes de decidir.
-8. **Qué datos usó el motor**: el rectángulo, el periodo y las celdas de NASA POWER, los valores, lo que contó la
-   persona, la celda del motor y el número de evaluación.
+8. **Qué datos usó el motor**:
+   - el rectángulo, el periodo y las celdas de NASA POWER, y sus valores;
+   - los datos del territorio de Antioquia, o por qué no se usaron (ver arriba);
+   - lo que contó la persona;
+   - la celda del motor y el número de evaluación.
 9. **Ten en cuenta**: los avisos globales del motor, y el recordatorio de que la herramienta apoya pero no reemplaza
    el criterio de la persona ni al técnico.
 
@@ -160,7 +189,7 @@ inventar precios, compradores, dosis ni rendimientos. Código: `src/server/motor
 
 | Variable | Para qué |
 | --- | --- |
-| `MOTOR_API_URL` | Base del servicio, por ejemplo `https://<servicio>.up.railway.app`. Sin ella se responde un **ejemplo** basado en una salida real 4.1.0 (Antioquia), marcado `source: "mock"`. La interfaz lo avisa |
+| `MOTOR_API_URL` | Base del servicio, por ejemplo `https://<servicio>.up.railway.app`. Si va sin esquema, como la muestra Railway, se asume `https://` (`http://` para `localhost`). Sin ella se responde un **ejemplo** basado en una salida real 4.1.0 (Antioquia), marcado `source: "mock"`. La interfaz lo avisa |
 | `MOTOR_API_KEY` | Si el motor define `API_KEY`, va en la cabecera `X-API-Key`. Como la llamada sale del servidor de Next, la clave no queda expuesta |
 | `MOTOR_FORCE_MOCK` | `true` usa el ejemplo aunque haya URL. Los e2e lo usan para no guardar filas en la base del motor |
 | `ANTHROPIC_API_KEY` | La misma del chat. La usa AgroAstro (Managed Agents) |
@@ -186,8 +215,8 @@ Hay que confirmarlas con el `schemas.py` o con un ejemplo real de la API. Si alg
    app ya pregunta por el drenaje y por el abono.
 5. **Envoltura del registro**: ¿`{ id, created_at, ..., resultado }`? Se lee `resultado` (o `result`, `salida`,
    `output`) y, si no está, el cuerpo entero.
-6. **Cobertura**: ¿qué responde para un punto fuera del índice territorial (fuera de Antioquia o de Colombia)? Hoy la
-   interfaz muestra "puede que tu lote quede fuera de su cobertura" si los tres escalones dan 422.
+6. ~~**Cobertura**~~: resuelta. Fuera de Antioquia el motor responde 201 con `territory.coverage.in_coverage: false`
+   y sin datos del territorio (ver "Datos del territorio: solo en Antioquia").
 7. **`GET /api/v1/catalogo`**: ¿qué forma tiene? Hoy el catálogo está fijo en `src/lib/motorCatalog.ts`.
 
 ## Pruebas
@@ -201,7 +230,9 @@ Hay que confirmarlas con el `schemas.py` o con un ejemplo real de la API. Si alg
   - el ejemplo sin historial;
   - el payload;
   - la escalera con 422;
-  - que un 500 no se reintenta.
+  - que un 500 no se reintenta;
+  - los datos del territorio dentro de Antioquia (sin lo que midió la persona) y fuera de Antioquia (sin celda ni datos);
+  - la URL del motor sin esquema.
 - `src/server/motor/advisor.test.ts` cubre:
   - el JSON recortado, con el municipio;
   - las tablas que se vuelven listas y las URL que se vuelven enlaces;

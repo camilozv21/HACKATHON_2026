@@ -198,6 +198,16 @@ export const MotorPlanBase = z.object({
     .nullable(),
   territory: z
     .object({
+      /**
+       * Los datos del territorio (API canónica: suelos IGAC, NDVI, lluvia del mes) solo existen para Antioquia.
+       * `false`: la finca queda fuera y el motor no usó ninguno. `null`: el motor no lo dijo (versión anterior).
+       */
+      inCoverage: z.boolean().nullable(),
+      region: z.string().nullable(),
+      /** Distancia a la celda más cercana de la grilla (km). */
+      nearestKm: Opt,
+      /** Lo que entró al motor desde el territorio (no desde la persona ni desde la serie diaria). */
+      inputs: z.array(z.object({ variable: z.string(), value: MotorValue, source: z.string(), period: z.string().nullable() })),
       landscape: z.string().nullable(),
       climate: z.string().nullable(),
       soil: z.string().nullable(),
