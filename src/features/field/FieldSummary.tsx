@@ -1,12 +1,10 @@
 'use client';
 
-import { BarChart3, Pencil, Share2, Sprout, Trash2, X } from 'lucide-react';
+import { Pencil, Repeat2, Share2, Sprout, Trash2, X } from 'lucide-react';
 import { Area } from '@/components/ui/Area';
 import { useLocale, useTranslations } from 'next-intl';
 import type { ComponentType, ReactNode } from 'react';
 import { toast } from '@/components/ui/toast';
-import { PublishEntry } from '@/features/listings/PublishEntry';
-import { MyFarmScore } from '@/features/points/MyFarmScore';
 import { formatCoords } from '@/lib/geo';
 import { clearField } from './actions';
 import { getDemo } from './demoFarms';
@@ -81,10 +79,13 @@ export function FieldSummary({
       {!analyzing && (
         <button
           type="button"
-          onClick={() => setAnalyzing(true)}
-          className="flex h-13 min-h-12 items-center justify-center gap-2 rounded-full bg-field-500 text-base font-bold text-black shadow-[var(--shadow-glow)] active:scale-[0.99]"
+          onClick={() => {
+            useFieldStore.getState().setPanelTab('motor');
+            setAnalyzing(true);
+          }}
+          className="flex min-h-13 items-center justify-center gap-2 rounded-full bg-field-500 px-4 py-2 text-base leading-tight font-bold text-black shadow-[var(--shadow-glow)] active:scale-[0.99]"
         >
-          <BarChart3 aria-hidden className="size-5" />
+          <Repeat2 aria-hidden className="size-5 shrink-0" />
           {t('analyze')}
         </button>
       )}
@@ -101,9 +102,7 @@ export function FieldSummary({
         </SecondaryButton>
       </div>
 
-      <PublishEntry field={field} />
-      {!demo && <MyFarmScore />}
-
+      {/* Publicar la finca y el puntaje viven al final de "Tu finca": aquí solo lo esencial. */}
       {demo && <p className="text-xs text-ink-muted">{t('demoNote')}</p>}
       {variant === 'panel' || analyzing ? children : null}
     </div>

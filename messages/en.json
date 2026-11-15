@@ -72,7 +72,7 @@
     "demoAria": "Demo farm: {name}, {region}. {hook}",
     "demoBadge": "Demo",
     "demoNote": "Example farm with simulated data to show how the tool works.",
-    "analyze": "Analyze this farm",
+    "analyze": "Generate crop rotation plan",
     "share": "Share",
     "change": "Change",
     "remove": "Remove",
@@ -382,6 +382,7 @@
   "panel": {
     "tabsLabel": "Parts of the analysis",
     "tabs": {
+      "motor": "Recommended",
       "conditions": "Your farm",
       "priorities": "Priorities",
       "rotations": "Options",
@@ -496,7 +497,8 @@
       "year": "Your year in the field",
       "trends": "How it has changed",
       "terrain": "Terrain risks",
-      "rotation": "Your current rotation"
+      "rotation": "Your current rotation",
+      "share": "Share your farm"
     },
     "status": {
       "good": "Good",
@@ -588,7 +590,9 @@
       "saved": "Saved"
     },
     "nextPriorities": "Next: what matters most to you?",
-    "unnamedField": "Your farm"
+    "unnamedField": "Your farm",
+    "moreDetail": "More detail: trends and terrain risks",
+    "backToPlan": "Back to your rotation plan"
   },
   "glossary": {
     "kicker": "Glossary",
@@ -760,6 +764,21 @@
         "title": "Soil health",
         "simple": "Healthy soil is alive: it has organic matter, holds water, lets roots in and doesn't wash away with the rain.",
         "example": "Leaving crop residue, rotating with beans and not burning help the soil hold more water in a drought."
+      },
+      "crop-rotation": {
+        "title": "Crop rotation",
+        "simple": "Changing what you plant on the same plot from one cycle to the next, instead of always repeating the same crop.",
+        "example": "After maize, plant beans: the family changes, maize pests lose their food and the beans leave nitrogen."
+      },
+      "crop-residue": {
+        "title": "Crop leftovers (residue)",
+        "simple": "What stays after harvest: stalks, leaves and roots.",
+        "example": "If you leave maize stalks on the plot, they protect the soil from rain and give back organic matter."
+      },
+      "crop-stage": {
+        "title": "Crop stage",
+        "simple": "The moment in the plant's life: just planted, growing, flowering, setting fruit or ripening.",
+        "example": "Lack of water hurts beans more when they are flowering than right after planting."
       }
     }
   },
@@ -3137,9 +3156,9 @@
         "done": "Farm marked"
       },
       "analyze": {
-        "label": "Analyze a farm",
+        "label": "Generate a rotation plan",
         "rule": "Per farm, up to 5",
-        "done": "Farm analyzed"
+        "done": "Rotation plan generated"
       },
       "region": {
         "label": "Explore a region on the globe",
@@ -3176,6 +3195,234 @@
         "rule": "Per published farm",
         "done": "Farm published"
       }
+    }
+  },
+  "motor": {
+    "title": "Your rotation plan",
+    "ctx": {
+      "crop": "Crop: {crop}",
+      "noCrop": "No crop given",
+      "stage": "Stage: {stage}",
+      "floor": "Thermal zone: {floor}",
+      "altitude": "{alt} high"
+    },
+    "steps": {
+      "label": "How we built your plan",
+      "zone": "Your area's data",
+      "zoneLoading": "Asking NASA for 90 days of rain, temperature and soil moisture for your farm's rectangle…",
+      "zoneDone": "{days, plural, one {# day} other {# days}} of NASA POWER",
+      "zoneSlope": "slope {slope} (SRTM)",
+      "zoneNoPower": "NASA POWER did not answer: the engine will use its own land data.",
+      "motor": "Agronomic engine",
+      "motorWaiting": "Starts when your area's data arrives.",
+      "motorLoading": "Checking the agronomic rules with your area's data and what you told us…",
+      "motorDone": "{evaluated} of {total} rules checked",
+      "motorReady": "Done. AgroAstro is reviewing it.",
+      "advisor": "AgroAstro, AI advisor",
+      "advisorWaiting": "Starts when the engine finishes.",
+      "advisorLoading": "Reviews the engine plan and looks up prices and markets on the web. It can take 1 to 3 minutes.",
+      "advisorTools": "{n, plural, one {# web lookup} other {# web lookups}}",
+      "advisorDone": "Review ready"
+    },
+    "mockNote": "Example: the team's agronomic engine is not connected yet. The findings come from a plot in Antioquia; your crop, stage and previous crop are applied.",
+    "acceptedNoSeries": "The engine did not accept the NASA POWER daily series: it used its own land data.",
+    "acceptedMinimal": "The engine only accepted the location, crop and stage. What you told us about the plot was not used this time.",
+    "spanishOnly": "The engine answers in Spanish.",
+    "updating": "Updating your plan…",
+    "ready": "Your rotation plan is ready. Overall risk: {risk}.",
+    "risk": {
+      "title": "Overall risk",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "unknown": "Not computed",
+      "findings": "{n, plural, =0 {No alerts} one {# alert} other {# alerts}}",
+      "hint": "It is a risk, not a diagnosis: check it on your plot."
+    },
+    "next": {
+      "title": "What to plant next",
+      "after": "After {crop}:",
+      "askTitle": "What did you plant last on this plot?",
+      "askText": "With that, the engine checks what is best to plant next: changing crop family breaks pests and protects the soil.",
+      "more": "See the other options ({n})",
+      "why": "Why",
+      "missing": "Not everything could be checked: {what} is missing.",
+      "guidance": "Good to know",
+      "family": "Family: {family}",
+      "none": "The engine returned no rotation options for this plot.",
+      "established": "You have established sugarcane: the engine does not suggest changing it yet."
+    },
+    "status": {
+      "favorecido": "Recommended",
+      "aceptable": "Acceptable",
+      "con_reservas": "With caveats",
+      "desaconsejado": "Not recommended",
+      "sin_evaluar": "Not checked"
+    },
+    "effect": {
+      "block": "Rules it out",
+      "discourage": "Against",
+      "favor": "In favor",
+      "note": "Watch out"
+    },
+    "findings": {
+      "title": "What we found",
+      "none": "With the data available, the engine found no alerts on your plot.",
+      "whatToDo": "What to do",
+      "why": "Why we say it",
+      "threshold": "threshold {op} {threshold}",
+      "source": "Source: {source}",
+      "period": "Period: {period}",
+      "quality": "Data quality: {quality}",
+      "cautions": "Careful",
+      "sources": "References",
+      "limiting": "What lowers certainty: {list}",
+      "uncalibrated": "This threshold is not calibrated for your area.",
+      "context": "Also checked (covered by another finding)",
+      "severity": {
+        "high": "High priority",
+        "medium": "Medium priority",
+        "low": "Low priority",
+        "unknown": "Priority not set"
+      }
+    },
+    "certainty": {
+      "label": "{level} certainty",
+      "baja": "Low",
+      "media": "Medium",
+      "alta": "High"
+    },
+    "practices": {
+      "title": "Suggested practices ({n})",
+      "fromFinding": "Because of a finding on your plot"
+    },
+    "refine": {
+      "title": "Fine-tune your plan",
+      "hint": "Tell us what you see on your plot: each answer lets the engine check more rules.",
+      "crop": "What is planted now?",
+      "noCrop": "Nothing now",
+      "stage": "What stage is it at?",
+      "symptoms": "Do you see any of these signs on the leaves?",
+      "last": "What did you plant last?",
+      "residue": "What do you do with crop leftovers after harvest?",
+      "dontKnow": "I don't know",
+      "apply": "Generate again with these answers",
+      "soilNote": "Soil pH, organic matter and soil type are entered in the Your farm tab.",
+      "soilCta": "Go to Your farm"
+    },
+    "residue": {
+      "incorporated": "I leave them on the plot",
+      "removed": "I take them out or burn them"
+    },
+    "crops": {
+      "maiz": "Maize",
+      "frijol": "Beans",
+      "calabaza": "Squash or pumpkin",
+      "caupi": "Cowpea",
+      "platano": "Plantain",
+      "cana_panelera": "Sugarcane",
+      "tres_hermanas": "Maize, beans and squash together",
+      "canavalia": "Jack bean (green manure)",
+      "otro": "Another crop"
+    },
+    "stages": {
+      "establecimiento": "Just planted",
+      "vegetativo": "Growing",
+      "floracion": "Flowering",
+      "fructificacion": "Setting fruit or pods",
+      "llenado": "Filling grain",
+      "maduracion": "Ripening"
+    },
+    "symptoms": {
+      "clorosis_hojas_viejas": "Old leaves evenly yellow",
+      "necrosis_bordes_hojas_viejas": "Burnt edges on old leaves",
+      "clorosis_intervenal_hojas_viejas": "Old leaves yellow between the veins",
+      "coloracion_violacea": "Purple leaves",
+      "necrosis_puntos_crecimiento_frutos_jovenes": "Dry or black tips or young fruit",
+      "clorosis_generalizada_hojas_jovenes": "New leaves yellow",
+      "bandas_cloroticas_entrenudos_cortos": "White stripes and stunted plant (maize)",
+      "amarillamiento_colapso_hojas_centrales": "Central leaves yellow and collapsing (plantain)"
+    },
+    "gaps": {
+      "title": "What we still don't know",
+      "rules": "The engine checked {evaluated} of {total} rules.",
+      "missingInput": "{n, plural, one {# rule was not checked because data is missing.} other {# rules were not checked because data is missing.}}",
+      "needsSeries": "{n, plural, one {# rule needs daily data.} other {# rules need daily data.}}",
+      "wanted": "What would help most:",
+      "wantedItem": "{label} ({n, plural, one {# rule} other {# rules}})",
+      "verify": "Before deciding, check:",
+      "dataAge": "The land data the engine uses ends {days, plural, one {# day} other {# days}} ago."
+    },
+    "vars": {
+      "temperature": "Air temperature",
+      "relative_humidity": "Air humidity",
+      "soil_moisture": "Soil moisture",
+      "organic_matter": "Organic matter",
+      "symptoms": "Signs on the plants",
+      "soil_ph": "Soil pH",
+      "soil_texture": "Soil type",
+      "altitude_masl": "Plot altitude",
+      "slope_pct": "Plot slope",
+      "rain_7d": "7-day rain",
+      "rain_month": "Monthly rain",
+      "ndvi": "Greenness (NDVI)",
+      "sat_days_consecutive": "Days in a row with waterlogged soil",
+      "dry_days_consecutive": "Days in a row without rain",
+      "tmin_mean_7d": "7-day minimum temperature",
+      "hot_days_7d": "Hot days",
+      "wet_dry_alternations_14d": "Switches between dry and wet",
+      "rain_last14": "14-day rain",
+      "rain_prev14": "Rain in the 14 days before",
+      "waterlogging_prone": "Whether the plot waterlogs",
+      "recent_n_fertilization": "Recent nitrogen fertilizer",
+      "history": "What you planted before"
+    },
+    "data": {
+      "title": "What data the engine used",
+      "zone": "Area: the rectangle of your farm's outer edges (not just the outline).",
+      "zonePoint": "Area: your farm's point.",
+      "bounds": "Latitude {s} to {n} · longitude {w} to {e}",
+      "period": "NASA POWER daily, {start} to {end}: {cells, plural, one {# cell} other {# cells; for each day, the highest value}}.",
+      "temp": "Mean temperature (7 days)",
+      "rh": "Air humidity (7 days)",
+      "rain7": "Rain (7 days)",
+      "rain30": "Rain (30 days)",
+      "soil": "Root-zone soil moisture",
+      "slope": "Municipality slope (SRTM)",
+      "example": "example data",
+      "cell": "Engine cell {id}: {km2} km², {km} km from your farm",
+      "engine": "Engine {schema} · notebook {notebook}",
+      "evaluation": "Evaluation no. {id}",
+      "told": "What you told us",
+      "lastCrop": "Last crop",
+      "soilFarmer": "Soil",
+      "none": "No data"
+    },
+    "cautions": {
+      "title": "Keep in mind",
+      "more": "See all ({n})"
+    },
+    "disclaimer": "This tool supports you: it does not replace your judgment or your local expert. No engine rule has been validated by an expert yet.",
+    "actions": {
+      "options": "See more rotation options",
+      "conditions": "See your farm's climate and data"
+    },
+    "error": {
+      "zone": "We could not get your area's data.",
+      "motor": "The agronomic engine did not answer.",
+      "invalid": "The engine did not accept this farm's data. Your plot may be outside its coverage.",
+      "busy": "You made many plans in a row. Wait a minute.",
+      "retry": "Try again",
+      "advisor": "AgroAstro could not review the plan. Without its review we do not show the plan.",
+      "advisorTimeout": "AgroAstro took too long to review the plan. Try again in a moment."
+    },
+    "updatingAdvisor": "Updating: AgroAstro is reviewing the new plan…",
+    "advisor": {
+      "title": "AgroAstro recommendation",
+      "hint": "AI advisor: it reviewed the engine plan{n, plural, =0 {} one { and made # web lookup} other { and made # web lookups}}.",
+      "mockNote": "Example: AgroAstro is not connected here. This summary only uses what the engine said, with no prices or buyers.",
+      "listen": "Listen to the recommendation",
+      "verify": "Prices, buyers and news come from a web search: confirm them before selling or buying supplies."
     }
   }
 }

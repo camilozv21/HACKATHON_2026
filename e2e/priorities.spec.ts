@@ -8,9 +8,10 @@ const waitForGlobe = (page: Page) =>
 const IOWA = '/es?lat=42&lon=-93.5&z=6&field=demo:cornbelt-iowa';
 
 async function openPriorities(page: Page) {
-  await page.getByRole('button', { name: 'Analizar esta finca' }).tap();
-  await expect(page.getByRole('heading', { name: 'Resumen de tu finca' })).toBeVisible();
-  await page.getByRole('tab', { name: 'Prioridades' }).tap();
+  await page.getByRole('button', { name: 'Generar plan de rotación de cultivos' }).tap();
+  // Prioridades ya no tiene pestaña: se abre desde "Opciones", que es lo que ordena.
+  await page.getByRole('tab', { name: 'Opciones' }).tap();
+  await page.getByRole('button', { name: 'Prioridades', exact: true }).tap();
 }
 
 async function setLevels(page: Page, levels: Record<string, 'Mucho' | 'Algo' | 'Poco'>) {
@@ -70,7 +71,7 @@ test('las prioridades reordenan las opciones en el teléfono y viajan en el enla
   await page.reload();
   await waitForGlobe(page);
   await expect(page.getByRole('heading', { name: 'Opciones de rotación para tu finca' })).toBeVisible();
-  await page.getByRole('tab', { name: 'Prioridades' }).tap();
+  await page.getByRole('button', { name: 'Prioridades', exact: true }).tap();
   await expect(page.getByRole('heading', { name: 'Revisa y listo' })).toBeVisible();
   await expect(page.getByRole('listitem').filter({ hasText: 'Frenar la erosión' })).toContainText('Mucho');
   await expect(options(page).last()).toContainText('Lo que haces hoy');

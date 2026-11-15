@@ -100,7 +100,8 @@ export default function DrawTool() {
 
   function finish(ring: LngLatTuple[]) {
     if (ring.length < 3) return;
-    void selectField(fieldFromRing(ring, 'polygon'), { locale });
+    // Al terminar el dibujo se abre el drawer de la finca y el motor empieza a armar el plan sin otro toque.
+    void selectField(fieldFromRing(ring, 'polygon'), { locale, analyze: true });
   }
 
   const undo = () => {

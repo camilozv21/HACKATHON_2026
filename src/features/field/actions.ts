@@ -19,18 +19,25 @@ export function flyToField(field: SelectedField, opts: { instant?: boolean } = {
 /**
  * Selecciona una finca: la guarda en el store (y en recientes), abre el sheet en "peek",
  * vuela a ella y, si no tiene nombre, le pone el del municipio por geocodificación inversa.
+ * `analyze`: abre directo el plan de rotación (el motor arranca solo) con el sheet a media altura,
+ * para que la finca siga a la vista mientras se reúnen los datos.
  */
 export async function selectField(
   field: SelectedField,
-  opts: { fly?: boolean; instant?: boolean; locale?: string; remember?: boolean } = {},
+  opts: { fly?: boolean; instant?: boolean; locale?: string; remember?: boolean; analyze?: boolean } = {},
 ) {
-  const { fly = true, locale = 'es', remember = true } = opts;
-  useFieldStore.getState().setField(field);
+  const { fly = true, locale = 'es', remember = true, analyze = false } = opts;
+  const store = useFieldStore.getState();
+  store.setField(field);
+  if (analyze) {
+    store.setPanelTab('motor');
+    store.setAnalyzing(true, 'half');
+  }
   // Vamos a volar: se detiene cualquier movimiento (p. ej. la rotación) y se fija el padding del sheet
   // antes del vuelo, para que la finca quede en la zona visible.
   const map = getMap();
   if (fly && map?.isMoving()) map.stop();
-  setMapPadding(sheetPadding('peek'), { instant: true });
+  setMapPadding(sheetPadding(analyze ? 'half' : 'peek'), { instant: true });
   if (fly) flyToField(field, { instant: opts.instant });
 
   if (!field.name) {

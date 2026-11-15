@@ -1,14 +1,16 @@
 'use client';
 
 import clsx from 'clsx';
-import { ArrowRight, BarChart3, Leaf, ListOrdered, RotateCcw, SlidersHorizontal, Sprout } from 'lucide-react';
+import { ArrowRight, BarChart3, ChevronDown, Leaf, ListOrdered, RotateCcw, Sprout, Store, Wand2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { OfflineBanner } from '@/components/shell/OfflineBanner';
 import { PrioritiesUrlSync } from '@/features/priorities/PrioritiesUrlSync';
 import { DEFAULT_MARKETS, usePrioritiesStore } from '@/features/priorities/store';
+import { PublishEntry } from '@/features/listings/PublishEntry';
 import { SellSuggestion } from '@/features/listings/SellSuggestion';
+import { MyFarmScore } from '@/features/points/MyFarmScore';
 import { useSurvey } from '@/features/survey/store';
 import { useTimeStore } from '@/features/time/store';
 import { TimeBanner } from '@/features/time/TimeBanner';
@@ -32,6 +34,7 @@ const RotationsView = dynamic(() => import('@/features/rotations/RotationsView')
 const PastPeriodSection = dynamic(() => import('@/features/time/PastPeriodSection'), { ssr: false });
 const PlanView = dynamic(() => import('@/features/rotations/mixed/PlanView'), { ssr: false });
 const SurveyCard = dynamic(() => import('@/features/survey/SurveyCard'), { ssr: false });
+const MotorPlan = dynamic(() => import('@/features/motor/MotorPlan'), { ssr: false });
 
 function Section({
   title,
@@ -71,12 +74,17 @@ function Skeleton() {
   );
 }
 
+/**
+ * Pestañas visibles. La primera es la recomendación del motor agronómico. "Prioridades" no tiene pestaña propia:
+ * se abre desde "Opciones" (ordena esas opciones) y, mientras está abierta, "Opciones" queda marcada.
+ */
 const TABS: { id: PanelTab; icon: typeof Leaf }[] = [
+  { id: 'motor', icon: Wand2 },
   { id: 'conditions', icon: Leaf },
-  { id: 'priorities', icon: SlidersHorizontal },
   { id: 'rotations', icon: ListOrdered },
   { id: 'plan', icon: Sprout },
 ];
+const tabOf = (tab: PanelTab): PanelTab => (tab === 'priorities' ? 'rotations' : tab);
 
 /**
  * Análisis de la finca dentro del sheet. Clima real de NASA POWER cuando responde; el resto (verdor, hallazgos,
@@ -158,19 +166,26 @@ export default function FieldPanel() {
     <div className="flex flex-col gap-4">
       {/* Sin conexión: aviso dentro del panel (en móvil el aviso de arriba queda tapado por el sheet). */}
       <OfflineBanner />
-      <div ref={tablistRef} role="tablist" aria-label={t('tabsLabel')} className="grid grid-cols-4 gap-1 rounded-2xl bg-white/5 p-1 ring-1 ring-line">
+      {/* Ancho natural de cada pestaña ("Recomendación" es la más larga); en pantallas muy angostas se desliza. */}
+      <div
+        ref={tablistRef}
+        role="tablist"
+        aria-label={t('tabsLabel')}
+        className="flex gap-1 overflow-x-auto rounded-2xl bg-white/5 p-1 ring-1 ring-line [scrollbar-width:none]"
+      >
         {TABS.map(({ id, icon: Icon }) => (
           <button
             key={id}
             role="tab"
             type="button"
             id={`tab-${id}`}
-            aria-selected={tab === id}
+            aria-selected={tabOf(tab) === id}
             aria-controls={`panel-${id}`}
             onClick={() => setTab(id)}
             className={clsx(
-              'flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-xs font-semibold sm:flex-row sm:gap-1.5 sm:text-sm',
-              tab === id ? 'bg-field-500 text-black' : 'text-ink-muted hover:bg-white/5',
+              // Ícono arriba y texto abajo también en escritorio: el panel lateral mide lo mismo que un teléfono.
+              'flex min-h-12 flex-auto flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 text-xs font-semibold whitespace-nowrap',
+              tabOf(tab) === id ? 'bg-field-500 text-black' : 'text-ink-muted hover:bg-white/5',
             )}
           >
             <Icon aria-hidden className="size-4" />
@@ -179,7 +194,22 @@ export default function FieldPanel() {
         ))}
       </div>
 
-      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} aria-busy={loading}>
+      <div
+        role="tabpanel"
+        id={`panel-${tabOf(tab)}`}
+        aria-labelledby={`tab-${tabOf(tab)}`}
+        aria-busy={tab === 'motor' ? undefined : loading}
+      >
+        {tab === 'motor' && (
+          <MotorPlan
+            field={field}
+            seasons={rotation ?? []}
+            soil={soil}
+            survey={survey}
+            onOpenConditions={() => setTab('conditions')}
+            onOpenOptions={() => setTab('rotations')}
+          />
+        )}
         {tab === 'priorities' && (
           <PrioritiesWizard
             strategies={analysis.data?.strategies}
@@ -263,24 +293,7 @@ export default function FieldPanel() {
               <Section id="sec-year" title={t('sections.year')} icon={<Leaf aria-hidden className="size-5 text-field-300" />}>
                 <YearCalendar year={year} source={source} />
               </Section>
-              {/* Modo sencillo: las gráficas de tendencia (25 años) son detalle; quedan resumen y calendario. */}
-              <Section
-                id="sec-trends"
-                className="lite:hidden"
-                title={t('sections.trends')}
-                icon={<BarChart3 aria-hidden className="size-5 text-field-300" />}
-              >
-                <TrendCharts climate={climate} />
-              </Section>
-              {analysis.data && (
-                <Section id="sec-terrain" title={t('sections.terrain')} icon={<BarChart3 aria-hidden className="size-5 text-field-300" />}>
-                  <TerrainRisks insights={analysis.data.insights} />
-                </Section>
-              )}
-              {/* Encuesta corta del terreno: historial y manejo (lo que los satélites no ven). */}
-              <div id="sec-survey" className="scroll-mt-4">
-                <SurveyCard fieldId={field.id} suggested={currentCrops} />
-              </div>
+              {/* Lo que siembras hoy y la encuesta: lo que los satélites no ven. Ambos mejoran el plan del motor. */}
               <Section id="sec-rotation" title={t('sections.rotation')} icon={<ListOrdered aria-hidden className="size-5 text-field-300" />}>
                 <RotationForm
                   key={field.id}
@@ -289,13 +302,42 @@ export default function FieldPanel() {
                   onSave={(r) => setRotation(r)}
                 />
               </Section>
+              <div id="sec-survey" className="scroll-mt-4">
+                <SurveyCard fieldId={field.id} suggested={currentCrops} />
+              </div>
+              {/* Detalle para quien quiera más: tendencias de 25 años y riesgos del terreno, cerrados de entrada. */}
+              <details className="group rounded-2xl bg-white/5 ring-1 ring-line">
+                <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-3 font-semibold [&::-webkit-details-marker]:hidden">
+                  <BarChart3 aria-hidden className="size-5 text-field-300" />
+                  <span className="flex-1">{t('moreDetail')}</span>
+                  <ChevronDown aria-hidden className="size-5 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="flex flex-col gap-6 px-3 pb-4">
+                  {/* Modo sencillo: las gráficas de tendencia (25 años) son detalle. */}
+                  <Section id="sec-trends" className="lite:hidden" title={t('sections.trends')} icon={<BarChart3 aria-hidden className="size-5 text-field-300" />}>
+                    <TrendCharts climate={climate} />
+                  </Section>
+                  {analysis.data && (
+                    <Section id="sec-terrain" title={t('sections.terrain')} icon={<BarChart3 aria-hidden className="size-5 text-field-300" />}>
+                      <TerrainRisks insights={analysis.data.insights} />
+                    </Section>
+                  )}
+                </div>
+              </details>
+              {/* Vender y el puntaje: al final, para no tapar el análisis. */}
               <SellSuggestion field={field} survey={survey} />
+              {!field.demoId && (
+                <Section id="sec-share" title={t('sections.share')} icon={<Store aria-hidden className="size-5 text-field-300" />}>
+                  <PublishEntry field={field} />
+                  <MyFarmScore />
+                </Section>
+              )}
               <button
                 type="button"
-                onClick={() => setTab('priorities')}
+                onClick={() => setTab('motor')}
                 className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-field-500 px-5 font-semibold text-black hover:bg-field-400"
               >
-                {t('nextPriorities')}
+                {t('backToPlan')}
                 <ArrowRight aria-hidden className="size-4" />
               </button>
               {analysis.data?.mock && <p className="text-xs text-ink-faint">{t('mockNote')}</p>}

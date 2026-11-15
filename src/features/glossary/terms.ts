@@ -35,6 +35,9 @@ export const GLOSSARY_TERMS = [
   'markov',
   'crop-vulnerability',
   'soil-health',
+  'crop-rotation',
+  'crop-residue',
+  'crop-stage',
 ] as const;
 export type GlossaryTerm = (typeof GLOSSARY_TERMS)[number];
 
@@ -72,6 +75,9 @@ export const TERM_ICONS: Record<GlossaryTerm, string> = {
   markov: 'Shuffle',
   'crop-vulnerability': 'ShieldAlert',
   'soil-health': 'Shovel',
+  'crop-rotation': 'Shuffle',
+  'crop-residue': 'Leaf',
+  'crop-stage': 'Sprout',
 };
 
 /** Ids que usan otras partes de la app (capas, tarjetas) → término del glosario. */

@@ -1,7 +1,8 @@
 import type { SheetSnap } from './types';
 
 /** Medidas del sheet de la finca (fuera del chunk perezoso para poder calcular el padding antes de volar). */
-export const PEEK_PX = 176;
+/** Alto del "peek": nombre, "Generar plan de rotación de cultivos" (dos líneas en 360 px) y las acciones. */
+export const PEEK_PX = 188;
 export const HALF_FRACTION = 0.55;
 export const FULL_FRACTION = 0.94;
 export const DESKTOP_PANEL_W = 420;

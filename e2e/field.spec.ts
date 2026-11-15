@@ -32,10 +32,12 @@ test('dibujar una parcela de 4 vértices con taps y abrir el análisis', async (
   await page.touchscreen.tap(cx - 80, cy + 90);
   await page.getByRole('button', { name: 'Terminar', exact: true }).tap();
 
-  await expect(page.getByRole('button', { name: 'Analizar esta finca' })).toBeVisible();
+  // Al terminar se abre el drawer de la finca en "Recomendación" y el motor arranca sin otro toque.
   await expect(page).toHaveURL(/field=p%3A|field=p:/);
-  await page.getByRole('button', { name: 'Analizar esta finca' }).tap();
-  await expect(page.getByText(/análisis/i).first()).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Recomendación' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page).toHaveURL(/view=motor/);
+  await expect(page.getByRole('heading', { name: 'Tu plan de rotación' })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole('button', { name: 'Generar plan de rotación de cultivos' })).toBeHidden();
 });
 
 test('una finca demo se abre desde su punto y recargar la URL restaura la vista', async ({ page }) => {

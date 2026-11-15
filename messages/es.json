@@ -72,7 +72,7 @@
     "demoAria": "Finca demo: {name}, {region}. {hook}",
     "demoBadge": "Demo",
     "demoNote": "Finca de ejemplo con datos simulados para mostrar cómo funciona la herramienta.",
-    "analyze": "Analizar esta finca",
+    "analyze": "Generar plan de rotación de cultivos",
     "share": "Compartir",
     "change": "Cambiar",
     "remove": "Quitar",
@@ -382,6 +382,7 @@
   "panel": {
     "tabsLabel": "Partes del análisis",
     "tabs": {
+      "motor": "Recomendación",
       "conditions": "Tu finca",
       "priorities": "Prioridades",
       "rotations": "Opciones",
@@ -496,7 +497,8 @@
       "year": "Tu año en el campo",
       "trends": "Cómo ha cambiado",
       "terrain": "Riesgos del terreno",
-      "rotation": "Tu rotación actual"
+      "rotation": "Tu rotación actual",
+      "share": "Comparte tu finca"
     },
     "status": {
       "good": "Bien",
@@ -588,7 +590,9 @@
       "saved": "Guardada"
     },
     "nextPriorities": "Siguiente: ¿qué es lo más importante para ti?",
-    "unnamedField": "Tu finca"
+    "unnamedField": "Tu finca",
+    "moreDetail": "Más detalle: tendencias y riesgos del terreno",
+    "backToPlan": "Volver a tu plan de rotación"
   },
   "glossary": {
     "kicker": "Glosario",
@@ -760,6 +764,21 @@
         "title": "Salud del suelo",
         "simple": "Un suelo sano está vivo: tiene materia orgánica, guarda agua, deja entrar las raíces y no se lava con la lluvia.",
         "example": "Dejar rastrojo, rotar con frijol y no quemar ayudan a que el suelo guarde más agua en la sequía."
+      },
+      "crop-rotation": {
+        "title": "Rotación de cultivos",
+        "simple": "Cambiar lo que siembras en el mismo lote de un ciclo a otro, en vez de repetir siempre el mismo cultivo.",
+        "example": "Después de maíz, sembrar fríjol: cambia la familia, corta las plagas del maíz y el fríjol deja nitrógeno."
+      },
+      "crop-residue": {
+        "title": "Rastrojo",
+        "simple": "Lo que queda del cultivo después de cosechar: tallos, hojas y raíces.",
+        "example": "Si dejas el rastrojo de maíz en el lote, protege el suelo de la lluvia y le devuelve materia orgánica."
+      },
+      "crop-stage": {
+        "title": "Etapa del cultivo",
+        "simple": "El momento de la vida de la planta: recién sembrada, creciendo, en flor, formando frutos o madurando.",
+        "example": "La falta de agua hace más daño cuando el fríjol está en flor que cuando está recién sembrado."
       }
     }
   },
@@ -3137,9 +3156,9 @@
         "done": "Finca marcada"
       },
       "analyze": {
-        "label": "Analizar una finca",
+        "label": "Generar un plan de rotación",
         "rule": "Por cada finca, hasta 5",
-        "done": "Finca analizada"
+        "done": "Plan de rotación generado"
       },
       "region": {
         "label": "Explorar una región del globo",
@@ -3176,6 +3195,234 @@
         "rule": "Por cada finca publicada",
         "done": "Finca publicada"
       }
+    }
+  },
+  "motor": {
+    "title": "Tu plan de rotación",
+    "ctx": {
+      "crop": "Cultivo: {crop}",
+      "noCrop": "Sin cultivo indicado",
+      "stage": "Etapa: {stage}",
+      "floor": "Piso térmico {floor}",
+      "altitude": "{alt} de altura"
+    },
+    "steps": {
+      "label": "Cómo armamos tu plan",
+      "zone": "Datos de tu zona",
+      "zoneLoading": "Pedimos a la NASA 90 días de lluvia, temperatura y humedad del suelo del rectángulo de tu finca…",
+      "zoneDone": "{days, plural, one {# día} other {# días}} de NASA POWER",
+      "zoneSlope": "pendiente {slope} (SRTM)",
+      "zoneNoPower": "NASA POWER no respondió: el motor usará sus datos del territorio.",
+      "motor": "Motor agronómico",
+      "motorWaiting": "Empieza cuando lleguen los datos de tu zona.",
+      "motorLoading": "Revisando las reglas agronómicas con los datos de tu zona y lo que nos contaste…",
+      "motorDone": "{evaluated} de {total} reglas revisadas",
+      "motorReady": "Listo. AgroAstro lo está revisando.",
+      "advisor": "AgroAstro, asesor con IA",
+      "advisorWaiting": "Empieza cuando el motor termine.",
+      "advisorLoading": "Revisa el plan del motor y busca precios y mercados en la web. Puede tardar de 1 a 3 minutos.",
+      "advisorTools": "{n, plural, one {# consulta en la web} other {# consultas en la web}}",
+      "advisorDone": "Revisión lista"
+    },
+    "mockNote": "Ejemplo: el motor agronómico del equipo todavía no está conectado. Los hallazgos vienen de un lote de Antioquia; tu cultivo, tu etapa y lo que sembraste antes sí se aplican.",
+    "acceptedNoSeries": "El motor no aceptó la serie diaria de NASA POWER: usó sus propios datos del territorio.",
+    "acceptedMinimal": "El motor solo aceptó la ubicación, el cultivo y la etapa. Lo que nos contaste del lote no entró esta vez.",
+    "spanishOnly": "El motor responde en español.",
+    "updating": "Actualizando tu plan…",
+    "ready": "Tu plan de rotación está listo. Riesgo general: {risk}.",
+    "risk": {
+      "title": "Riesgo general",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo",
+      "unknown": "Sin calcular",
+      "findings": "{n, plural, =0 {Sin alertas} one {# alerta} other {# alertas}}",
+      "hint": "Es un riesgo, no un diagnóstico: confírmalo en tu lote."
+    },
+    "next": {
+      "title": "Qué sembrar después",
+      "after": "Después de {crop}:",
+      "askTitle": "¿Qué sembraste la última vez en este lote?",
+      "askText": "Con eso el motor revisa qué conviene sembrar después: cambiar de familia corta plagas y cuida el suelo.",
+      "more": "Ver las demás opciones ({n})",
+      "why": "Por qué",
+      "missing": "No se pudo revisar todo: falta {what}.",
+      "guidance": "Bueno saber",
+      "family": "Familia: {family}",
+      "none": "El motor no devolvió opciones de rotación para este lote.",
+      "established": "Tienes caña establecida: el motor no propone cambiarla todavía."
+    },
+    "status": {
+      "favorecido": "Recomendada",
+      "aceptable": "Aceptable",
+      "con_reservas": "Con reservas",
+      "desaconsejado": "No recomendada",
+      "sin_evaluar": "Sin evaluar"
+    },
+    "effect": {
+      "block": "Lo impide",
+      "discourage": "En contra",
+      "favor": "A favor",
+      "note": "Ojo"
+    },
+    "findings": {
+      "title": "Lo que encontramos",
+      "none": "Con los datos que hay, el motor no encontró alertas en tu lote.",
+      "whatToDo": "Qué hacer",
+      "why": "Por qué lo decimos",
+      "threshold": "umbral {op} {threshold}",
+      "source": "Fuente: {source}",
+      "period": "Periodo: {period}",
+      "quality": "Calidad del dato: {quality}",
+      "cautions": "Cuidado",
+      "sources": "Referencias",
+      "limiting": "Lo que baja la certeza: {list}",
+      "uncalibrated": "Este umbral no está calibrado para tu zona.",
+      "context": "También revisado (lo cubre otro hallazgo)",
+      "severity": {
+        "high": "Prioridad alta",
+        "medium": "Prioridad media",
+        "low": "Prioridad baja",
+        "unknown": "Prioridad sin definir"
+      }
+    },
+    "certainty": {
+      "label": "Certeza {level}",
+      "baja": "baja",
+      "media": "media",
+      "alta": "alta"
+    },
+    "practices": {
+      "title": "Prácticas sugeridas ({n})",
+      "fromFinding": "Por un hallazgo de tu lote"
+    },
+    "refine": {
+      "title": "Afina tu plan",
+      "hint": "Cuéntanos lo que ves en tu lote: cada dato deja que el motor revise más reglas.",
+      "crop": "¿Qué tienes sembrado ahora?",
+      "noCrop": "Nada ahora",
+      "stage": "¿En qué etapa va?",
+      "symptoms": "¿Ves alguno de estos síntomas en las hojas?",
+      "last": "¿Qué sembraste la última vez?",
+      "residue": "¿Qué haces con el rastrojo después de cosechar?",
+      "dontKnow": "No sé",
+      "apply": "Generar de nuevo con estos datos",
+      "soilNote": "El pH, la materia orgánica y el tipo de tierra se cuentan en la pestaña Tu finca.",
+      "soilCta": "Ir a Tu finca"
+    },
+    "residue": {
+      "incorporated": "Lo dejo en el lote",
+      "removed": "Lo saco o lo quemo"
+    },
+    "crops": {
+      "maiz": "Maíz",
+      "frijol": "Fríjol",
+      "calabaza": "Calabaza o ahuyama",
+      "caupi": "Fríjol caupí",
+      "platano": "Plátano",
+      "cana_panelera": "Caña panelera",
+      "tres_hermanas": "Maíz, fríjol y calabaza juntos",
+      "canavalia": "Canavalia (abono verde)",
+      "otro": "Otro cultivo"
+    },
+    "stages": {
+      "establecimiento": "Recién sembrado",
+      "vegetativo": "Creciendo",
+      "floracion": "En flor",
+      "fructificacion": "Formando frutos o vainas",
+      "llenado": "Llenando el grano",
+      "maduracion": "Madurando"
+    },
+    "symptoms": {
+      "clorosis_hojas_viejas": "Hojas viejas amarillas parejas",
+      "necrosis_bordes_hojas_viejas": "Bordes quemados en las hojas viejas",
+      "clorosis_intervenal_hojas_viejas": "Hojas viejas amarillas entre las venas",
+      "coloracion_violacea": "Hojas moradas o violetas",
+      "necrosis_puntos_crecimiento_frutos_jovenes": "Puntas o frutos tiernos secos o negros",
+      "clorosis_generalizada_hojas_jovenes": "Hojas nuevas amarillas",
+      "bandas_cloroticas_entrenudos_cortos": "Rayas blancas y planta enana (maíz)",
+      "amarillamiento_colapso_hojas_centrales": "Hojas del centro amarillas y caídas (plátano)"
+    },
+    "gaps": {
+      "title": "Lo que falta saber",
+      "rules": "El motor revisó {evaluated} de {total} reglas.",
+      "missingInput": "{n, plural, one {# regla no se revisó porque falta un dato.} other {# reglas no se revisaron porque falta un dato.}}",
+      "needsSeries": "{n, plural, one {# regla pide datos diarios.} other {# reglas piden datos diarios.}}",
+      "wanted": "Lo que más ayudaría:",
+      "wantedItem": "{label} ({n, plural, one {# regla} other {# reglas}})",
+      "verify": "Antes de decidir, verifica:",
+      "dataAge": "Los datos del territorio que usa el motor terminan hace {days, plural, one {# día} other {# días}}."
+    },
+    "vars": {
+      "temperature": "Temperatura del aire",
+      "relative_humidity": "Humedad del aire",
+      "soil_moisture": "Humedad del suelo",
+      "organic_matter": "Materia orgánica",
+      "symptoms": "Síntomas en las plantas",
+      "soil_ph": "pH del suelo",
+      "soil_texture": "Tipo de tierra",
+      "altitude_masl": "Altura del lote",
+      "slope_pct": "Pendiente del lote",
+      "rain_7d": "Lluvia de 7 días",
+      "rain_month": "Lluvia del mes",
+      "ndvi": "Verdor (NDVI)",
+      "sat_days_consecutive": "Días seguidos con el suelo encharcado",
+      "dry_days_consecutive": "Días seguidos sin lluvia",
+      "tmin_mean_7d": "Temperatura mínima de 7 días",
+      "hot_days_7d": "Días de calor",
+      "wet_dry_alternations_14d": "Cambios entre seco y mojado",
+      "rain_last14": "Lluvia de 14 días",
+      "rain_prev14": "Lluvia de los 14 días anteriores",
+      "waterlogging_prone": "Si el lote se encharca",
+      "recent_n_fertilization": "Abono con nitrógeno reciente",
+      "history": "Lo que sembraste antes"
+    },
+    "data": {
+      "title": "Qué datos usó el motor",
+      "zone": "Zona: el rectángulo de los extremos de tu finca (no solo el contorno).",
+      "zonePoint": "Zona: el punto de tu finca.",
+      "bounds": "Latitud {s} a {n} · longitud {w} a {e}",
+      "period": "NASA POWER diario, {start} a {end}: {cells, plural, one {# celda} other {# celdas; para cada día, el valor más alto}}.",
+      "temp": "Temperatura media (7 días)",
+      "rh": "Humedad del aire (7 días)",
+      "rain7": "Lluvia (7 días)",
+      "rain30": "Lluvia (30 días)",
+      "soil": "Humedad del suelo en las raíces",
+      "slope": "Pendiente del municipio (SRTM)",
+      "example": "dato de ejemplo",
+      "cell": "Celda del motor {id}: {km2} km², a {km} km de tu finca",
+      "engine": "Motor {schema} · cuaderno {notebook}",
+      "evaluation": "Evaluación n.º {id}",
+      "told": "Lo que nos contaste",
+      "lastCrop": "Última siembra",
+      "soilFarmer": "Suelo",
+      "none": "Sin dato"
+    },
+    "cautions": {
+      "title": "Ten en cuenta",
+      "more": "Ver todo ({n})"
+    },
+    "disclaimer": "Esta herramienta te apoya: no reemplaza tu criterio ni al técnico de tu zona. Ninguna regla del motor ha sido validada todavía por un técnico.",
+    "actions": {
+      "options": "Ver más opciones de rotación",
+      "conditions": "Ver el clima y los datos de tu finca"
+    },
+    "error": {
+      "zone": "No pudimos traer los datos de tu zona.",
+      "motor": "El motor agronómico no respondió.",
+      "invalid": "El motor no aceptó los datos de esta finca. Puede que tu lote quede fuera de su cobertura.",
+      "busy": "Hiciste muchos planes seguidos. Espera un minuto.",
+      "retry": "Intentar de nuevo",
+      "advisor": "AgroAstro no pudo revisar el plan. Sin su revisión no te mostramos el plan.",
+      "advisorTimeout": "AgroAstro tardó demasiado en revisar el plan. Intenta de nuevo en un momento."
+    },
+    "updatingAdvisor": "Actualizando: AgroAstro revisa el nuevo plan…",
+    "advisor": {
+      "title": "Recomendación de AgroAstro",
+      "hint": "Asesor con IA: revisó el plan del motor{n, plural, =0 {} one { e hizo # consulta en la web} other { e hizo # consultas en la web}}.",
+      "mockNote": "Ejemplo: AgroAstro no está conectado aquí. Este resumen usa solo lo que dijo el motor, sin precios ni compradores.",
+      "listen": "Escuchar la recomendación",
+      "verify": "Los precios, compradores y noticias salen de una búsqueda en la web: confírmalos antes de vender o comprar insumos."
     }
   }
 }

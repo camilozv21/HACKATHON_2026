@@ -16,8 +16,8 @@ export const cameraParams = {
 
 export const fieldParams = {
   field: parseAsString,
-  /** Pestaña del análisis abierta (conditions | priorities | rotations | plan): un enlace compartido abre ahí. */
-  view: parseAsStringLiteral(['conditions', 'priorities', 'rotations', 'plan'] as const),
+  /** Pestaña del análisis abierta (motor | conditions | priorities | rotations | plan): un enlace compartido abre ahí. */
+  view: parseAsStringLiteral(['motor', 'conditions', 'priorities', 'rotations', 'plan'] as const),
 };
 
 export const priorityParams = {

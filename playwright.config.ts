@@ -34,7 +34,8 @@ export default defineConfig({
     // El análisis usa el clima de plantilla (no NASA POWER) para que las opciones sean siempre las mismas.
     // Sin base de datos ni secreto de trabajos: publicaciones en memoria y mercado desde el seed (pnpm start carga
     // .env.local, y una variable vacía aquí gana sobre la de ese archivo).
-    env: { AGENT_FORCE_MOCK: 'true', ANALYSIS_USE_POWER: 'false', DATABASE_URL: '', MARKET_JOB_SECRET: '' },
+    // MOTOR_FORCE_MOCK: los e2e nunca guardan evaluaciones en la base del motor agronómico del equipo.
+    env: { AGENT_FORCE_MOCK: 'true', ANALYSIS_USE_POWER: 'false', DATABASE_URL: '', MARKET_JOB_SECRET: '', MOTOR_FORCE_MOCK: 'true' },
     timeout: 120_000,
   },
 });

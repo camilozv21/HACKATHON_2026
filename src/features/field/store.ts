@@ -2,7 +2,9 @@ import { create } from 'zustand';
 import type { CropSeason } from '@/lib/api/contract';
 import type { FieldMode, SelectedField, SheetSnap } from './types';
 
-export type PanelTab = 'conditions' | 'priorities' | 'rotations' | 'plan';
+/** `motor`: plan de rotación del motor agronómico (primera pestaña). `priorities` vive dentro de "Opciones". */
+export const PANEL_TABS = ['motor', 'conditions', 'priorities', 'rotations', 'plan'] as const;
+export type PanelTab = (typeof PANEL_TABS)[number];
 
 type FieldState = {
   field: SelectedField | null;
@@ -18,7 +20,8 @@ type FieldState = {
   renameField: (name: string) => void;
   setMode: (mode: FieldMode) => void;
   setSheet: (snap: SheetSnap | null) => void;
-  setAnalyzing: (v: boolean) => void;
+  /** Abre o cierra el análisis. Por defecto sube el sheet a 'full'; tras dibujar se abre a media altura. */
+  setAnalyzing: (v: boolean, snap?: SheetSnap) => void;
   setPanelTab: (t: PanelTab) => void;
   setRotation: (r: CropSeason[] | null) => void;
   clear: () => void;
@@ -29,22 +32,22 @@ export const useFieldStore = create<FieldState>()((set) => ({
   mode: 'idle',
   sheet: null,
   analyzing: false,
-  panelTab: 'conditions',
+  panelTab: 'motor',
   rotation: null,
   setField: (field, opts = {}) =>
     set((s) => ({
       field,
       mode: 'idle',
       analyzing: false,
-      panelTab: 'conditions',
+      panelTab: 'motor',
       rotation: field?.id === s.field?.id ? s.rotation : null,
       sheet: field ? (opts.openSheet === false ? s.sheet : 'peek') : null,
     })),
   renameField: (name) => set((s) => (s.field ? { field: { ...s.field, name } } : s)),
   setMode: (mode) => set({ mode }),
   setSheet: (sheet) => set({ sheet }),
-  setAnalyzing: (analyzing) => set({ analyzing, sheet: analyzing ? 'full' : 'peek' }),
+  setAnalyzing: (analyzing, snap = 'full') => set({ analyzing, sheet: analyzing ? snap : 'peek' }),
   setPanelTab: (panelTab) => set({ panelTab }),
   setRotation: (rotation) => set({ rotation }),
-  clear: () => set({ field: null, mode: 'idle', sheet: null, analyzing: false, rotation: null, panelTab: 'conditions' }),
+  clear: () => set({ field: null, mode: 'idle', sheet: null, analyzing: false, rotation: null, panelTab: 'motor' }),
 }));

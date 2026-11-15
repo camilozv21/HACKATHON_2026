@@ -16,8 +16,9 @@ test('publicar mi finca: 3 pasos, sin teléfono en la página y contacto por Wha
   await page.goto('/es?lat=4.53&lon=-75.64&z=12&field=pt:-75.64,4.53');
   await waitForGlobe(page);
 
-  // En "peek" solo se ven el nombre y "Analizar"; al analizar, el sheet sube y aparece "Publicar mi finca".
-  await page.getByRole('button', { name: 'Analizar esta finca' }).tap();
+  // En "peek" solo se ven el nombre y "Generar plan…"; "Publicar mi finca" está al final de la pestaña "Tu finca".
+  await page.getByRole('button', { name: 'Generar plan de rotación de cultivos' }).tap();
+  await page.getByRole('tab', { name: 'Tu finca' }).tap();
   await page.getByRole('button', { name: /Publicar mi finca/ }).first().tap();
   const dialog = page.getByRole('dialog', { name: '¿Qué vendes?' });
   await expect(dialog).toBeVisible();
