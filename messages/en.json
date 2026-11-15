@@ -2589,5 +2589,145 @@
       "projection": "The projection assumes changes continue the same way; your management, the weather and policies can change it.",
       "support": "This tool supports you; it does not replace your judgment or local experts."
     }
+  },
+  "points": {
+    "button": {
+      "aria": "Your score: {points} points. Open your account",
+      "ariaGuest": "Your score: {points} unsaved points. Sign up or sign in"
+    },
+    "flash": {
+      "plus": "+{points}",
+      "saved": "Points saved",
+      "sr": "You earned {points} points: {what}",
+      "srGuest": "You earned {points} points: {what}. Create your account to keep them."
+    },
+    "levels": {
+      "semilla": "Seed",
+      "brote": "Sprout",
+      "raiz": "Strong roots",
+      "cosecha": "Harvest",
+      "bosque": "Forest"
+    },
+    "farm": {
+      "badge": "{points} points · {level}",
+      "what": "The score shows how much the person who published this farm uses and learns with Field Shift. It does not rate the farm or its products."
+    },
+    "myFarm": {
+      "title": "Your farm score: {points} · {level}",
+      "hint": "It shows on your farm when you publish it.",
+      "guestTitle": "You have {points} unsaved points",
+      "guestHint": "Create your account to keep them and see them on your farm."
+    },
+    "dialog": {
+      "kicker": "Field points",
+      "titleGuest": "Your score",
+      "titleSignedIn": "Hi, {username}",
+      "close": "Close",
+      "summary": "Your score summary",
+      "points": "{points} points",
+      "level": "Level {rank}: {level}",
+      "unsaved": "unsaved",
+      "progress": "Progress to the next level",
+      "toNext": "{points} more points to reach {level}.",
+      "topLevel": "You reached the top level!",
+      "guestNote": "These points live only on this phone. Create an account to keep them: your score will show on every farm you publish.",
+      "farmNote": "Your score shows on every farm you publish from this phone.",
+      "logout": "Sign out",
+      "loggedOut": "You signed out. Your points are still saved in your account.",
+      "welcome": "All set, {username}! Your account is ready and your points are saved.",
+      "welcomeBack": "Welcome back, {username}. Your points are up to date."
+    },
+    "form": {
+      "signupTab": "Create account",
+      "loginTab": "I have an account",
+      "username": "Username",
+      "usernameHint": "3 to 20 letters or numbers, no spaces or accents.",
+      "password": "Password",
+      "passwordHint": "At least {min} characters.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "signupSubmit": "Create account and earn {points} points",
+      "loginSubmit": "Sign in",
+      "busy": "One moment…",
+      "privacy": "We only ask for a username and password: no email or phone. A forgotten password cannot be recovered, so keep it safe."
+    },
+    "errors": {
+      "username": "The username needs 3 to 20 letters or numbers, with no spaces or accents.",
+      "password": "The password needs at least {min} characters.",
+      "taken": "That username is taken. Try another one or sign in.",
+      "credentials": "The username or password is not right.",
+      "rate": "Too many tries. Wait a few minutes and try again.",
+      "invalid": "Check the details and try again.",
+      "storage": "We could not save right now. Try again in a while.",
+      "network": "No connection. Check your internet and try again."
+    },
+    "earn": {
+      "title": "How to earn points",
+      "plus": "+{points}",
+      "questPoints": "up to {max}",
+      "earned": "you have {points}"
+    },
+    "actions": {
+      "signup": {
+        "label": "Create your account",
+        "rule": "Once",
+        "done": "Account created"
+      },
+      "quest": {
+        "label": "Finish the starter challenges",
+        "rule": "30 for finishing and 20 per star. Replay and improve to add the difference",
+        "done": "Starter challenges"
+      },
+      "visit": {
+        "label": "Open the app",
+        "rule": "Once a day",
+        "done": "Daily visit"
+      },
+      "field": {
+        "label": "Mark your farm on the map",
+        "rule": "Per farm, up to 5",
+        "done": "Farm marked"
+      },
+      "analyze": {
+        "label": "Analyze a farm",
+        "rule": "Per farm, up to 5",
+        "done": "Farm analyzed"
+      },
+      "region": {
+        "label": "Explore a region on the globe",
+        "rule": "Up to 10 a day",
+        "done": "Region explored"
+      },
+      "layer": {
+        "label": "View a NASA data layer",
+        "rule": "Per new layer",
+        "done": "New NASA layer"
+      },
+      "radio": {
+        "label": "Listen to the field radio",
+        "rule": "Once a day",
+        "done": "Daily radio"
+      },
+      "ask": {
+        "label": "Ask the assistant",
+        "rule": "Up to 5 a day",
+        "done": "Question to the assistant"
+      },
+      "glossary": {
+        "label": "Learn a term (what is this?)",
+        "rule": "Per new term",
+        "done": "Term learned"
+      },
+      "report": {
+        "label": "Report an event in your area",
+        "rule": "Up to 3 a day",
+        "done": "Event reported"
+      },
+      "publish": {
+        "label": "Publish your farm",
+        "rule": "Per published farm",
+        "done": "Farm published"
+      }
+    }
   }
 }

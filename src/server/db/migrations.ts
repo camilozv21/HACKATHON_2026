@@ -67,6 +67,42 @@ export const MIGRATIONS: Migration[] = [
       );
     `,
   },
+  {
+    // Cuentas sencillas (usuario y contraseña), sesiones y puntaje. `points` es el total ya sumado del libro
+    // `point_events` (se actualiza en la misma transacción). Las fincas publicadas se enlazan a una cuenta.
+    id: '003_accounts_points',
+    sql: `
+      create table if not exists fieldshift.accounts (
+        id text primary key,
+        username text not null,
+        username_key text not null unique,
+        password_hash text not null,
+        points integer not null default 0,
+        created_at timestamptz not null default now(),
+        last_seen_at timestamptz
+      );
+      create table if not exists fieldshift.sessions (
+        token_hash text primary key,
+        account_id text not null references fieldshift.accounts (id) on delete cascade,
+        created_at timestamptz not null default now(),
+        expires_at timestamptz not null
+      );
+      create index if not exists sessions_account_idx on fieldshift.sessions (account_id);
+      create table if not exists fieldshift.point_events (
+        account_id text not null references fieldshift.accounts (id) on delete cascade,
+        action text not null,
+        ref text not null,
+        day date not null,
+        points integer not null,
+        created_at timestamptz not null default now(),
+        primary key (account_id, action, ref)
+      );
+      create index if not exists point_events_day_idx on fieldshift.point_events (account_id, action, day);
+      alter table fieldshift.listings
+        add column if not exists account_id text references fieldshift.accounts (id) on delete set null;
+      create index if not exists listings_account_idx on fieldshift.listings (account_id);
+    `,
+  },
 ];
 
 /** SQL que crea el schema y la tabla de control. Idempotente. */

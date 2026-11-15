@@ -24,6 +24,9 @@ una API con contrato definido en `src/lib/api/contract.ts` y **debe funcionar co
 - **Chat con agente IA (n8n):** la persona pregunta por las condiciones de una región; el agente responde y además
   mueve el globo (vuela, activa capas, abre el drawer) mediante acciones estructuradas en su respuesta.
   El chat vive en la zona media inferior de la pantalla.
+- **Puntaje:** cuenta sencilla (usuario y contraseña), puntos por crearla, por los retos de inicio y por usar la app;
+  el puntaje se ve en cada finca publicada (sin el usuario y con el aviso de que no califica la finca).
+  Detalle: `docs/points.md`.
 
 ## Stack fijo
 
@@ -81,7 +84,8 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
 - Lógica del mapa en `src/features/globe/`, capas en `src/features/layers/`, rotaciones en `src/features/rotations/`,
   drawer de región en `src/features/region/`, radio en `src/features/radio/`, chat en `src/features/agent/`,
   ubicación en `src/features/location/`, finca en `src/features/field/`, prioridades en `src/features/priorities/`,
-  zonas de riesgo y cambios del terreno (Markov, Google Earth Engine) en `src/features/terrain/`.
+  zonas de riesgo y cambios del terreno (Markov, Google Earth Engine) en `src/features/terrain/`,
+  puntaje en `src/features/points/` (servidor en `src/server/accounts/`, reglas compartidas en `src/lib/points.ts`).
 - Capa de datos en `src/lib/api/` (contrato zod, cliente, hooks, mocks, NASA POWER).
 - Textos de UI siempre vía next-intl (`messages/es.json`, `messages/en.json`); nunca strings sueltos en componentes.
 - `localStorage` / `sessionStorage` siempre envueltos en try/catch.

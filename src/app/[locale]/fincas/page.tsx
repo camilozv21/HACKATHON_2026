@@ -1,6 +1,7 @@
 import { ArrowLeft, MapPin, Store } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { FarmScore } from '@/features/points/FarmScore';
 import { isProductId, PRODUCT_IDS } from '@/lib/market/catalog';
 import { departments, listListings } from '@/server/listings';
 
@@ -22,6 +23,7 @@ export default async function FincasPage({ params, searchParams }: Props) {
   const t = await getTranslations('listings.page');
   const tl = await getTranslations('listings');
   const tp = await getTranslations('products');
+  const tpts = await getTranslations('points');
   const dept = sp.dept && /^\d{2}$/.test(sp.dept) ? sp.dept : undefined;
   const product = isProductId(sp.product) ? sp.product : undefined;
   let data: Awaited<ReturnType<typeof listListings>> | null = null;
@@ -97,6 +99,11 @@ export default async function FincasPage({ params, searchParams }: Props) {
                       <MapPin aria-hidden className="size-4 text-field-300" />
                       {l.place}
                     </span>
+                    {l.score && (
+                      <span>
+                        <FarmScore points={l.score.points} level={l.score.level} size="sm" />
+                      </span>
+                    )}
                     <span className="flex flex-wrap gap-1.5">
                       {l.products.map((p, i) => (
                         <span key={i} className="rounded-full bg-field-500/15 px-2.5 py-1 text-xs font-semibold text-field-300">
@@ -112,6 +119,7 @@ export default async function FincasPage({ params, searchParams }: Props) {
         </section>
       )}
       <p className="text-xs text-ink-faint">{t('disclaimer')}</p>
+      <p className="text-xs text-ink-faint">{tpts('farm.what')}</p>
     </main>
   );
 }

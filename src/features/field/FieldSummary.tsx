@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { ComponentType, ReactNode } from 'react';
 import { toast } from '@/components/ui/toast';
 import { PublishEntry } from '@/features/listings/PublishEntry';
+import { MyFarmScore } from '@/features/points/MyFarmScore';
 import { formatCoords } from '@/lib/geo';
 import { clearField } from './actions';
 import { getDemo } from './demoFarms';
@@ -101,6 +102,7 @@ export function FieldSummary({
       </div>
 
       <PublishEntry field={field} />
+      {!demo && <MyFarmScore />}
 
       {demo && <p className="text-xs text-ink-muted">{t('demoNote')}</p>}
       {variant === 'panel' || analyzing ? children : null}

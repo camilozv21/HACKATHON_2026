@@ -25,6 +25,8 @@ type Row = {
   created_at: Date;
   updated_at: Date;
   expires_at: Date;
+  /** Migración 003 (cuentas y puntos). */
+  account_id?: string | null;
 };
 
 const iso = (d: Date | string) => (typeof d === 'string' ? new Date(d).toISOString() : d.toISOString());
@@ -51,6 +53,7 @@ function fromRow(r: Row): ListingRecord {
     createdAt: iso(r.created_at),
     updatedAt: iso(r.updated_at),
     expiresAt: iso(r.expires_at),
+    accountId: r.account_id ?? null,
   };
 }
 
@@ -102,6 +105,7 @@ export const pgRepo: ListingsRepo = {
         products = coalesce(${p.products ? q.json(p.products) : null}::jsonb, products),
         description = case when ${p.description !== undefined} then ${p.description ?? null} else description end,
         expires_at = coalesce(${p.expiresAt ?? null}::timestamptz, expires_at),
+        account_id = coalesce(${p.accountId ?? null}::text, account_id),
         updated_at = coalesce(${p.updatedAt ?? null}::timestamptz, now())
       where id = ${id}
       returning *`;
