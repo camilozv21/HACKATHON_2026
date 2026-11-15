@@ -106,6 +106,29 @@ no sale "alto" solo por compararse con los demás.
 - IMERG mensual V07 llega hasta 2025-09 y GRACE V04 hasta 2024-09 (catálogo GEE, 14-nov-2026): el periodo reciente
   de esos indicadores es más corto.
 - SMAP L4 (~11 km), IMERG (~11 km) y GRACE (~300 km) son más gruesos que un municipio pequeño: se re-muestrean.
+- **Deriva de MODIS Terra.** Desde 2020 el satélite cruza cada vez más temprano, así que la temperatura de superficie
+  de día baja aunque el clima no se haya enfriado.
+  - En el primer export real (14-nov-2026), `lstAnom` dio una mediana de −1,1 °C en Colombia.
+  - Por eso el calor pesa sobre todo por `lstHot` y el drawer lo avisa en "Lo que no sabemos".
+  - Mejora pendiente: comparar Terra con Aqua (MYD11A2) o corregir por hora de paso.
+
+## Primer export real (14-nov-2026, proyecto `imposing-kite-396719`)
+
+Niveles por municipio (1.122):
+
+| Riesgo | Bajo | Medio | Alto |
+| --- | --- | --- | --- |
+| Combinado | 824 | 298 | 0 |
+| Encharcamiento | 713 | 329 | 80 |
+| Sequía | 1.116 | 6 | 0 |
+| Calor | 1.094 | 28 | 0 |
+| Suelo degradado | 1.112 | 10 | 0 |
+
+- **Confianza:** alta en 1.102 municipios.
+- **Sequía casi sin riesgo:** 2023–2025 frente a 2016–2022 no muestra sequía fuerte. La mediana de lluvia es −2,7 % y
+  la de humedad del suelo −0,6 %, porque el año húmedo 2025 compensa El Niño de 2023–2024.
+- **Encharcamiento:** sale sobre todo de los aguaceros, con mediana de 3,5 días al año por encima de 50 mm, y del
+  terreno plano.
 
 ## Cómo regenerar los datos
 

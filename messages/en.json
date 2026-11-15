@@ -2501,7 +2501,8 @@
       "valid": "Satellites saw {n} % of the area clearly (clouds, cities and snow are left out).",
       "grace": "Groundwater (GRACE) measures areas of about 300 km: it is a regional trend, not your farm.",
       "missing": "No data for: {list}.",
-      "average": "It is the municipality average. Your farm may be better or worse: check it on the ground."
+      "average": "It is the municipality average. Your farm may be better or worse: check it on the ground.",
+      "lstDrift": "Ground temperature comes from MODIS Terra, which has been passing earlier each year since 2020: recent years may look cooler than they were."
     },
     "changeTitle": "How the land is changing",
     "changeIntro": "We compare the land state at the start and at the end, pixel by pixel, with NASA satellites.",

@@ -216,6 +216,7 @@ function RiskCard({ item, index, onSeeOnMap }: { item: TerrainItem; index: Terra
           {synthetic && <li>{t('gaps.synthetic')}</li>}
           <li>{t('gaps.valid', { n: pct(item.v) })}</li>
           <li>{t('gaps.grace')}</li>
+          {!synthetic && <li>{t('gaps.lstDrift')}</li>}
           {missing.length > 0 && <li>{t('gaps.missing', { list: missing.map((m) => t(`indicators.${m}`)).join(', ') })}</li>}
           <li>{t('gaps.average')}</li>
         </ul>

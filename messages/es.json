@@ -2501,7 +2501,8 @@
       "valid": "Los satélites vieron bien el {n} % del área (nubes, ciudades y nieve se dejan fuera).",
       "grace": "El agua subterránea (GRACE) mide zonas de unos 300 km: es una tendencia regional, no de tu finca.",
       "missing": "Sin dato de: {list}.",
-      "average": "Es el promedio del municipio. Tu finca puede estar mejor o peor: confírmalo en el terreno."
+      "average": "Es el promedio del municipio. Tu finca puede estar mejor o peor: confírmalo en el terreno.",
+      "lstDrift": "La temperatura de superficie viene de MODIS Terra, que desde 2020 cruza cada vez más temprano: los años recientes pueden verse más frescos de lo que fueron."
     },
     "changeTitle": "Cómo cambia el terreno",
     "changeIntro": "Comparamos el estado del terreno al inicio y al final, píxel por píxel, con satélites NASA.",
