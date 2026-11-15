@@ -15,6 +15,7 @@ misiones NASA y se sirven como JSON estático. Sin export de GEE la app usa un s
 | Cadena de Markov | `src/features/terrain/markov.ts` |
 | Capa del mapa (relleno, patrones, relieve) | `src/features/terrain/riskLayer.ts`, leyenda `RiskLegend.tsx` |
 | Drawer | `src/features/terrain/TerrainSection.tsx`, gráficas `charts.tsx` (visx) |
+| API abierta (filtros por campo, ubicación × tiempo, CSV/GeoJSON) | `/api/terrain`, `src/server/terrain/` ([terrain-api.md](terrain-api.md)) |
 
 ## Estados del terreno
 

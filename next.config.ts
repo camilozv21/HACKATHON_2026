@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Driver de PostgreSQL (solo servidor): no se empaqueta.
   serverExternalPackages: ['postgres'],
+  // La API del terreno lee estos JSON del disco: que viajen con sus funciones (en Vercel, `public/` va a la CDN).
+  outputFileTracingIncludes: {
+    '/api/terrain': ['./public/geo/terrain-co.json', './public/geo/terrain/*.json', './public/geo/co-mpio.json', './public/geo/co-dpto.json'],
+  },
   experimental: {
     optimizePackageImports: ['lucide-react', 'radix-ui'],
   },
