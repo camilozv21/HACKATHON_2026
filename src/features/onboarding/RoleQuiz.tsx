@@ -1,43 +1,54 @@
 'use client';
 
 import clsx from 'clsx';
-import { ArrowLeft, ArrowRight, ChartColumn, Check, Leaf, Satellite, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChartColumn, Check, Leaf, Satellite, Sparkles, Star, Volume2, VolumeX } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { isSpeechSupported, speak, stop, type NarratorLang } from '@/features/narrator/narrator';
-import type { OnboardingAnswers, ProfileSuggestion } from '@/lib/api/contract';
+import type { OnboardingAnswers, ProfileSuggestion, QuestSummary } from '@/lib/api/contract';
 import { usePrefsStore, type Mode } from '@/lib/prefs';
 import { runFirstStep } from './firstStep';
+import { GAME_IDS, summarize, totalStars, type QuestResults } from './games/catalog';
+import { ProfileCard, profileSpoken } from './games/ProfileCard';
+import QuestRunner from './games/QuestRunner';
 import { markQuizTaken } from './gateFlag';
 import { useProfileStore } from './profile';
 import { QUESTION_OPTIONS, QUESTION_STEPS, type QuestionStep } from './questions';
 import { requestSuggestion } from './suggest';
 
-type Screen = QuestionStep | 'thinking' | 'suggestion';
+type Screen = QuestionStep | 'quest' | 'results' | 'thinking' | 'suggestion';
 type Opt = { value: string; Icon: (typeof QUESTION_OPTIONS)['role'][number]['Icon'] };
 
 /**
- * Preguntas de inicio (después de la bienvenida en línea): rol, qué quiere hacer y cómo prefiere la información.
- * Las respuestas van a /api/profile (Claude → reglas), que sugiere modo sencillo o completo, voz y primer paso;
- * la persona confirma o cambia. Pensado para quien no sabe leer: íconos grandes, cada pantalla se lee sola con la
- * voz encendida, tocar una opción la lee, y una flecha grande confirma. Mismo aspecto que la bienvenida (z-80).
+ * Inicio tipo juego (después de la bienvenida en línea):
+ *  1. ¿Quién eres? (el personaje: agricultor/a o técnico/a) y ¿cómo quieres jugar? (escuchar, poco texto o todos
+ *     los datos: enciende la voz y decide si los retos muestran la ciencia).
+ *  2. Los 7 retos del glosario (games/QuestRunner): NDVI, evapotranspiración, balance de agua, anomalía de humedad,
+ *     helada, satélite vs. campo y la temporada (vulnerabilidad del cultivo y salud del suelo).
+ *  3. ¿Cuál es tu primera misión? y "Tu perfil de campo" (insignia, nivel, términos que domina y por repasar).
+ *  4. /api/profile (Claude → reglas) sugiere modo sencillo o completo, voz y primer paso; la persona confirma.
+ * Pensado para quien no sabe leer: íconos grandes, cada pantalla se lee sola con la voz encendida, y botones
+ * grandes abajo. Mismo aspecto que la bienvenida (z-80).
  */
 export default function RoleQuiz({ onClose }: { onClose: () => void }) {
   const t = useTranslations('onboarding');
   const tRules = useTranslations('onboarding.rules');
   const locale = useLocale() as NarratorLang;
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotion() ?? false;
   const narrator = usePrefsStore((s) => s.narrator);
   const [screen, setScreen] = useState<Screen>('role');
   const [answers, setAnswers] = useState<Partial<OnboardingAnswers>>({});
+  const [quest, setQuest] = useState<{ index: number; results: QuestResults }>({ index: 0, results: {} });
+  const [summary, setSummary] = useState<QuestSummary | null>(null);
   const [suggestion, setSuggestion] = useState<ProfileSuggestion | null>(null);
   const [mode, setMode] = useState<Mode>('full');
   const [voice, setVoice] = useState(false);
   const [canSpeak] = useState(isSpeechSupported);
   const panelRef = useRef<HTMLElement>(null);
   const alive = useRef(true);
+  const pending = useRef<Promise<ProfileSuggestion> | null>(null);
   // Foco en el título de cada pantalla al aparecer (el lector de pantalla la anuncia). Ref estable: con
   // AnimatePresence "wait" el título nuevo se monta al terminar la salida del anterior.
   const headingRef = useCallback((el: HTMLHeadingElement | null) => el?.focus({ preventScroll: true }), []);
@@ -48,9 +59,13 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
     [s.welcome, `${t(`suggestion.${m}.title`)}.`, t(`suggestion.${m}.text`), v ? t('suggestion.voiceSpoken') : '', t('suggestion.spokenEnd')]
       .filter(Boolean)
       .join(' ');
-  const say = (text: string) => {
-    if (usePrefsStore.getState().narrator) speak(text, { lang: locale, id: 'onboarding' });
-  };
+  // Estable: los retos lo usan en sus efectos de montaje (leer la instrucción una sola vez).
+  const say = useCallback(
+    (text: string) => {
+      if (usePrefsStore.getState().narrator) speak(text, { lang: locale, id: 'onboarding' });
+    },
+    [locale],
+  );
 
   // Toma el relevo de la bienvenida en línea: la oculta y lee la primera pregunta si la voz está encendida.
   useEffect(() => {
@@ -87,7 +102,7 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
     finishRef.current = finish;
   });
 
-  // Esc salta. El foco no sale del diálogo: si Tab lo lleva afuera, vuelve al primer botón (salvo al cerrar).
+  // Esc cierra. El foco no sale del diálogo: si Tab lo lleva afuera, vuelve al primer botón (salvo al cerrar).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && finishRef.current();
     const onFocus = (e: FocusEvent) => {
@@ -105,44 +120,74 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
 
   const go = (next: Screen) => {
     setScreen(next);
-    if (next !== 'thinking' && next !== 'suggestion') say(questionText(next));
-  };
-
-  const think = async (a: OnboardingAnswers) => {
-    setScreen('thinking');
-    say(t('thinking.title'));
-    const [s] = await Promise.all([
-      requestSuggestion(a, locale, (k) => tRules(k)),
-      // Un instante mínimo en "Pensando…" para que se entienda qué pasó.
-      new Promise((r) => setTimeout(r, reduced ? 200 : 700)),
-    ]);
-    if (!alive.current) return;
-    setSuggestion(s);
-    setMode(s.mode);
-    setVoice(s.narrator);
-    setScreen('suggestion');
-    if (s.narrator && !usePrefsStore.getState().narrator) usePrefsStore.getState().setNarrator(true);
-    say(suggestionText(s, s.mode, s.narrator));
+    if (next === 'role' || next === 'reading' || next === 'goal') say(questionText(next));
   };
 
   const step = QUESTION_STEPS.indexOf(screen as QuestionStep);
   const current = step >= 0 ? QUESTION_STEPS[step]! : null;
+  // La ciencia (fórmulas, misiones) se muestra a técnicos y a quien quiso todos los datos.
+  const detail = answers.reading === 'detail' || answers.role === 'technician';
 
   const sayOption = (s: QuestionStep, value: string) => say(t('questions.selected', { option: t(`questions.${s}.${value}.label`) }));
   const choose = (s: QuestionStep, value: string) => {
     setAnswers((a) => ({ ...a, [s]: value }));
-    // "Escucharla": la voz se enciende de inmediato (quien no lee la necesita para el resto de preguntas) y anuncia
-    // la elección (el onClick de la opción corre antes que este onChange, todavía sin voz).
+    // "Escuchando": la voz se enciende de inmediato (quien no lee la necesita para los retos) y anuncia la elección
+    // (el onClick de la opción corre antes que este onChange, todavía sin voz).
     if (s === 'reading' && value === 'listen' && canSpeak && !usePrefsStore.getState().narrator) {
       usePrefsStore.getState().setNarrator(true);
       sayOption(s, value);
     }
   };
 
+  const onQuestDone = (results: QuestResults) => {
+    setQuest((q) => ({ ...q, results }));
+    go('goal');
+  };
+
+  /** "Saltar retos": los que faltan quedan como saltados (para repasar) y sigue con la misión. */
+  const skipQuest = () => {
+    stop();
+    const results: QuestResults = { ...quest.results };
+    for (const id of GAME_IDS) results[id] ??= 0;
+    setQuest((q) => ({ ...q, results }));
+    go('goal');
+  };
+
+  const showResults = (a: OnboardingAnswers) => {
+    const s = summarize(quest.results);
+    setSummary(s);
+    setScreen('results');
+    // La sugerencia se pide ya: mientras la persona mira su perfil, Claude (o las reglas) responde.
+    pending.current = requestSuggestion(a, locale, (k) => tRules(k), undefined, s);
+    say(profileSpoken(t, a, s));
+  };
+
   const next = () => {
     if (!current || !answers[current]) return;
-    if (step < QUESTION_STEPS.length - 1) go(QUESTION_STEPS[step + 1]!);
-    else void think(answers as OnboardingAnswers);
+    if (current === 'role') go('reading');
+    else if (current === 'reading') setScreen('quest');
+    else showResults(answers as OnboardingAnswers);
+  };
+
+  const think = async () => {
+    const a = answers as OnboardingAnswers;
+    setScreen('thinking');
+    say(t('thinking.title'));
+    const [s] = await Promise.all([
+      pending.current ?? requestSuggestion(a, locale, (k) => tRules(k), undefined, summary ?? undefined),
+      // Un instante mínimo en "Preparando…" para que se entienda qué pasó.
+      new Promise((r) => setTimeout(r, reduced ? 200 : 600)),
+    ]);
+    if (!alive.current) return;
+    // La voz que la persona ya encendió (en la bienvenida o con el botón de arriba) no se apaga sola: la sugerencia
+    // solo puede encenderla. Si no, "Usar así" la apagaba y el resto de la app quedaba en silencio.
+    const voiceOn = s.narrator || usePrefsStore.getState().narrator;
+    setSuggestion(s);
+    setMode(s.mode);
+    setVoice(voiceOn);
+    setScreen('suggestion');
+    if (voiceOn && !usePrefsStore.getState().narrator) usePrefsStore.getState().setNarrator(true);
+    say(suggestionText(s, s.mode, voiceOn));
   };
 
   const toggleVoice = () => {
@@ -151,6 +196,7 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
     if (screen === 'suggestion') setVoice(on);
     if (!on) return stop();
     if (current) speak(questionText(current), { lang: locale, id: 'onboarding' });
+    else if (screen === 'results' && summary) speak(profileSpoken(t, answers as OnboardingAnswers, summary), { lang: locale, id: 'onboarding' });
     else if (suggestion) speak(suggestionText(suggestion, mode, on), { lang: locale, id: 'onboarding' });
   };
 
@@ -169,6 +215,7 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
       ...(answers as OnboardingAnswers),
       suggestions: suggestion.suggestions,
       source: suggestion.source,
+      ...(summary ? { quest: summary } : {}),
     });
     const first = suggestion.firstStep;
     finish();
@@ -178,6 +225,14 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
 
   const enter = reduced ? { opacity: 0 } : { opacity: 0, x: 40 };
   const leave = reduced ? { opacity: 0 } : { opacity: 0, x: -40 };
+  const stars = totalStars(quest.results);
+  const kicker = current
+    ? t('step', { n: step + 1, total: QUESTION_STEPS.length })
+    : screen === 'quest'
+      ? t('games.progress', { n: quest.index + 1, total: GAME_IDS.length })
+      : screen === 'results'
+        ? t('games.kicker')
+        : t('brand');
 
   return createPortal(
     <div data-overlay-dialog className="fixed inset-0 z-[80] flex items-end justify-center bg-black/55 sm:items-center">
@@ -186,12 +241,24 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="quiz-title"
-        className="panel relative m-0 flex max-h-[94dvh] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-t-3xl p-5 pb-[calc(var(--safe-bottom)+1.25rem)] shadow-2xl sm:m-4 sm:rounded-3xl"
+        className="panel relative m-0 flex max-h-[96dvh] w-full max-w-md flex-col gap-3 overflow-y-auto rounded-t-3xl p-4 pb-[calc(var(--safe-bottom)+1rem)] shadow-2xl sm:m-4 sm:max-h-[92dvh] sm:rounded-3xl sm:p-5"
       >
         <header className="flex items-center gap-2">
           <p aria-live="polite" className="flex-1 text-xs font-semibold tracking-wider text-ink-muted uppercase">
-            {current ? t('step', { n: step + 1, total: QUESTION_STEPS.length }) : t('brand')}
+            {kicker}
           </p>
+          {(screen === 'quest' || screen === 'results' || screen === 'goal') && (
+            <span
+              className="flex min-h-9 items-center gap-1 rounded-full bg-sun/15 px-2.5 text-sm font-bold text-sun ring-1 ring-sun/40"
+              aria-label={t('games.starsTotal', { stars })}
+              role="img"
+            >
+              <Star aria-hidden className="size-4 fill-sun" />
+              <span aria-hidden className="tabular-nums">
+                {stars}
+              </span>
+            </span>
+          )}
           {canSpeak && (
             <button
               type="button"
@@ -207,9 +274,14 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
               {narrator ? <Volume2 aria-hidden className="size-5" /> : <VolumeX aria-hidden className="size-5" />}
             </button>
           )}
-          {screen !== 'suggestion' && (
+          {(screen === 'role' || screen === 'reading') && (
             <button type="button" onClick={finish} className="min-h-11 rounded-full px-3 text-sm font-semibold text-ink-muted hover:bg-white/10">
               {t('skip')}
+            </button>
+          )}
+          {screen === 'quest' && (
+            <button type="button" onClick={skipQuest} className="min-h-11 rounded-full px-3 text-sm font-semibold text-ink-muted hover:bg-white/10">
+              {t('games.skipAll')}
             </button>
           )}
         </header>
@@ -217,6 +289,7 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={screen}
+            data-screen={screen}
             initial={enter}
             animate={{ opacity: 1, x: 0 }}
             exit={leave}
@@ -225,9 +298,18 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
           >
             {current && (
               <>
-                <h2 id="quiz-title" ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
-                  {t(`questions.${current}.title`)}
-                </h2>
+                <div>
+                  {current === 'goal' && (
+                    <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-sun uppercase">
+                      <Star aria-hidden className="size-4 fill-sun" />
+                      {t('questions.goal.kicker')}
+                    </p>
+                  )}
+                  <h2 id="quiz-title" ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+                    {t(`questions.${current}.title`)}
+                  </h2>
+                  <p className="text-sm text-ink-muted">{t(`questions.${current}.subtitle`)}</p>
+                </div>
                 <div role="radiogroup" aria-labelledby="quiz-title" className="flex flex-col gap-2">
                   {(QUESTION_OPTIONS[current] as Opt[]).map(({ value, Icon }) => {
                     const checked = answers[current] === value;
@@ -235,9 +317,9 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
                       <label
                         key={value}
                         className={clsx(
-                          'flex min-h-20 cursor-pointer items-center gap-4 rounded-2xl p-3 ring-1',
+                          'flex min-h-20 cursor-pointer items-center gap-4 rounded-2xl p-3 ring-1 transition-transform',
                           'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-field-300',
-                          checked ? 'bg-field-500/15 ring-2 ring-field-400' : 'bg-white/5 ring-line hover:bg-white/10',
+                          checked ? 'scale-[1.02] bg-field-500/15 ring-2 ring-field-400' : 'bg-white/5 ring-line hover:bg-white/10',
                         )}
                       >
                         <input
@@ -249,7 +331,12 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
                           onClick={() => sayOption(current, value)}
                           className="sr-only"
                         />
-                        <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-field-500/15 text-field-300 ring-1 ring-field-500/40">
+                        <span
+                          className={clsx(
+                            'grid size-14 shrink-0 place-items-center rounded-2xl ring-1 transition-colors',
+                            checked ? 'bg-field-500 text-black ring-field-300' : 'bg-field-500/15 text-field-300 ring-field-500/40',
+                          )}
+                        >
                           <Icon aria-hidden className="size-8" />
                         </span>
                         <span className="min-w-0 flex-1">
@@ -271,6 +358,18 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
                 </div>
               </>
             )}
+
+            {screen === 'quest' && (
+              <QuestRunner
+                detail={detail}
+                reduced={reduced}
+                say={say}
+                onProgress={(index, results) => setQuest({ index, results })}
+                onDone={onQuestDone}
+              />
+            )}
+
+            {screen === 'results' && summary && <ProfileCard answers={answers as OnboardingAnswers} summary={summary} reduced={reduced} />}
 
             {screen === 'thinking' && (
               <div role="status" className="flex flex-col items-center gap-4 py-6 text-center">
@@ -351,10 +450,10 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
 
         {current && (
           <div className="flex gap-2">
-            {step > 0 && (
+            {current === 'reading' && (
               <button
                 type="button"
-                onClick={() => go(QUESTION_STEPS[step - 1]!)}
+                onClick={() => go('role')}
                 aria-label={t('back')}
                 className="grid size-14 shrink-0 place-items-center rounded-full bg-white/5 ring-1 ring-line hover:bg-white/10"
               >
@@ -367,10 +466,21 @@ export default function RoleQuiz({ onClose }: { onClose: () => void }) {
               disabled={!answers[current]}
               className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-full bg-field-500 px-5 text-lg font-semibold text-black hover:bg-field-400 disabled:opacity-40"
             >
-              {t('next')}
+              {current === 'reading' ? t('games.play') : t('next')}
               <ArrowRight aria-hidden className="size-6" />
             </button>
           </div>
+        )}
+
+        {screen === 'results' && (
+          <button
+            type="button"
+            onClick={() => void think()}
+            className="sticky bottom-0 z-10 flex min-h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-field-500 px-5 text-lg font-semibold text-black shadow-lg shadow-black/30 hover:bg-field-400"
+          >
+            {t('results.continue')}
+            <ArrowRight aria-hidden className="size-6" />
+          </button>
         )}
 
         {screen === 'suggestion' && suggestion && (

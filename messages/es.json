@@ -283,8 +283,42 @@
     "types": {
       "ad": "Anuncio",
       "alert": "Alerta",
-      "tip": "Consejo"
-    }
+      "tip": "Consejo",
+      "news": "Boletín"
+    },
+    "topics": {
+      "intro": "Bienvenida",
+      "weather": "Clima",
+      "soil": "Suelo",
+      "vegetation": "Verdor",
+      "events": "Eventos",
+      "terrain": "Terreno",
+      "market": "Precios",
+      "advice": "Consejo",
+      "outro": "Cierre"
+    },
+    "ident": "Estás escuchando {name}, {freq}.",
+    "preparing": "Preparando el boletín de {place}…",
+    "polishing": "La IA está puliendo el guion del boletín; los datos no cambian.",
+    "programError": "No se pudo armar el boletín de esta zona: suenan los segmentos grabados.",
+    "localStation": "Emisora de la zona: la arma la app con los datos de este lugar (satélites de la NASA, eventos y precios).",
+    "voiceDevice": "Leído con la voz de tu teléfono",
+    "jumpTo": "Escuchar desde aquí: {text}",
+    "confidence": {
+      "high": "Confianza alta",
+      "medium": "Confianza media",
+      "low": "Confianza baja"
+    },
+    "simulated": "Valor de demostración, no medido",
+    "caveat": "Lo que este dato no dice: {text}",
+    "byClaude": "Guion escrito con IA (Claude) a partir de estos datos",
+    "byRules": "Guion automático a partir de estos datos",
+    "seeZone": "Ver la zona de {place}",
+    "follow": "La radio mueve el mapa",
+    "followHint": "Mientras habla, vuela al lugar y prende la capa de la que habla.",
+    "held": "Tomaste el mapa: la radio dejó de moverlo.",
+    "resume": "Seguir a la radio",
+    "reminder": "La radio te apoya, pero no reemplaza tu criterio ni el de los técnicos de tu zona."
   },
   "agent": {
     "placeholder": "Pregúntale al campo…",
@@ -716,6 +750,16 @@
         "title": "Cambios de estado (cadena de Markov)",
         "simple": "Cuenta qué parte del terreno pasó de un estado a otro entre dos fechas. Con eso se calcula hacia dónde iría el terreno si todo sigue igual.",
         "example": "Si 20 de cada 100 hectáreas sanas pasaron a “con estrés”, la flecha de sana a estrés dice 20 %."
+      },
+      "crop-vulnerability": {
+        "title": "Vulnerabilidad del cultivo",
+        "simple": "Qué tan fácil es que el cultivo sufra daño por el clima: calor, sequía, exceso de lluvia o heladas.",
+        "example": "Un maíz en floración con una ola de calor y el suelo seco es muy vulnerable: puede perder buena parte de la cosecha."
+      },
+      "soil-health": {
+        "title": "Salud del suelo",
+        "simple": "Un suelo sano está vivo: tiene materia orgánica, guarda agua, deja entrar las raíces y no se lava con la lluvia.",
+        "example": "Dejar rastrojo, rotar con frijol y no quemar ayudan a que el suelo guarde más agua en la sequía."
       }
     }
   },
@@ -1172,18 +1216,18 @@
     "brand": "Field Shift · datos de la NASA",
     "step": "{n} de {total}",
     "skip": "Saltar",
-    "start": "Empezar",
+    "start": "¡A jugar!",
     "preparing": "Preparando…",
     "next": "Siguiente",
     "back": "Atrás",
     "welcome": {
       "title": "Hola, te damos la bienvenida",
       "text": "Te ayudamos a cuidar tu suelo y a escoger qué sembrar, con datos de los satélites de la NASA.",
-      "find": "Busca tu finca",
-      "climate": "Mira tu clima",
-      "compare": "Compara cultivos",
-      "hint": "Te haremos 3 preguntas cortas para mostrarte lo que te sirve.",
-      "spokenEnd": "Toca el botón verde de abajo para empezar."
+      "hint": "Juega unos 3 minutos: aprendes a leer los datos de la NASA y dejamos la app a tu medida.",
+      "spokenEnd": "Toca el botón verde de abajo para jugar.",
+      "play": "7 retos cortos",
+      "learn": "Aprende a leer los satélites",
+      "profile": "La app a tu medida"
     },
     "voice": {
       "listen": "Escuchar con voz",
@@ -1206,10 +1250,11 @@
           "label": "Técnico o técnica",
           "hint": "Agrónomo, extensionista o asesor.",
           "spoken": "Si eres agrónomo, extensionista o asesor, toca la tabla de notas."
-        }
+        },
+        "subtitle": "Elige tu personaje: así adaptamos los retos a ti."
       },
       "goal": {
-        "title": "¿Qué quieres hacer hoy?",
+        "title": "¿Cuál es tu primera misión?",
         "climate": {
           "label": "Ver el clima de mi zona",
           "hint": "Lluvia, humedad del suelo y calor.",
@@ -1224,25 +1269,28 @@
           "label": "Ver datos de satélite",
           "hint": "Capas de la NASA sobre el mapa.",
           "spoken": "Para ver los mapas de los satélites, toca el satélite."
-        }
+        },
+        "kicker": "Último paso",
+        "subtitle": "Por ahí empezamos la app."
       },
       "reading": {
-        "title": "¿Cómo prefieres la información?",
+        "title": "¿Cómo quieres jugar?",
         "listen": {
-          "label": "Escucharla",
-          "hint": "Una voz me lee lo importante.",
+          "label": "Escuchando",
+          "hint": "Una voz me lee todo.",
           "spoken": "Si prefieres escuchar, toca la oreja."
         },
         "little": {
-          "label": "Leer poco",
-          "hint": "Frases cortas y dibujos.",
+          "label": "Con dibujos",
+          "hint": "Frases cortas y poco texto.",
           "spoken": "Si prefieres leer poco, toca el dibujo."
         },
         "detail": {
-          "label": "Leer todo con detalle",
-          "hint": "Números, gráficas y fuentes.",
-          "spoken": "Si quieres todos los detalles, toca el libro."
-        }
+          "label": "Con todos los datos",
+          "hint": "Números, fuentes y la ciencia de cada dato.",
+          "spoken": "Si quieres todos los detalles y la ciencia, toca el libro."
+        },
+        "subtitle": "Puedes cambiarlo cuando quieras en Ajustes."
       }
     },
     "thinking": {
@@ -1294,6 +1342,403 @@
         "satellite2": "¿Qué mide el NDVI y de qué satélite viene?",
         "common": "¿Qué datos de la NASA hay para mi zona?"
       }
+    },
+    "games": {
+      "kicker": "Retos del campo",
+      "play": "¡A jugar!",
+      "progress": "Reto {n} de {total}",
+      "starsTotal": "{stars, plural, =0 {Sin estrellas todavía} one {# estrella ganada} other {# estrellas ganadas}}",
+      "path": "Camino de los retos",
+      "pathItem": "Reto {n}: {name}, {status}",
+      "status": {
+        "current": "jugando ahora",
+        "done": "{stars, plural, one {# estrella} other {# estrellas}}",
+        "skipped": "saltado",
+        "next": "por jugar"
+      },
+      "skipGame": "Saltar este reto",
+      "skipAll": "Saltar retos",
+      "learned": {
+        "kicker": "Lo aprendiste",
+        "stars": "{stars, plural, one {# estrella de 3} other {# estrellas de 3}}",
+        "praise1": "¡Lo lograste!",
+        "praise2": "¡Muy bien!",
+        "praise3": "¡Perfecto!",
+        "key": "La clave",
+        "science": "La ciencia",
+        "also": "También aprendiste:",
+        "measures": "Lo mide desde el espacio:",
+        "nextGame": "Siguiente reto",
+        "finish": "Terminar los retos"
+      },
+      "ndvi": {
+        "name": "Visión satélite",
+        "title": "Visión satélite",
+        "task": "Tres lotes tienen plantas con sed, pero a simple vista todo se ve verde. Enciende la visión del satélite y tócalos.",
+        "eyeView": "Así lo ven tus ojos",
+        "lensView": "Así lo ve el satélite (NDVI)",
+        "lens": "Visión satélite",
+        "on": "encendida",
+        "off": "apagada",
+        "lensOn": "Visión satélite encendida. Los números bajos son plantas con sed.",
+        "needLens": "Con los ojos no se nota la diferencia. Enciende la visión del satélite.",
+        "lot": "Lote {n}",
+        "lotValue": "Lote {n}, verdor {value}",
+        "found": "¡Bien! {value}: plantas con sed. {left, plural, one {Falta #.} other {Faltan #.}}",
+        "healthy": "Ese marca {value}: plantas verdes y fuertes. Busca los números bajos.",
+        "allFound": "¡Los encontraste! El satélite ve la sed antes que tus ojos.",
+        "legendLow": "Bajo: con sed o sin plantas",
+        "legendHigh": "Alto: verde y fuerte",
+        "formula": "NDVI = (infrarrojo − rojo) ÷ (infrarrojo + rojo). Va de 0 a 1.",
+        "lesson": "Un NDVI alto, cerca de 1, es planta verde y fuerte. Uno bajo avisa sed, plaga o suelo desnudo, muchas veces antes de que se vea.",
+        "science": "Una hoja sana absorbe la luz roja y refleja mucho infrarrojo cercano, una luz que tus ojos no ven. MODIS lo mide casi cada día; Landsat y Sentinel (HLS), cada pocos días y con más detalle."
+      },
+      "et": {
+        "name": "El campo suda",
+        "title": "El campo suda",
+        "taskSources": "El agua se va del campo hacia el aire. Toca los 2 lugares de donde sale el vapor.",
+        "taskMax": "Ahora mueve el clima: haz que el campo pierda la mayor cantidad de agua.",
+        "taskProtect": "El sol y el viento no los puedes cambiar. ¿Qué sí puedes hacer tú para que el campo pierda menos agua?",
+        "scene": "Campo con plantas. Pierde {amount} de agua al día.",
+        "spots": {
+          "soil": "El suelo",
+          "leaves": "Las hojas",
+          "cloud": "La nube"
+        },
+        "soilFound": "¡Sí! El suelo pierde agua: eso es evaporación.",
+        "leavesFound": "¡Sí! Las plantas sudan por las hojas: eso es transpiración.",
+        "cloudWrong": "La nube trae agua, no la saca. Busca más abajo.",
+        "sourcesDone": "Las dos juntas se llaman evapotranspiración.",
+        "equation": {
+          "evaporation": "Evaporación",
+          "transpiration": "Transpiración",
+          "et": "Evapotranspiración"
+        },
+        "continue": "Seguir",
+        "sun": "Sol",
+        "sunSoft": "Suave",
+        "sunStrong": "Fuerte",
+        "wind": "Viento",
+        "windCalm": "Calma",
+        "windStrong": "Fuerte",
+        "soil": "Suelo",
+        "soilBare": "Desnudo",
+        "soilCovered": "Cubierto",
+        "locked": "No lo puedes cambiar",
+        "meter": "El campo pierde {amount} de agua al día",
+        "maxDone": "¡{amount} al día! Con sol fuerte, viento y suelo desnudo el campo se seca más rápido.",
+        "protectDone": "¡Eso! Con el suelo cubierto el campo pierde {amount} menos cada día.",
+        "lesson": "La evapotranspiración es el agua que se va del campo: la que se evapora del suelo más la que sudan las plantas. Más sol, calor y viento la suben; cubrir el suelo la baja.",
+        "science": "ECOSTRESS mide la temperatura de las hojas desde la Estación Espacial: una planta que transpira se mantiene fresca y una que se calienta tiene sed. MODIS estima la evapotranspiración cada 8 días."
+      },
+      "balance": {
+        "name": "La cuenta del agua",
+        "title": "La cuenta del agua",
+        "task": "Lo que entra menos lo que sale. Deja el agua del suelo en la franja verde y toca Listo.",
+        "round": "Mes {n} de {total}: {name}",
+        "rounds": {
+          "dry": {
+            "name": "julio seco"
+          },
+          "wet": {
+            "name": "octubre de lluvias",
+            "intro": "Ahora un mes de lluvias. Empiezas con el riego de siempre: ¿hace falta?"
+          }
+        },
+        "tank": "Agua en el suelo: {state}",
+        "zone": {
+          "wet": "Encharcado",
+          "ok": "Justo",
+          "dry": "Seco"
+        },
+        "verdict": {
+          "dry": "Le falta agua",
+          "ok": "Agua justa para las raíces",
+          "wet": "Le sobra agua"
+        },
+        "in": "Entra",
+        "out": "Sale",
+        "rain": "Lluvia (GPM)",
+        "irrigation": "Riego",
+        "less": "Regar menos",
+        "more": "Regar más",
+        "et": "Evaporación y plantas",
+        "cover": "Cubrir el suelo: sale {amount} menos",
+        "result": "Balance",
+        "check": "Listo",
+        "okRound": "¡Justo! Las raíces tienen el agua que necesitan.",
+        "dryHint": "Todavía sale más agua de la que entra: el suelo queda seco. Riega un poco más o cubre el suelo.",
+        "wetHint": "Entra demasiada agua: el suelo se encharca, las raíces se ahogan y la lluvia lava la tierra. Ya llovió bastante: riega menos.",
+        "formula": "Balance = lluvia + riego − evapotranspiración.",
+        "lesson": "El balance de agua es lo que entra (lluvia y riego) menos lo que sale (evaporación y plantas). Si es negativo hay sequía; si sobra mucho, el suelo se encharca.",
+        "science": "GPM IMERG estima la lluvia cada media hora en todo el mundo; ECOSTRESS y MODIS estiman la evapotranspiración. Restando una de la otra se calcula el balance de agua de tu zona."
+      },
+      "anomaly": {
+        "name": "¿Seco para quién?",
+        "title": "¿Seco para quién?",
+        "task": "Compara el agua del suelo de hoy con lo normal de ese mes en ese lugar. ¿Cómo está?",
+        "card": "Lugar {n} de {total}",
+        "now": "Hoy",
+        "normal": "Lo normal",
+        "answers": {
+          "drier": "Más seco de lo normal",
+          "normal": "Normal para ese lugar",
+          "wetter": "Más húmedo de lo normal"
+        },
+        "diff": "Anomalía: {value} puntos",
+        "right": "¡Correcto!",
+        "wrong": "Era: {answer}.",
+        "cards": {
+          "boyaca": {
+            "place": "Tu finca en Boyacá",
+            "month": "Julio",
+            "why": "Tiene 12 puntos menos de lo normal: es una anomalía seca."
+          },
+          "guajira": {
+            "place": "Desierto de La Guajira",
+            "month": "Marzo",
+            "why": "Hay muy poca agua, pero ahí siempre es así en marzo: no hay anomalía."
+          },
+          "choco": {
+            "place": "Selva del Chocó",
+            "month": "Octubre",
+            "why": "Hay bastante agua, pero 12 puntos menos de lo normal para el Chocó: es una anomalía seca."
+          },
+          "llanos": {
+            "place": "Llanos Orientales",
+            "month": "Mayo",
+            "why": "Tiene 10 puntos más de lo normal: es una anomalía húmeda. Cuidado con el encharcamiento."
+          }
+        },
+        "nextCard": "Siguiente lugar",
+        "finish": "Terminar",
+        "formula": "Anomalía = humedad de hoy − promedio de muchos años en el mismo mes.",
+        "lesson": "Una anomalía compara con lo normal de cada lugar y mes. Poca agua no siempre es anomalía, y mucha agua puede ser menos de lo normal.",
+        "science": "SMAP mide la humedad de la capa de arriba del suelo con microondas, aun con nubes, cada 2 o 3 días. La anomalía resta el promedio de muchos años del mismo mes."
+      },
+      "frost": {
+        "name": "La noche más fría",
+        "title": "La noche más fría",
+        "taskFind": "Mueve el cielo, el viento y el lugar. Busca la noche en que cae la helada.",
+        "question": "Esta noche anuncian cielo despejado y calma. Tu frijol está en la hondonada. ¿Qué haces?",
+        "scene": "Noche en el campo. Al amanecer: {temp}, {risk}.",
+        "sky": "Cielo",
+        "cloudy": "Nublado",
+        "clear": "Despejado",
+        "wind": "Viento",
+        "windy": "Con viento",
+        "calm": "En calma",
+        "place": "Lugar",
+        "slope": "Ladera",
+        "hollow": "Hondonada",
+        "dawn": "Al amanecer",
+        "risk": {
+          "low": "Sin riesgo",
+          "high": "Riesgo alto",
+          "frost": "¡Helada!"
+        },
+        "why": {
+          "clear": "Sin nubes, el calor del suelo se escapa al cielo y la noche se enfría más.",
+          "cloudy": "Las nubes son como una cobija: guardan el calor del suelo.",
+          "calm": "Sin viento, el aire frío se queda quieto pegado al suelo.",
+          "windy": "El viento mezcla el aire y no deja que el frío se asiente.",
+          "hollow": "El aire frío pesa: baja y se junta en la hondonada.",
+          "slope": "En la ladera el aire frío se escurre hacia abajo."
+        },
+        "found": "¡Ahí está la helada! Cielo despejado, sin viento y en la hondonada: la noche más peligrosa.",
+        "options": {
+          "wait": "Esperar a ver si amanece con hielo",
+          "cover": "Cubrirlo con tela antes de que oscurezca",
+          "fertilize": "Echarle abono hoy"
+        },
+        "feedback": {
+          "wait": "Cuando ves el hielo ya es tarde: la helada quema las hojas en la madrugada.",
+          "cover": "¡Bien! La tela guarda el calor del suelo cerca de las plantas.",
+          "fertilize": "El abono no protege del frío. Busca algo que guarde el calor."
+        },
+        "lesson": "Hay riesgo de helada cuando la temperatura cerca del suelo baja de {zero}. Las noches despejadas y sin viento, y las hondonadas, son las más peligrosas.",
+        "science": "En noches despejadas las hojas pueden quedar hasta {delta} más frías que el aire. NASA POWER da la temperatura mínima de cada día; MODIS mide de noche la temperatura de la superficie."
+      },
+      "sensors": {
+        "name": "Detective del suelo",
+        "title": "Detective del suelo",
+        "task": "Misión: encuentra el lote más seco de la finca para regarlo primero.",
+        "stepsLabel": "Pasos del reto",
+        "steps": {
+          "look": "Satélite",
+          "probe": "Sensores",
+          "decide": "Decide"
+        },
+        "nowTitle": "Ahora",
+        "now": {
+          "look": "Mira la finca desde el satélite. Toca el botón verde.",
+          "seen": "El satélite ve toda la finca como un solo cuadro: {value} de agua. Es un promedio: no dice cuál lote está más seco.",
+          "probe": "{left, plural, =0 {Listo.} one {Toca # lote más para clavar el último sensor.} other {Toca # lotes, uno por uno, para clavar un sensor en cada uno.}}",
+          "combining": "Juntando satélite y sensores…",
+          "decide": "Toca el lote con el número más bajo: ese es el más seco."
+        },
+        "look": "Mirar con el satélite",
+        "toField": "Ahora mide en el campo",
+        "satPixel": "Satélite: {value}",
+        "satBadge": "Satélite: {value} para toda la finca",
+        "probeTip": "Consejo: uno cerca del río, otro en el medio y otro lejos.",
+        "probeValue": "Sensor: {value} de agua, exacto en ese lote.",
+        "sensors": "Sensores:",
+        "sensorsCount": "Sensores: {used} de {total}",
+        "combined": "¡Mapa listo! El satélite dio la idea general y tus sensores el detalle.",
+        "farm": "Lotes de la finca",
+        "river": "Río",
+        "cell": "Lote fila {row}, columna {col}",
+        "cellSensor": "Lote fila {row}, columna {col}: sensor, {value}",
+        "cellEstimate": "Lote fila {row}, columna {col}: cerca de {value}",
+        "precisionTitle": "Qué tan preciso es el mapa",
+        "precisionSat": "Solo satélite",
+        "precisionBoth": "Satélite + sensores",
+        "decideOk": "¡Ese es! El lote más lejos del río es el más seco.",
+        "decideNo": "Ese lote tiene {value}: hay otros con menos agua. Busca el número más bajo.",
+        "formula": "Mapa combinado: el patrón del satélite, ajustado con el dato exacto de cada sensor.",
+        "lesson": "El satélite ve toda la zona cada día, pero en cuadros grandes. Un sensor en el campo es exacto, pero en un solo punto. Juntos dan un mapa más preciso de tu finca.",
+        "science": "SMAP mide la humedad en cuadros de varios kilómetros. Los modelos usan sensores en tierra para corregir el error del satélite, y el satélite para estimar lo que pasa entre un sensor y otro."
+      },
+      "season": {
+        "name": "Sobrevive la temporada",
+        "title": "Sobrevive la temporada",
+        "task": "4 momentos de la temporada. Lee el aviso del satélite y elige qué haces para cuidar tu cultivo y tu suelo.",
+        "crop": "Tu cultivo",
+        "soil": "Tu suelo",
+        "vulnerability": {
+          "low": "Vulnerabilidad baja",
+          "medium": "Vulnerabilidad media",
+          "high": "Vulnerabilidad alta"
+        },
+        "soilStatus": {
+          "good": "Suelo sano",
+          "fair": "Suelo regular",
+          "poor": "Suelo débil"
+        },
+        "delta": "Cultivo {crop}, suelo {soil}.",
+        "nextTurn": "Siguiente momento",
+        "seeEnd": "Ver cómo terminó",
+        "finish": "Terminar",
+        "endTitle": "Así terminó tu temporada",
+        "endText": "Cuando sube el calor, baja la humedad y crece la evaporación al mismo tiempo, el cultivo se vuelve vulnerable. Un suelo cubierto y con rotación guarda más agua y aguanta mejor.",
+        "turns": {
+          "storm": {
+            "when": "Semana 2",
+            "title": "Aguacero fuerte sobre el suelo recién arado",
+            "options": {
+              "plow": "Arar otra vez para secarlo",
+              "cover": "Dejar rastrojo o sembrar una cobertura",
+              "nothing": "No hacer nada"
+            },
+            "feedback": {
+              "plow": "Arar el suelo mojado lo aprieta, y el próximo aguacero se lleva la tierra fértil.",
+              "cover": "¡Bien! Las raíces y el rastrojo frenan el agua: la tierra no se lava.",
+              "nothing": "El suelo desnudo pierde un poco de tierra con cada aguacero."
+            },
+            "say": {
+              "rain": "Cayeron {value} de lluvia en un solo día: muchísima agua.",
+              "ndvi": "Verdor {value}: el suelo está casi sin plantas que lo cubran."
+            }
+          },
+          "heat": {
+            "when": "Semana 6",
+            "title": "Ola de calor justo en la floración",
+            "options": {
+              "noon": "Regar al mediodía",
+              "fertilize": "Echar fertilizante",
+              "dawn": "Regar al amanecer y cubrir el suelo"
+            },
+            "feedback": {
+              "noon": "Ayuda, pero con tanto calor mucha agua se evapora antes de llegar a las raíces.",
+              "fertilize": "Con el suelo seco el fertilizante puede quemar las raíces.",
+              "dawn": "¡Bien! Al amanecer se evapora menos y la cobertura guarda la humedad."
+            },
+            "say": {
+              "temp": "Hace {value} justo cuando el maíz florece: mucho calor.",
+              "moisture": "El suelo tiene solo {value} de agua: muy seco.",
+              "et": "El campo pierde {value} de agua al día: se seca rápido."
+            }
+          },
+          "stress": {
+            "when": "Semana 9",
+            "title": "El satélite muestra que el verdor baja en una esquina",
+            "options": {
+              "spray": "Fumigar todo el lote",
+              "scout": "Ir a mirar esa esquina",
+              "ignore": "No hacer nada"
+            },
+            "feedback": {
+              "spray": "Sin saber la causa, el veneno gasta plata y daña la vida del suelo.",
+              "scout": "¡Bien! El satélite avisa; tus ojos confirman si es agua, plaga o falta de abono.",
+              "ignore": "Cuando la mancha se ve a simple vista, el daño ya creció."
+            },
+            "say": {
+              "ndvi": "En una esquina del lote el verdor bajó a {value}: esas plantas sufren."
+            }
+          },
+          "harvest": {
+            "when": "Cosecha",
+            "title": "Ya cosechaste el maíz. ¿Qué viene después?",
+            "options": {
+              "repeat": "Sembrar maíz otra vez",
+              "burn": "Quemar el rastrojo",
+              "legume": "Sembrar frijol (rotar)"
+            },
+            "feedback": {
+              "repeat": "Repetir el mismo cultivo cansa el suelo y ayuda a las plagas.",
+              "burn": "Quemar acaba con la materia orgánica y deja el suelo desnudo ante la lluvia.",
+              "legume": "¡Bien! El frijol devuelve nitrógeno al suelo y corta el ciclo de las plagas."
+            },
+            "say": {
+              "ndvi": "Verdor {value}: el maíz ya se cosechó y el suelo quedó libre."
+            }
+          }
+        },
+        "lesson": "Calor, humedad del suelo, lluvia, evaporación y verdor se mueven juntos. Cuando varios van mal a la vez, el cultivo es más vulnerable; un suelo sano y cubierto amortigua el golpe.",
+        "science": "Los satélites no ven tus decisiones, pero sí sus efectos: SMAP ve la humedad, GPM la lluvia, ECOSTRESS la evaporación y MODIS el verdor. Juntos muestran el riesgo antes de que se vea en la planta.",
+        "stepsLabel": "Momentos de la temporada",
+        "alertsTitle": "El satélite te avisa",
+        "question": "¿Qué haces? Elige una opción."
+      }
+    },
+    "results": {
+      "kicker": "Tu perfil de campo",
+      "archetype": {
+        "farmer": {
+          "climate": "Vigía del clima",
+          "rotations": "Estratega de la siembra",
+          "satellite": "Ojo de satélite"
+        },
+        "technician": {
+          "climate": "Analista del clima",
+          "rotations": "Estratega de rotaciones",
+          "satellite": "Analista de satélites"
+        }
+      },
+      "goalText": {
+        "climate": "Te importa saber cómo vienen la lluvia, el calor y el agua del suelo.",
+        "rotations": "Quieres escoger qué sembrar para cuidar tu suelo.",
+        "satellite": "Te gusta ver la finca con los ojos de los satélites."
+      },
+      "level": "Nivel {n}: {name}",
+      "levels": {
+        "beginner": "Semilla",
+        "intermediate": "Brote",
+        "advanced": "Cosecha"
+      },
+      "levelText": {
+        "beginner": "Vas empezando: la app y el asistente te explicarán cada término con calma.",
+        "intermediate": "Ya lees bien varios datos: te explicaremos los que faltan.",
+        "advanced": "Lees muy bien los datos de los satélites: el asistente irá directo al grano."
+      },
+      "stars": "{stars} de {max} estrellas",
+      "mastered": "Ya dominas",
+      "review": "Para repasar",
+      "note": "El asistente te explicará estos términos cuando aparezcan. También están en el glosario, en Ajustes.",
+      "noteAll": "Puedes repasar todos los términos cuando quieras en el glosario, en Ajustes.",
+      "continue": "Ver cómo queda mi app",
+      "spoken": "Tu perfil de campo: {archetype}. Nivel {level}. Ganaste {stars} de {max} estrellas."
     }
   },
   "glossaryPage": {

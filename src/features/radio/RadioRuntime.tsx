@@ -1,53 +1,41 @@
 'use client';
 
 import type { Marker } from 'maplibre-gl';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { useAgentStore } from '@/features/agent/store';
-import { isAutoRotateEvent } from '@/features/globe/autoRotate';
+import { onFlyStart } from '@/features/globe/camera';
 import { useGlobeStore } from '@/features/globe/store';
 import { getUserLocation } from '@/features/location/store';
 import { useNarratorStore } from '@/features/narrator/store';
-import { RadioSegmentsResponse, RadioStationsResponse, type RadioStation } from '@/lib/api/contract';
-import { haversineKm } from '@/lib/geo';
+import { RadioStationsResponse } from '@/lib/api/contract';
 import { usePrefsStore } from '@/lib/prefs';
+import { radioSteering } from './cues';
 import { radioEngine } from './engine';
-import { useRadioStore } from './store';
+import { useRadioLive } from './live';
+import { ensureProgram } from './programClient';
+import { currentSegment, useRadioStore } from './store';
+import { markTuned, stationFor, tuneTo } from './tune';
 
-/** Radio de sintonía según el zoom: con el globo entero se "escucha" lejos; de cerca, solo lo local. */
-const tuneRadiusKm = (zoom: number) => Math.max(250, 4500 / 2 ** Math.max(0, zoom - 2));
-
-function nearestStation(stations: RadioStation[], lng: number, lat: number, zoom: number) {
-  let best: RadioStation | null = null;
-  let bestD = Infinity;
-  for (const s of stations) {
-    if (s.lat == null || s.lon == null) continue;
-    const d = haversineKm({ lng, lat }, { lng: s.lon, lat: s.lat });
-    if (d < bestD) {
-      bestD = d;
-      best = s;
-    }
-  }
-  if (best && bestD <= tuneRadiusKm(zoom)) return best;
-  return stations.find((s) => s.lat == null) ?? best;
-}
-
-async function loadSegments(id: string) {
-  const res = await fetch(`/api/radio/stations/${encodeURIComponent(id)}/segments`);
-  if (!res.ok) throw new Error(String(res.status));
-  return RadioSegmentsResponse.parse(await res.json()).segments;
+/** La radio está contando su programa y moviendo el mapa: sus propios vuelos no cambian de emisora. */
+function radioDriving() {
+  if (radioSteering()) return true;
+  const live = useRadioLive.getState();
+  return radioEngine.isPlaying() && live.follow && !live.held && Boolean(currentSegment()?.topic);
 }
 
 /**
- * Emisoras en el globo (puntos con ondas que pulsan) y sintonía: la emisora es la más cercana al centro.
- * Al cambiar de emisora suena una estática breve; si ya estaba sonando, la nueva sigue sola.
+ * Emisoras en el globo (puntos con ondas que pulsan) y sintonía: la emisora es la de lo que está bajo la mira
+ * (fija, de la zona o la nacional; ver tune.ts). Al cambiar de emisora suena una estática breve; si ya estaba
+ * sonando, la nueva sigue sola. Mientras suena el programa del día, la radio mueve el mapa (cues.ts) hasta que la
+ * persona lo toma.
  */
 export default function RadioRuntime() {
   const t = useTranslations('radio');
+  const locale = useLocale() === 'en' ? 'en' : 'es';
   const map = useGlobeStore((s) => s.map);
   const ready = useGlobeStore((s) => s.status === 'ready');
   const markers = useRef<Marker[]>([]);
-  const tuning = useRef(0);
 
   // Emisoras (una vez).
   useEffect(() => {
@@ -58,6 +46,18 @@ export default function RadioRuntime() {
       .then((j) => useRadioStore.getState().setStations(RadioStationsResponse.parse(j).stations))
       .catch(() => useRadioStore.getState().setStatus('error'));
   }, []);
+
+  // El motor pide el programa al empezar una emisora y se identifica en voz mientras llega.
+  useEffect(() => {
+    radioEngine.setHooks({
+      beforePlay: () => ensureProgram(),
+      ident: () => {
+        const st = useRadioStore.getState().station;
+        return st ? t('ident', { name: st.name, freq: st.frequencyLabel }) : null;
+      },
+    });
+    return () => radioEngine.setHooks({});
+  }, [t]);
 
   // Puntos de emisora en el globo (se ocultan desde Ajustes; la radio sigue sonando en el mini reproductor).
   const stations = useRadioStore((s) => s.stations);
@@ -77,12 +77,15 @@ export default function RadioRuntime() {
         if (s.lat == null || s.lon == null) continue;
         const el = document.createElement('div');
         el.className = 'radio-marker';
+        el.dataset.stationId = s.id;
         el.style.display = usePrefsStore.getState().mapMarkers ? '' : 'none';
         el.setAttribute('role', 'img');
         el.setAttribute('aria-label', t('stationAria', { name: s.name, freq: s.frequencyLabel }));
         el.innerHTML = '<span class="radio-marker__wave"></span><span class="radio-marker__wave radio-marker__wave--2"></span><span class="radio-marker__dot"></span>';
         markers.current.push(new Marker({ element: el, anchor: 'center', opacityWhenCovered: '0' }).setLngLat([s.lon, s.lat]).addTo(map));
       }
+      const tuned = useRadioStore.getState().tunedId;
+      if (tuned) markTuned(tuned);
     })();
     return () => {
       cancelled = true;
@@ -91,42 +94,45 @@ export default function RadioRuntime() {
     };
   }, [map, ready, stations, t]);
 
-  // Sintonía al terminar cada movimiento.
+  // Sintonía: cada vez que cambia lo que está bajo la mira (fin de un movimiento y, luego, el nombre del lugar).
   useEffect(() => {
-    if (!map || !stations.length) return;
-    const retune = async (e?: object) => {
-      if (e && isAutoRotateEvent(e)) return;
-      const c = map.getCenter();
-      const target = nearestStation(stations, c.lng, c.lat, map.getZoom());
-      const store = useRadioStore.getState();
-      if (!target || target.id === store.tunedId) return;
-      const seq = ++tuning.current;
-      const wasPlaying = radioEngine.isPlaying();
-      if (wasPlaying) {
-        radioEngine.pause();
-        await radioEngine.staticBurst();
-      }
-      try {
-        const segments = await loadSegments(target.id);
-        if (seq !== tuning.current) return;
-        useRadioStore.getState().tune(target.id, segments);
-        document.querySelectorAll('.radio-marker').forEach((m) => m.classList.remove('is-tuned'));
-        const i = stations.filter((s) => s.lat != null).findIndex((s) => s.id === target.id);
-        if (i >= 0) markers.current[i]?.getElement().classList.add('is-tuned');
-        if (wasPlaying && useRadioStore.getState().activated) void radioEngine.play();
-        else useRadioStore.getState().setStatus(segments.length ? 'paused' : 'empty');
-      } catch {
-        useRadioStore.getState().setStatus('error');
-      }
+    if (!stations.length) return;
+    const retune = () => {
+      if (radioDriving()) return;
+      const g = useGlobeStore.getState();
+      // Al abrir con una posición en la URL aún no hubo moveend: se usa la cámara (sin nombre de lugar todavía).
+      const mc = g.map?.getCenter();
+      const stale = mc && Math.abs(mc.lat - g.center.lat) + Math.abs(mc.lng - g.center.lng) > 0.01;
+      const center = stale && g.map ? { lng: mc.lng, lat: mc.lat, zoom: g.map.getZoom(), label: null, labelStatus: 'loading' as const } : g.center;
+      const target = stationFor(stations, center, locale);
+      if (!target || target === 'wait' || target.id === useRadioStore.getState().tunedId) return;
+      void tuneTo(target, { resume: radioEngine.isPlaying() });
     };
-    void retune();
-    map.on('moveend', retune);
-    return () => {
-      map.off('moveend', retune);
-    };
-  }, [map, stations]);
+    retune();
+    return useGlobeStore.subscribe((s, prev) => {
+      if (s.center !== prev.center) retune();
+    });
+  }, [stations, locale, map, ready]);
 
-  // Baja el volumen mientras el asistente responde o el locutor lee. Si la radio suena con su voz de respaldo
+  // La persona toma el mapa mientras la radio lo mueve: las pistas esperan ("Seguir a la radio").
+  useEffect(() => {
+    const hold = () => {
+      if (radioSteering() || !radioEngine.isPlaying() || !currentSegment()?.topic) return;
+      const live = useRadioLive.getState();
+      if (live.follow && !live.held) live.setHeld(true);
+    };
+    const offFly = onFlyStart(hold);
+    if (!map) return () => void offFly();
+    const onGesture = (e: { originalEvent?: unknown }) => e.originalEvent && hold();
+    const events = ['dragstart', 'zoomstart', 'rotatestart', 'pitchstart'] as const;
+    events.forEach((ev) => map.on(ev, onGesture));
+    return () => {
+      offFly();
+      events.forEach((ev) => map.off(ev, onGesture));
+    };
+  }, [map]);
+
+  // Baja el volumen mientras el asistente responde o el locutor lee. Si la radio suena con la voz del teléfono
   // (misma speechSynthesis que el locutor), se pausa: las dos voces no pueden sonar a la vez.
   useEffect(() => {
     const duck = () => radioEngine.duck(useAgentStore.getState().busy || useNarratorStore.getState().speakingId !== null);

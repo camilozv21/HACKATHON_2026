@@ -57,7 +57,62 @@ Los esquemas zod están en `src/lib/api/contract.ts` (`RadioStation`, `RadioSegm
 ## Comportamiento
 
 - Nunca suena sola al cargar: el primer play requiere un toque. Después, al mover el globo y cambiar de
-  emisora (la más cercana al centro), suena una estática breve generada con Web Audio y sigue reproduciendo.
+  emisora, suena una estática breve generada con Web Audio y la nueva emisora sigue sola.
+- Al empezar una emisora, la radio se identifica en voz ("Estás escuchando Radio Campo Salento, 101.3 FM")
+  mientras llega el programa del día. Esa frase va dentro del toque, como piden los navegadores para hablar.
 - Media Session: título, emisora y controles en la pantalla bloqueada.
-- Baja el volumen (ducking) mientras el asistente responde.
+- Baja el volumen (ducking) mientras el asistente responde; se pausa si el locutor de la app empieza a leer.
 - Antes de la demo: revisar que los audios IA tengan derechos de uso.
+
+## Programa del día (todo gira alrededor de la radio)
+
+Cada emisora con lugar tiene un **boletín hecho con los datos de ese punto**, que suena antes de los segmentos
+grabados. Bloques, en orden (`RADIO_TOPICS`): bienvenida, lluvia y temperatura, humedad del suelo, verdor,
+eventos cerca, riesgo del terreno, precios, consejo y cierre. Fuera de Colombia no hay terreno ni precios; en
+modo sencillo es más corto, pero nunca quita riesgos, confianza ni avisos.
+
+```
+GET /api/radio/program?lat&lon[&name][&station][&locale][&role][&mode][&units][&quick=1]
+→ RadioProgramResponse { station, place, segments, generatedAt, by: 'claude' | 'rules', pending? }
+```
+
+| Paso | Dónde | Qué hace |
+|---|---|---|
+| Datos | `src/server/radio/facts.ts` | NASA POWER (lluvia y temperatura reales), tarjetas de sensores (las simuladas van marcadas), EONET + UNGRD + comunidad (50 km, 90 días), zona de riesgo del municipio (GEE + Markov) y mercado SIPSA (Colombia). Cada fuente con tope de 3–6 s; guardado 10 min. |
+| Guion de plantillas | `src/server/radio/script.ts` | Frases cortas para oír (sin "mm" ni "%"), con fuente, fecha, confianza, vacío de información y "dato de demostración" dichos en voz. Pistas sobre el globo por frase. |
+| Voz de locutor | `src/server/radio/claudeScript.ts` | Claude (`claude-opus-5-5`, esfuerzo bajo, salida JSON) reescribe solo el texto. Si un bloque trae un número que no estaba en el borrador, se descarta y suena el de plantillas. |
+| Orden | `src/server/radio/program.ts` | Con `quick=1` responde enseguida con plantillas (`pending: true` si Claude puede mejorarlo, o la versión de Claude si ya estaba escrita); sin `quick`, Claude la escribe. Una llamada a Claude por emisora, hora, idioma, rol, modo y unidades (caché de una hora). Sin `ANTHROPIC_API_KEY` (o con `AGENT_FORCE_MOCK=true`), solo plantillas. |
+
+En el cliente (`src/features/radio/programClient.ts`): al tocar play se pide el programa (máximo 9 s de espera,
+con la identificación sonando); entra **delante** de lo grabado si la radio no suena, o justo después del
+segmento actual si ya suena. Si la persona sigue en la emisora a los 4 s, se pide la versión de Claude y se
+cambian los bloques que aún no sonaron (mismo id). Así no se gasta IA en cada emisora que se cruza al pasear.
+
+## Emisoras de la zona
+
+Si bajo la mira no hay una emisora fija cerca (el radio de sintonía se achica con el zoom) y se mira un lugar con
+nombre (zoom ≥ 4,5), la radio arma **la emisora de esa zona** (`src/features/radio/local.ts`): celdas de 0,25°,
+id `local:<lat>,<lon>`, frecuencia FM estable entre 88.1 y 107.9 y nombre "Radio Campo <lugar>". La UI aclara que
+la arma la app con datos (no es una emisora real). Su relleno grabado es el de la emisora nacional.
+
+## La radio mueve el globo (pistas)
+
+Cada bloque trae `cues: [{ sentence, action }]` con las mismas acciones del agente (`flyTo`, `setLayer`,
+`clearLayers`, `openRegion`, `showEvents`, `showListings`; nunca formularios). Cuando el locutor llega a esa
+frase, `src/features/radio/cues.ts` las ejecuta con el ejecutor del agente:
+
+- Si la persona toma el mapa (arrastra, hace zoom, busca, el asistente vuela), la radio sigue hablando pero deja
+  de moverlo hasta que toque **Seguir a la radio**. "La radio mueve el mapa" se puede apagar (se recuerda).
+- Mientras la radio maneja el mapa, sus vuelos no cambian de emisora.
+- En el teléfono no abre el panel de la región (taparía el reproductor): queda el botón "Ver la zona".
+- Un vuelo a donde ya se mira se omite; con `prefers-reduced-motion` la cámara salta sin animación.
+
+## Subtítulos y "¿qué es esto?"
+
+El guion se lee **frase por frase** (`src/features/radio/sentences.ts`): el mini reproductor muestra la frase que
+suena y, si nombra un término técnico (NDVI, humedad del suelo, zona de riesgo…; `terms.ts`), ofrece su
+"¿qué es esto?" del glosario. Expandido: la transcripción completa (tocar una frase la repite desde ahí), fuente
+con fecha, confianza, lo que el dato no dice, si es de demostración y si el texto lo escribió la IA o las
+plantillas. Al pausar se retoma desde la misma frase. En un mp3, la frase se estima por su largo.
+
+El asistente también pone la radio: "ponme el boletín de Salento" → `flyTo` + `playRadio { lat, lon, name }`.

@@ -36,7 +36,7 @@ secreto nunca llegan al navegador ni a los logs.
     { "role": "user", "content": "¿Cómo está la lluvia en mi zona?" },
     { "role": "assistant", "content": "Llovió un 20 % menos de lo normal en el último mes…" }
   ],
-  "profile": { "role": "farmer", "mode": "lite", "narrator": true }
+  "profile": { "role": "farmer", "mode": "lite", "narrator": true, "level": "beginner", "review": ["anomaly", "frost"] }
 }
 ```
 
@@ -60,6 +60,12 @@ secreto nunca llegan al navegador ni a los logs.
     tablas) o `full`.
   - `narrator`: `true` si la respuesta se leerá en voz alta con la voz del teléfono. Escribe para oír: sin tablas,
     símbolos, emojis ni abreviaturas ("milímetros", no "mm").
+  - `level` (opcional): cómo le fue en los **retos del glosario** del inicio: `beginner` (explica cada término
+    técnico en pocas palabras la primera vez), `intermediate` o `advanced` (puedes saltarte las definiciones básicas).
+    Falta si no jugó.
+  - `review` (opcional): ids de términos del glosario que le costaron o saltó (`ndvi`, `et`, `water-balance`,
+    `anomaly`, `frost`, `satellite-vs-field`, `crop-vulnerability`). Si uno aparece en tu respuesta, explícalo en una
+    frase simple con un ejemplo del campo.
 
 ## Response que debe devolver n8n
 
@@ -98,7 +104,7 @@ El proxy también acepta las formas habituales de n8n y las normaliza: `[ {…} 
 | `highlightArea` | `geojson` | Dibuja un contorno luminoso (GeoJSON en EPSG:4326). |
 | `showStrategies` | `fieldId?` | Abre el análisis de rotaciones de la finca seleccionada. |
 | `askForData` | `need?` (uno de `view.missingData`) | Abre las preguntas rápidas "Faltan datos para completar tu análisis" en ese dato. Solo si hay finca (`view.fieldId`). No la combines con `openRegion` ni `showStrategies`: se abren del mismo lado. |
-| `playRadio` | `stationId?` | Sintoniza y reproduce la radio del campo. |
+| `playRadio` | `stationId?`, `lat?`, `lon?`, `name?` | Sintoniza y reproduce la radio del campo. Con `lat/lon` suena el **boletín del día de ese lugar** (lluvia, suelo, verdor, eventos, riesgo del terreno y precios leídos en voz, con el globo siguiendo al locutor). Va después del `flyTo` a ese lugar. Ver [`radio.md`](radio.md). |
 | `setTime` | `when: "YYYY-MM" \| "YYYY-MM-DD" \| null` | Máquina del tiempo: lleva toda la app (capas, drawer de región, panel de la finca) a esa fecha pasada; `null` vuelve a hoy. Hay datos diarios desde 1981 y con ~3 días de retraso. Ejemplo: "¿cómo llovió en mayo?" → `setTime "2026-05"` + `setLayer rain`. |
 | `showEvents` | `on?: boolean`, `kind?` (`landslide`, `flood`, `storm`, `wildfire`, `drought`, `frost`, `erosion`, `earthquake`, `volcano`, `other`) | Muestra (u oculta) los eventos y emergencias en el globo: NASA EONET, UNGRD (Colombia) y reportes de la comunidad, del periodo de `view.when` o de los últimos 90 días. Ver [`events.md`](events.md). |
 | `reportEvent` | `kind?`, `lat?`, `lon?` | Abre el formulario "Reportar un evento" con esos datos. **Solo lo abre**: la persona revisa y decide si lo envía. Si hay personas en peligro, la respuesta debe decir primero que llamen al 123. |
@@ -139,14 +145,21 @@ La respuesta lleva el header `X-Agent: n8n | claude | mock` para saber quién co
 
 ## Perfil de inicio: `POST /api/profile`
 
-Al entrar, la app hace 3 preguntas con íconos grandes (se pueden responder sin leer, con la voz del teléfono):
-rol (`farmer` / `technician`), qué quiere hacer hoy (`climate` / `rotations` / `satellite`) y cómo prefiere la
-información (`listen` / `little` / `detail`). Esta ruta las recibe y **sugiere** cómo mostrar la app; la persona ve
-la sugerencia (marcada "Sugerencia de la IA" o "Sugerencia automática") y la confirma o la cambia.
+Al entrar, la app es un juego corto (se puede jugar sin leer, con la voz del teléfono): el personaje (rol
+`farmer` / `technician`), cómo quiere jugar (`listen` / `little` / `detail`), **7 retos del glosario** (NDVI,
+evapotranspiración, balance de agua, anomalía de humedad, helada, satélite vs. campo y la temporada) y su primera
+misión (`climate` / `rotations` / `satellite`). Con eso arma "Tu perfil de campo" (insignia, nivel semilla / brote /
+cosecha, términos que domina y por repasar). Esta ruta recibe las respuestas y el resumen de los retos, y **sugiere**
+cómo mostrar la app; la persona ve la sugerencia (marcada "Sugerencia de la IA" o "Sugerencia automática") y la
+confirma o la cambia.
 
 ```json
-// request
-{ "answers": { "role": "farmer", "goal": "climate", "reading": "listen" }, "locale": "es" }
+// request (quest es opcional: falta si saltó todo)
+{
+  "answers": { "role": "farmer", "goal": "climate", "reading": "listen" },
+  "locale": "es",
+  "quest": { "level": "intermediate", "stars": 14, "maxStars": 21, "mastered": ["ndvi", "et"], "review": ["frost"] }
+}
 // response (ProfileSuggestion en contract.ts)
 {
   "role": "farmer", "mode": "lite", "narrator": true,
@@ -160,6 +173,8 @@ la sugerencia (marcada "Sugerencia de la IA" o "Sugerencia automática") y la co
 - Orden: Claude (`src/server/claudeProfile.ts`, `claude-opus-5-5`, esfuerzo `low`, salida estructurada, 8 s) →
   reglas locales (`src/features/onboarding/rules.ts`). Header `X-Profile: claude | rules`. 10 peticiones por minuto por IP.
 - La IA no decide el rol (lo dijo la persona) y si pidió escuchar la voz queda encendida y el modo es `lite`.
+- Con `quest`, el saludo puede felicitar en una frase y decir que el asistente explicará los términos difíciles;
+  nunca regaña por un nivel bajo. El resumen se guarda en el perfil y viaja al agente como `profile.level` / `review`.
 - `firstStep`: `myArea` (abre el panel de su zona), `myFarm` (modo "elegir mi finca"), `layers` (catálogo de capas)
   o `explore`. `suggestions` reemplazan las preguntas iniciales del chat.
 - Si la ruta falla o tarda más de 9 s, el cliente usa las mismas reglas: nadie se queda esperando.

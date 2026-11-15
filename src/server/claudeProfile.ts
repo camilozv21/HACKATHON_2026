@@ -1,6 +1,6 @@
 /**
  * Sugerencia de perfil con Claude (solo servidor): con las 3 respuestas de inicio (rol, objetivo, cómo prefiere la
- * información) propone modo sencillo o completo, voz, un saludo, razones, el primer paso y preguntas para el chat.
+ * información) y, si los jugó, el resultado de los retos del glosario, propone modo sencillo o completo, voz, un saludo, razones, el primer paso y preguntas para el chat.
  * La persona confirma la sugerencia antes de aplicarla. Si falla, /api/profile usa las reglas locales.
  */
 import Anthropic from '@anthropic-ai/sdk';
@@ -19,6 +19,8 @@ You receive the user's answers to three start-up questions:
 - role: "farmer" or "technician" (agronomist, extension worker).
 - goal: "climate" (see how weather and soil are in their area), "rotations" (choose what to plant on their farm) or "satellite" (explore NASA satellite layers).
 - reading: "listen" (they prefer to hear the information; they may not be able to read), "little" (short sentences and pictures) or "detail" (all the data).
+
+You may also receive "quest": the result of seven short learning games they just played about NASA data terms (level "beginner", "intermediate" or "advanced"; stars won out of maxStars; "mastered" = terms they got right, "review" = terms that were hard or skipped, as glossary ids such as "ndvi" for plant greenness, "et" for evapotranspiration, "water-balance", "anomaly" for soil moisture anomaly, "frost" for frost risk, "satellite-vs-field", "crop-vulnerability"). If it is present, the welcome may congratulate them briefly and say that the assistant will explain the hard terms in plain words. Never shame a low result. A beginner level is a reason to prefer mode "lite".
 
 Suggest how the app should look for them:
 - mode "lite": the simple view. Fewer numbers, no technical lines (mission, resolution), short sentences, the most important data first. Best for people who read little or prefer to listen.
@@ -55,7 +57,7 @@ export async function suggestProfileWithClaude(req: ProfileRequest): Promise<Pro
     fallbacks: 'default',
     system: [{ type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral' } }],
     output_config: { effort: 'low', format: betaJSONSchemaOutputFormat(OUTPUT_SCHEMA) },
-    messages: [{ role: 'user', content: JSON.stringify({ locale: req.locale, answers: req.answers }) }],
+    messages: [{ role: 'user', content: JSON.stringify({ locale: req.locale, answers: req.answers, ...(req.quest ? { quest: req.quest } : {}) }) }],
   });
   if (msg.stop_reason === 'refusal') throw new Error('claude_refusal');
 

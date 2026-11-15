@@ -505,39 +505,8 @@ export const RegionSummary = z.object({
 });
 export type RegionSummary = z.infer<typeof RegionSummary>;
 
-// ---------------------------------------------------------------- radio del campo (mock)
-
-export const RadioStation = z.object({
-  id: z.string(),
-  name: z.string(),
-  region: z.string(),
-  /** null = emisora nacional (sin ubicación en el globo). */
-  lat: z.number().nullable(),
-  lon: z.number().nullable(),
-  frequencyLabel: z.string(),
-  /** BCP-47 corto: es, en… (también se usa para la voz de respaldo). */
-  language: z.string(),
-  distanceKm: z.number().nullable().optional(),
-});
-export type RadioStation = z.infer<typeof RadioStation>;
-
-export const RadioSegment = z.object({
-  id: z.string(),
-  type: z.enum(['ad', 'alert', 'tip']),
-  title: z.string(),
-  sponsor: z.string().optional(),
-  audioUrl: z.string(),
-  durationSec: z.number().positive(),
-  transcript: z.string(),
-  regionId: z.string(),
-  relatedLayerId: LayerIdSchema.optional(),
-  /** Fuente NASA del dato que menciona un consejo o alerta. */
-  dataSource: DataSource.optional(),
-});
-export type RadioSegment = z.infer<typeof RadioSegment>;
-
-export const RadioStationsResponse = z.object({ stations: z.array(RadioStation) });
-export const RadioSegmentsResponse = z.object({ station: RadioStation, segments: z.array(RadioSegment) });
+// La radio del campo (emisoras, segmentos y programa del día) está después de AgentAction: sus pistas
+// sobre el globo reutilizan esas acciones.
 
 // ---------------------------------------------------------------- eventos y emergencias
 
@@ -666,7 +635,28 @@ export const OnboardingAnswers = z.object({
 });
 export type OnboardingAnswers = z.infer<typeof OnboardingAnswers>;
 
-export const ProfileRequest = z.object({ answers: OnboardingAnswers, locale: z.enum(['es', 'en']) });
+/** Nivel que mostró en los retos de inicio (minijuegos del glosario): semilla, brote o cosecha. */
+export const QUEST_LEVELS = ['beginner', 'intermediate', 'advanced'] as const;
+export type QuestLevel = (typeof QUEST_LEVELS)[number];
+/** Id de un término del glosario (ndvi, et, anomaly, frost…). */
+const TermId = z.string().regex(/^[a-z-]{2,40}$/);
+
+/** Resultado de los retos de inicio: estrellas, nivel, términos que domina y los que conviene repasar. */
+export const QuestSummary = z.object({
+  level: z.enum(QUEST_LEVELS),
+  stars: z.number().int().min(0).max(60),
+  maxStars: z.number().int().min(1).max(60),
+  mastered: z.array(TermId).max(12),
+  review: z.array(TermId).max(12),
+});
+export type QuestSummary = z.infer<typeof QuestSummary>;
+
+export const ProfileRequest = z.object({
+  answers: OnboardingAnswers,
+  locale: z.enum(['es', 'en']),
+  /** Opcional: si jugó los retos, la IA lo usa para el saludo (qué ya entiende y qué le explicaremos). */
+  quest: QuestSummary.optional(),
+});
 export type ProfileRequest = z.infer<typeof ProfileRequest>;
 
 /** Sugerencia de la IA (o de las reglas locales): la persona la confirma o la cambia antes de aplicarla. */
@@ -690,6 +680,10 @@ export const AgentProfile = z.object({
   role: UserRole.optional(),
   mode: z.enum(DISPLAY_MODES),
   narrator: z.boolean(),
+  /** Nivel en los retos de inicio (si los jugó): beginner = explicar cada término la primera vez. */
+  level: z.enum(QUEST_LEVELS).optional(),
+  /** Términos del glosario que le costaron en los retos: explicarlos en una frase simple cuando aparezcan. */
+  review: z.array(TermId).max(12).optional(),
 });
 export type AgentProfile = z.infer<typeof AgentProfile>;
 
@@ -756,7 +750,14 @@ export const AgentAction = z.discriminatedUnion('type', [
     geojson: z.object({ type: z.string() }).passthrough(),
   }),
   z.object({ type: z.literal('showStrategies'), fieldId: z.string().optional() }),
-  z.object({ type: z.literal('playRadio'), stationId: z.string().optional() }),
+  /** Poner la radio; con lat/lon suena el boletín de ese lugar (clima, suelo, alertas y precios leídos en voz). */
+  z.object({
+    type: z.literal('playRadio'),
+    stationId: z.string().optional(),
+    lat: z.number().min(-90).max(90).optional(),
+    lon: z.number().min(-180).max(180).optional(),
+    name: z.string().max(120).optional(),
+  }),
   /** Máquina del tiempo: revisar una fecha pasada (null = volver a hoy). */
   z.object({ type: z.literal('setTime'), when: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/).nullable() }),
   /** Mostrar (u ocultar) los eventos y emergencias en el globo, opcionalmente solo de un tipo. */
@@ -782,6 +783,83 @@ export const AgentAction = z.discriminatedUnion('type', [
   z.object({ type: z.literal('showListings'), on: z.boolean().optional(), listingId: z.string().max(40).optional() }),
 ]);
 export type AgentAction = z.infer<typeof AgentAction>;
+
+// ---------------------------------------------------------------- radio del campo
+
+export const RadioStation = z.object({
+  id: z.string().max(80),
+  name: z.string(),
+  region: z.string(),
+  /** null = emisora nacional (sin ubicación en el globo). */
+  lat: z.number().nullable(),
+  lon: z.number().nullable(),
+  frequencyLabel: z.string(),
+  /** BCP-47 corto: es, en… (también se usa para la voz de respaldo). */
+  language: z.string(),
+  distanceKm: z.number().nullable().optional(),
+  /** Emisora de la zona: la arma la app con los datos de ese punto (no es una emisora real). */
+  local: z.boolean().optional(),
+});
+export type RadioStation = z.infer<typeof RadioStation>;
+
+/** Bloques del programa del día, en el orden en que suenan. */
+export const RADIO_TOPICS = ['intro', 'weather', 'soil', 'vegetation', 'events', 'terrain', 'market', 'advice', 'outro'] as const;
+export const RadioTopic = z.enum(RADIO_TOPICS);
+export type RadioTopic = z.infer<typeof RadioTopic>;
+
+/** Lo que la radio puede hacer en el globo mientras habla: cámara, capas y paneles. Nunca abre formularios. */
+export const RADIO_CUE_TYPES = ['flyTo', 'setLayer', 'clearLayers', 'openRegion', 'showEvents', 'showListings'] as const;
+export const RadioCue = z.object({
+  /** Frase del guion (0 = la primera) en la que ocurre la acción. */
+  sentence: z.number().int().min(0).max(60),
+  action: AgentAction.refine((a) => (RADIO_CUE_TYPES as readonly string[]).includes(a.type), { message: 'acción no permitida en la radio' }),
+});
+export type RadioCue = z.infer<typeof RadioCue>;
+
+export const RadioSegment = z.object({
+  id: z.string(),
+  /** news = bloque del programa del día (generado con los datos del punto). */
+  type: z.enum(['ad', 'alert', 'tip', 'news']),
+  title: z.string(),
+  sponsor: z.string().optional(),
+  /** mp3 generado con IA. Sin audio, el guion se lee con la voz del dispositivo, frase por frase. */
+  audioUrl: z.string().optional(),
+  durationSec: z.number().positive(),
+  transcript: z.string(),
+  regionId: z.string(),
+  /** Idioma del guion (si falta, el de la emisora). */
+  language: z.string().optional(),
+  relatedLayerId: LayerIdSchema.optional(),
+  /** Fuente NASA del dato que menciona un consejo o alerta. */
+  dataSource: DataSource.optional(),
+  topic: RadioTopic.optional(),
+  /** Datos que usa el bloque, con su fecha ("SMAP", "2026-11-12"). */
+  sources: z.array(z.object({ dataset: z.string(), date: z.string().optional() })).max(6).optional(),
+  confidence: Confidence.optional(),
+  /** Lo que el dato no dice o lo que falta (vacío de información). */
+  caveat: z.string().optional(),
+  /** Valor de demostración, no medido. */
+  simulated: z.boolean().optional(),
+  /** Acciones sobre el globo sincronizadas con el guion. */
+  cues: z.array(RadioCue).max(8).optional(),
+});
+export type RadioSegment = z.infer<typeof RadioSegment>;
+
+export const RadioStationsResponse = z.object({ stations: z.array(RadioStation) });
+export const RadioSegmentsResponse = z.object({ station: RadioStation, segments: z.array(RadioSegment) });
+
+/** GET /api/radio/program: el programa del día de un punto, escrito con sus datos (NASA, eventos, mercado, terreno). */
+export const RadioProgramResponse = z.object({
+  station: RadioStation,
+  place: z.string(),
+  segments: z.array(RadioSegment).min(1).max(12),
+  generatedAt: z.iso.datetime(),
+  /** Quién escribió el guion: Claude o las plantillas locales (sin IA). Los datos son los mismos. */
+  by: z.enum(['claude', 'rules']),
+  /** Llegó el de plantillas y el de Claude se está escribiendo: pedirlo otra vez sin `quick`. */
+  pending: z.boolean().optional(),
+});
+export type RadioProgramResponse = z.infer<typeof RadioProgramResponse>;
 
 export const AgentResponse = z.object({
   /** Markdown simple (se renderiza sanitizado, sin HTML). */

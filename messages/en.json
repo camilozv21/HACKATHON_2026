@@ -283,8 +283,42 @@
     "types": {
       "ad": "Ad",
       "alert": "Alert",
-      "tip": "Tip"
-    }
+      "tip": "Tip",
+      "news": "Bulletin"
+    },
+    "topics": {
+      "intro": "Welcome",
+      "weather": "Weather",
+      "soil": "Soil",
+      "vegetation": "Greenness",
+      "events": "Events",
+      "terrain": "Land",
+      "market": "Prices",
+      "advice": "Tip",
+      "outro": "Sign-off"
+    },
+    "ident": "You're listening to {name}, {freq}.",
+    "preparing": "Preparing the {place} bulletin…",
+    "polishing": "AI is polishing the bulletin script; the data stays the same.",
+    "programError": "Couldn't build this area's bulletin: playing the recorded segments.",
+    "localStation": "Local station: the app builds it from this place's data (NASA satellites, events and prices).",
+    "voiceDevice": "Read by your phone's voice",
+    "jumpTo": "Listen from here: {text}",
+    "confidence": {
+      "high": "High confidence",
+      "medium": "Medium confidence",
+      "low": "Low confidence"
+    },
+    "simulated": "Demo value, not measured",
+    "caveat": "What this data doesn't say: {text}",
+    "byClaude": "Script written with AI (Claude) from this data",
+    "byRules": "Automatic script from this data",
+    "seeZone": "See the {place} area",
+    "follow": "The radio moves the map",
+    "followHint": "While it talks, it flies to the place and turns on the layer it's talking about.",
+    "held": "You took over the map: the radio stopped moving it.",
+    "resume": "Follow the radio",
+    "reminder": "The radio supports you, but it doesn't replace your judgement or local experts."
   },
   "agent": {
     "placeholder": "Ask the field…",
@@ -716,6 +750,16 @@
         "title": "State changes (Markov chain)",
         "simple": "It counts how much land moved from one state to another between two dates. From that we estimate where the land is heading if nothing changes.",
         "example": "If 20 of every 100 healthy hectares became “stressed”, the arrow from healthy to stressed says 20 %."
+      },
+      "crop-vulnerability": {
+        "title": "Crop vulnerability",
+        "simple": "How easily the crop gets damaged by the weather: heat, drought, too much rain or frost.",
+        "example": "Maize at flowering during a heat wave with dry soil is very vulnerable: it can lose a good part of the harvest."
+      },
+      "soil-health": {
+        "title": "Soil health",
+        "simple": "Healthy soil is alive: it has organic matter, holds water, lets roots in and doesn't wash away with the rain.",
+        "example": "Leaving crop residue, rotating with beans and not burning help the soil hold more water in a drought."
       }
     }
   },
@@ -1172,18 +1216,18 @@
     "brand": "Field Shift · NASA data",
     "step": "{n} of {total}",
     "skip": "Skip",
-    "start": "Start",
+    "start": "Let's play!",
     "preparing": "Getting ready…",
     "next": "Next",
     "back": "Back",
     "welcome": {
       "title": "Hello, welcome",
       "text": "We help you care for your soil and choose what to plant, with data from NASA satellites.",
-      "find": "Find your farm",
-      "climate": "See your weather",
-      "compare": "Compare crops",
-      "hint": "We will ask you 3 short questions to show you what is useful.",
-      "spokenEnd": "Tap the green button below to start."
+      "hint": "Play for about 3 minutes: you learn to read NASA data and we set up the app for you.",
+      "spokenEnd": "Tap the green button below to play.",
+      "play": "7 short challenges",
+      "learn": "Learn to read satellites",
+      "profile": "An app made for you"
     },
     "voice": {
       "listen": "Listen with voice",
@@ -1206,10 +1250,11 @@
           "label": "Technician",
           "hint": "Agronomist, extension worker or adviser.",
           "spoken": "If you are an agronomist, extension worker or adviser, tap the clipboard."
-        }
+        },
+        "subtitle": "Pick your character: we adapt the challenges to you."
       },
       "goal": {
-        "title": "What do you want to do today?",
+        "title": "What is your first mission?",
         "climate": {
           "label": "See the weather in my area",
           "hint": "Rain, soil moisture and heat.",
@@ -1224,25 +1269,28 @@
           "label": "See satellite data",
           "hint": "NASA layers on the map.",
           "spoken": "To see the satellite maps, tap the satellite."
-        }
+        },
+        "kicker": "Last step",
+        "subtitle": "We start the app there."
       },
       "reading": {
-        "title": "How do you prefer the information?",
+        "title": "How do you want to play?",
         "listen": {
-          "label": "Listen to it",
-          "hint": "A voice reads me what matters.",
+          "label": "Listening",
+          "hint": "A voice reads everything to me.",
           "spoken": "If you prefer to listen, tap the ear."
         },
         "little": {
-          "label": "Read a little",
-          "hint": "Short sentences and pictures.",
+          "label": "With pictures",
+          "hint": "Short sentences and little text.",
           "spoken": "If you prefer to read a little, tap the picture."
         },
         "detail": {
-          "label": "Read everything in detail",
-          "hint": "Numbers, charts and sources.",
-          "spoken": "If you want all the details, tap the book."
-        }
+          "label": "With all the data",
+          "hint": "Numbers, sources and the science behind each value.",
+          "spoken": "If you want all the details and the science, tap the book."
+        },
+        "subtitle": "You can change it any time in Settings."
       }
     },
     "thinking": {
@@ -1294,6 +1342,403 @@
         "satellite2": "What does NDVI measure and which satellite is it from?",
         "common": "What NASA data is there for my area?"
       }
+    },
+    "games": {
+      "kicker": "Field challenges",
+      "play": "Let's play!",
+      "progress": "Challenge {n} of {total}",
+      "starsTotal": "{stars, plural, =0 {No stars yet} one {# star earned} other {# stars earned}}",
+      "path": "Challenge path",
+      "pathItem": "Challenge {n}: {name}, {status}",
+      "status": {
+        "current": "playing now",
+        "done": "{stars, plural, one {# star} other {# stars}}",
+        "skipped": "skipped",
+        "next": "to play"
+      },
+      "skipGame": "Skip this challenge",
+      "skipAll": "Skip challenges",
+      "learned": {
+        "kicker": "You learned it",
+        "stars": "{stars, plural, one {# star out of 3} other {# stars out of 3}}",
+        "praise1": "You made it!",
+        "praise2": "Well done!",
+        "praise3": "Perfect!",
+        "key": "The key",
+        "science": "The science",
+        "also": "You also learned:",
+        "measures": "Measured from space by:",
+        "nextGame": "Next challenge",
+        "finish": "Finish the challenges"
+      },
+      "ndvi": {
+        "name": "Satellite vision",
+        "title": "Satellite vision",
+        "task": "Three plots have thirsty plants, but to the eye everything looks green. Turn on satellite vision and tap them.",
+        "eyeView": "What your eyes see",
+        "lensView": "What the satellite sees (NDVI)",
+        "lens": "Satellite vision",
+        "on": "on",
+        "off": "off",
+        "lensOn": "Satellite vision on. Low numbers are thirsty plants.",
+        "needLens": "Your eyes can't tell the difference. Turn on satellite vision.",
+        "lot": "Plot {n}",
+        "lotValue": "Plot {n}, greenness {value}",
+        "found": "Good! {value}: thirsty plants. {left, plural, one {# to go.} other {# to go.}}",
+        "healthy": "That one reads {value}: green, strong plants. Look for the low numbers.",
+        "allFound": "You found them! The satellite sees thirst before your eyes do.",
+        "legendLow": "Low: thirsty or no plants",
+        "legendHigh": "High: green and strong",
+        "formula": "NDVI = (infrared − red) ÷ (infrared + red). It goes from 0 to 1.",
+        "lesson": "A high NDVI, close to 1, means green, strong plants. A low one warns of thirst, pests or bare soil, often before you can see it.",
+        "science": "A healthy leaf absorbs red light and reflects a lot of near-infrared, a light your eyes can't see. MODIS measures it almost every day; Landsat and Sentinel (HLS) every few days, in more detail."
+      },
+      "et": {
+        "name": "The field sweats",
+        "title": "The field sweats",
+        "taskSources": "Water leaves the field into the air. Tap the 2 places the vapor comes from.",
+        "taskMax": "Now play with the weather: make the field lose as much water as possible.",
+        "taskProtect": "You can't change the sun or the wind. What can you do so the field loses less water?",
+        "scene": "Field with plants. It loses {amount} of water a day.",
+        "spots": {
+          "soil": "The soil",
+          "leaves": "The leaves",
+          "cloud": "The cloud"
+        },
+        "soilFound": "Yes! The soil loses water: that is evaporation.",
+        "leavesFound": "Yes! Plants sweat through their leaves: that is transpiration.",
+        "cloudWrong": "The cloud brings water, it doesn't take it. Look lower.",
+        "sourcesDone": "Together they are called evapotranspiration.",
+        "equation": {
+          "evaporation": "Evaporation",
+          "transpiration": "Transpiration",
+          "et": "Evapotranspiration"
+        },
+        "continue": "Continue",
+        "sun": "Sun",
+        "sunSoft": "Mild",
+        "sunStrong": "Strong",
+        "wind": "Wind",
+        "windCalm": "Calm",
+        "windStrong": "Strong",
+        "soil": "Soil",
+        "soilBare": "Bare",
+        "soilCovered": "Covered",
+        "locked": "You can't change it",
+        "meter": "The field loses {amount} of water a day",
+        "maxDone": "{amount} a day! With strong sun, wind and bare soil the field dries out fastest.",
+        "protectDone": "That's it! With covered soil the field loses {amount} less each day.",
+        "lesson": "Evapotranspiration is the water that leaves the field: what evaporates from the soil plus what the plants sweat. More sun, heat and wind raise it; covering the soil lowers it.",
+        "science": "ECOSTRESS measures leaf temperature from the Space Station: a plant that transpires stays cool, and one that heats up is thirsty. MODIS estimates evapotranspiration every 8 days."
+      },
+      "balance": {
+        "name": "The water account",
+        "title": "The water account",
+        "task": "What comes in minus what goes out. Keep the soil water in the green band and tap Done.",
+        "round": "Month {n} of {total}: {name}",
+        "rounds": {
+          "dry": {
+            "name": "dry July"
+          },
+          "wet": {
+            "name": "rainy October",
+            "intro": "Now a rainy month. You start with your usual watering: do you need it?"
+          }
+        },
+        "tank": "Water in the soil: {state}",
+        "zone": {
+          "wet": "Waterlogged",
+          "ok": "Just right",
+          "dry": "Dry"
+        },
+        "verdict": {
+          "dry": "Not enough water",
+          "ok": "Just right for the roots",
+          "wet": "Too much water"
+        },
+        "in": "In",
+        "out": "Out",
+        "rain": "Rain (GPM)",
+        "irrigation": "Irrigation",
+        "less": "Irrigate less",
+        "more": "Irrigate more",
+        "et": "Evaporation and plants",
+        "cover": "Cover the soil: {amount} less goes out",
+        "result": "Balance",
+        "check": "Done",
+        "okRound": "Just right! The roots have the water they need.",
+        "dryHint": "More water still goes out than comes in: the soil dries out. Irrigate a bit more or cover the soil.",
+        "wetHint": "Too much water comes in: the soil gets waterlogged, the roots drown and the rain washes the soil away. It already rained a lot: irrigate less.",
+        "formula": "Balance = rain + irrigation − evapotranspiration.",
+        "lesson": "The water balance is what comes in (rain and irrigation) minus what goes out (evaporation and plants). Negative means drought; a big surplus means waterlogged soil.",
+        "science": "GPM IMERG estimates rain every half hour all over the world; ECOSTRESS and MODIS estimate evapotranspiration. Subtracting one from the other gives your area's water balance."
+      },
+      "anomaly": {
+        "name": "Dry for whom?",
+        "title": "Dry for whom?",
+        "task": "Compare today's soil water with what is normal for that month in that place. How is it?",
+        "card": "Place {n} of {total}",
+        "now": "Today",
+        "normal": "Normal",
+        "answers": {
+          "drier": "Drier than normal",
+          "normal": "Normal for that place",
+          "wetter": "Wetter than normal"
+        },
+        "diff": "Anomaly: {value} points",
+        "right": "Correct!",
+        "wrong": "It was: {answer}.",
+        "cards": {
+          "boyaca": {
+            "place": "Your farm in Boyacá",
+            "month": "July",
+            "why": "It has 12 points less than normal: a dry anomaly."
+          },
+          "guajira": {
+            "place": "La Guajira desert",
+            "month": "March",
+            "why": "There is very little water, but it is always like that there in March: no anomaly."
+          },
+          "choco": {
+            "place": "Chocó rainforest",
+            "month": "October",
+            "why": "There is plenty of water, but 12 points less than normal for Chocó: a dry anomaly."
+          },
+          "llanos": {
+            "place": "Eastern Plains (Llanos)",
+            "month": "May",
+            "why": "It has 10 points more than normal: a wet anomaly. Watch out for waterlogging."
+          }
+        },
+        "nextCard": "Next place",
+        "finish": "Finish",
+        "formula": "Anomaly = today's moisture − the average of many years in the same month.",
+        "lesson": "An anomaly compares with what is normal for each place and month. Little water is not always an anomaly, and a lot of water can be less than normal.",
+        "science": "SMAP measures the moisture of the top layer of soil with microwaves, even through clouds, every 2 or 3 days. The anomaly subtracts the average of many years for the same month."
+      },
+      "frost": {
+        "name": "The coldest night",
+        "title": "The coldest night",
+        "taskFind": "Change the sky, the wind and the place. Find the night when frost falls.",
+        "question": "Tonight the forecast says clear sky and calm. Your beans are in the hollow. What do you do?",
+        "scene": "Night on the farm. At dawn: {temp}, {risk}.",
+        "sky": "Sky",
+        "cloudy": "Cloudy",
+        "clear": "Clear",
+        "wind": "Wind",
+        "windy": "Windy",
+        "calm": "Calm",
+        "place": "Place",
+        "slope": "Slope",
+        "hollow": "Hollow",
+        "dawn": "At dawn",
+        "risk": {
+          "low": "No risk",
+          "high": "High risk",
+          "frost": "Frost!"
+        },
+        "why": {
+          "clear": "With no clouds, the soil's heat escapes to the sky and the night gets colder.",
+          "cloudy": "Clouds are like a blanket: they keep the soil's heat in.",
+          "calm": "With no wind, the cold air stays still, close to the ground.",
+          "windy": "The wind mixes the air and doesn't let the cold settle.",
+          "hollow": "Cold air is heavy: it flows down and pools in the hollow.",
+          "slope": "On the slope the cold air drains downhill."
+        },
+        "found": "There's the frost! Clear sky, no wind and in the hollow: the most dangerous night.",
+        "options": {
+          "wait": "Wait and see if there is ice at dawn",
+          "cover": "Cover them with cloth before dark",
+          "fertilize": "Add fertilizer today"
+        },
+        "feedback": {
+          "wait": "When you see the ice it's too late: frost burns the leaves before dawn.",
+          "cover": "Good! The cloth keeps the soil's heat close to the plants.",
+          "fertilize": "Fertilizer doesn't protect from cold. Look for something that keeps heat in."
+        },
+        "lesson": "There is frost risk when the temperature near the ground drops below {zero}. Clear, windless nights and hollows are the most dangerous.",
+        "science": "On clear nights leaves can get up to {delta} colder than the air. NASA POWER gives each day's minimum temperature; MODIS measures surface temperature at night."
+      },
+      "sensors": {
+        "name": "Soil detective",
+        "title": "Soil detective",
+        "task": "Mission: find the driest plot on the farm so you water it first.",
+        "stepsLabel": "Challenge steps",
+        "steps": {
+          "look": "Satellite",
+          "probe": "Sensors",
+          "decide": "Decide"
+        },
+        "nowTitle": "Now",
+        "now": {
+          "look": "Look at the farm from the satellite. Tap the green button.",
+          "seen": "The satellite sees the whole farm as one single square: {value} water. It's an average: it doesn't say which plot is driest.",
+          "probe": "{left, plural, =0 {Done.} one {Tap # more plot to place the last sensor.} other {Tap # plots, one by one, to place a sensor in each.}}",
+          "combining": "Combining satellite and sensors…",
+          "decide": "Tap the plot with the lowest number: that's the driest."
+        },
+        "look": "Look with the satellite",
+        "toField": "Now measure in the field",
+        "satPixel": "Satellite: {value}",
+        "satBadge": "Satellite: {value} for the whole farm",
+        "probeTip": "Tip: one near the river, one in the middle and one far away.",
+        "probeValue": "Sensor: {value} water, exact for that plot.",
+        "sensors": "Sensors:",
+        "sensorsCount": "Sensors: {used} of {total}",
+        "combined": "Map ready! The satellite gave the big picture and your sensors the detail.",
+        "farm": "Farm plots",
+        "river": "River",
+        "cell": "Plot row {row}, column {col}",
+        "cellSensor": "Plot row {row}, column {col}: sensor, {value}",
+        "cellEstimate": "Plot row {row}, column {col}: about {value}",
+        "precisionTitle": "How accurate the map is",
+        "precisionSat": "Satellite only",
+        "precisionBoth": "Satellite + sensors",
+        "decideOk": "That's the one! The plot farthest from the river is the driest.",
+        "decideNo": "That plot has {value}: others have less water. Look for the lowest number.",
+        "formula": "Combined map: the satellite's pattern, adjusted with each sensor's exact value.",
+        "lesson": "The satellite sees the whole area every day, but in big squares. A field sensor is exact, but at a single spot. Together they give a more accurate map of your farm.",
+        "science": "SMAP measures moisture in squares several kilometres wide. Models use ground sensors to correct the satellite's error, and the satellite to estimate what happens between one sensor and the next."
+      },
+      "season": {
+        "name": "Survive the season",
+        "title": "Survive the season",
+        "task": "4 moments of the season. Read the satellite warning and choose what to do to look after your crop and your soil.",
+        "crop": "Your crop",
+        "soil": "Your soil",
+        "vulnerability": {
+          "low": "Low vulnerability",
+          "medium": "Medium vulnerability",
+          "high": "High vulnerability"
+        },
+        "soilStatus": {
+          "good": "Healthy soil",
+          "fair": "Fair soil",
+          "poor": "Weak soil"
+        },
+        "delta": "Crop {crop}, soil {soil}.",
+        "nextTurn": "Next moment",
+        "seeEnd": "See how it ended",
+        "finish": "Finish",
+        "endTitle": "This is how your season ended",
+        "endText": "When heat rises, moisture drops and evaporation grows at the same time, the crop becomes vulnerable. Covered soil with rotation keeps more water and holds up better.",
+        "turns": {
+          "storm": {
+            "when": "Week 2",
+            "title": "Heavy downpour on freshly ploughed soil",
+            "options": {
+              "plow": "Plough again to dry it",
+              "cover": "Leave crop residue or sow a cover crop",
+              "nothing": "Do nothing"
+            },
+            "feedback": {
+              "plow": "Ploughing wet soil compacts it, and the next downpour carries the fertile soil away.",
+              "cover": "Good! Roots and residue slow the water: the soil doesn't wash away.",
+              "nothing": "Bare soil loses a bit of earth with every downpour."
+            },
+            "say": {
+              "rain": "{value} of rain fell in a single day: a huge amount of water.",
+              "ndvi": "Greenness {value}: the soil has almost no plants covering it."
+            }
+          },
+          "heat": {
+            "when": "Week 6",
+            "title": "Heat wave right at flowering",
+            "options": {
+              "noon": "Irrigate at noon",
+              "fertilize": "Add fertilizer",
+              "dawn": "Irrigate at dawn and cover the soil"
+            },
+            "feedback": {
+              "noon": "It helps, but with so much heat a lot of water evaporates before it reaches the roots.",
+              "fertilize": "With dry soil, fertilizer can burn the roots.",
+              "dawn": "Good! Less evaporates at dawn and the cover keeps the moisture in."
+            },
+            "say": {
+              "temp": "It's {value} right when the maize is flowering: very hot.",
+              "moisture": "The soil has only {value} water: very dry.",
+              "et": "The field loses {value} of water a day: it dries out fast."
+            }
+          },
+          "stress": {
+            "when": "Week 9",
+            "title": "The satellite shows greenness dropping in one corner",
+            "options": {
+              "spray": "Spray the whole plot",
+              "scout": "Go and look at that corner",
+              "ignore": "Do nothing"
+            },
+            "feedback": {
+              "spray": "Without knowing the cause, the pesticide wastes money and harms soil life.",
+              "scout": "Good! The satellite warns; your eyes confirm if it's water, pests or missing nutrients.",
+              "ignore": "By the time the patch is visible to the eye, the damage has grown."
+            },
+            "say": {
+              "ndvi": "In one corner of the plot greenness dropped to {value}: those plants are suffering."
+            }
+          },
+          "harvest": {
+            "when": "Harvest",
+            "title": "You harvested the maize. What comes next?",
+            "options": {
+              "repeat": "Plant maize again",
+              "burn": "Burn the residue",
+              "legume": "Plant beans (rotate)"
+            },
+            "feedback": {
+              "repeat": "Repeating the same crop tires the soil and helps pests.",
+              "burn": "Burning destroys organic matter and leaves the soil bare against the rain.",
+              "legume": "Good! Beans give nitrogen back to the soil and break the pest cycle."
+            },
+            "say": {
+              "ndvi": "Greenness {value}: the maize was harvested and the soil is free."
+            }
+          }
+        },
+        "lesson": "Heat, soil moisture, rain, evaporation and greenness move together. When several go wrong at once the crop is more vulnerable; healthy, covered soil cushions the blow.",
+        "science": "Satellites don't see your decisions, but they see their effects: SMAP sees moisture, GPM rain, ECOSTRESS evaporation and MODIS greenness. Together they show the risk before it shows on the plant.",
+        "stepsLabel": "Moments of the season",
+        "alertsTitle": "The satellite warns you",
+        "question": "What do you do? Choose one option."
+      }
+    },
+    "results": {
+      "kicker": "Your field profile",
+      "archetype": {
+        "farmer": {
+          "climate": "Weather watcher",
+          "rotations": "Planting strategist",
+          "satellite": "Satellite eye"
+        },
+        "technician": {
+          "climate": "Climate analyst",
+          "rotations": "Rotation strategist",
+          "satellite": "Satellite analyst"
+        }
+      },
+      "goalText": {
+        "climate": "You care about how rain, heat and soil water are coming.",
+        "rotations": "You want to choose what to plant to take care of your soil.",
+        "satellite": "You like seeing the farm through the satellites' eyes."
+      },
+      "level": "Level {n}: {name}",
+      "levels": {
+        "beginner": "Seed",
+        "intermediate": "Sprout",
+        "advanced": "Harvest"
+      },
+      "levelText": {
+        "beginner": "You are starting out: the app and the assistant will explain each term calmly.",
+        "intermediate": "You already read several data well: we will explain the rest.",
+        "advanced": "You read satellite data very well: the assistant will get straight to the point."
+      },
+      "stars": "{stars} of {max} stars",
+      "mastered": "You've mastered",
+      "review": "To review",
+      "note": "The assistant will explain these terms when they come up. They are also in the glossary, in Settings.",
+      "noteAll": "You can review all the terms any time in the glossary, in Settings.",
+      "continue": "See how my app looks",
+      "spoken": "Your field profile: {archetype}. Level {level}. You earned {stars} of {max} stars."
     }
   },
   "glossaryPage": {

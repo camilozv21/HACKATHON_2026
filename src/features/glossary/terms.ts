@@ -33,6 +33,8 @@ export const GLOSSARY_TERMS = [
   'risk-zone',
   'land-state',
   'markov',
+  'crop-vulnerability',
+  'soil-health',
 ] as const;
 export type GlossaryTerm = (typeof GLOSSARY_TERMS)[number];
 
@@ -68,6 +70,8 @@ export const TERM_ICONS: Record<GlossaryTerm, string> = {
   'risk-zone': 'ShieldAlert',
   'land-state': 'Layers',
   markov: 'Shuffle',
+  'crop-vulnerability': 'ShieldAlert',
+  'soil-health': 'Shovel',
 };
 
 /** Ids que usan otras partes de la app (capas, tarjetas) → término del glosario. */

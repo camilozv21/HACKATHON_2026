@@ -19,8 +19,11 @@ una API con contrato definido en `src/lib/api/contract.ts` y **debe funcionar co
   del navegador si la persona da permiso. El globo vuela a su zona.
 - **Drawer de región:** tocar una región del globo abre un drawer lateral (derecha) con una animación de entrada
   llamativa y datos útiles de los sensores y misiones NASA para esa región.
-- **Radio del campo (diferenciador):** anuncios por radio por región. Por ahora es mock: una API que devuelve
-  segmentos de audio generados con IA (mp3 en `public/audio/`) y un reproductor tipo radio.
+- **Radio del campo (diferenciador, eje de la experiencia):** cada lugar tiene su emisora y su **programa del día**
+  hecho con sus datos (NASA POWER, sensores, eventos, terreno, mercado), escrito por plantillas y reescrito por Claude
+  sin poder inventar cifras (`/api/radio/program`, `src/server/radio/`). Se lee frase por frase con subtítulos y
+  "¿qué es esto?", y **mueve el globo** con pistas por frase (mismas acciones del agente). Además, segmentos mp3 del
+  mock (`public/audio/`). Detalle: `docs/radio.md`.
 - **Chat con agente IA (n8n):** la persona pregunta por las condiciones de una región; el agente responde y además
   mueve el globo (vuela, activa capas, abre el drawer) mediante acciones estructuradas en su respuesta.
   El chat vive en la zona media inferior de la pantalla.
@@ -86,6 +89,8 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
   ubicación en `src/features/location/`, finca en `src/features/field/`, prioridades en `src/features/priorities/`,
   zonas de riesgo y cambios del terreno (Markov, Google Earth Engine) en `src/features/terrain/`,
   puntaje en `src/features/points/` (servidor en `src/server/accounts/`, reglas compartidas en `src/lib/points.ts`).
+- API abierta del terreno (solo lectura, CORS `*`, filtros `campo=op.valor`, ubicación × tiempo) en `/api/terrain`,
+  lógica en `src/server/terrain/`, contrato zod en `src/lib/api/terrainApi.ts` (ver `docs/terrain-api.md`).
 - Capa de datos en `src/lib/api/` (contrato zod, cliente, hooks, mocks, NASA POWER).
 - Textos de UI siempre vía next-intl (`messages/es.json`, `messages/en.json`); nunca strings sueltos en componentes.
 - `localStorage` / `sessionStorage` siempre envueltos en try/catch.
@@ -120,9 +125,11 @@ node scripts/measure-perf.mjs <url> --cpu=4  # fps del globo en Pixel 7 con CPU 
 - Modo sencillo: `data-mode="lite"` en `<html>`; oculta detalle técnico con la variante CSS `lite:hidden` (sin JS) y
   usa `useLite()` solo si cambia la estructura. Nunca ocultes confianza, riesgos ni avisos de honestidad.
 - Locutor (voz del teléfono): `src/features/narrator/` (`speak`/`stop`, `SpeakButton`). La radio baja el volumen o
-  pausa su voz de respaldo mientras habla. Inicio por rol: bienvenida en línea (`OnboardingScript`) → preguntas en
-  `src/features/onboarding/RoleQuiz.tsx` (diferido en `FirstLayer`) → `/api/profile` (Claude → reglas). El agente
-  recibe `profile` (rol, modo, voz) en cada pregunta.
+  pausa su voz de respaldo mientras habla. Inicio tipo juego: bienvenida en línea (`OnboardingScript`) → personaje y
+  "cómo quieres jugar" en `src/features/onboarding/RoleQuiz.tsx` (diferido en `FirstLayer`) → 7 retos del glosario en
+  `src/features/onboarding/games/` (reglas puras en `logic.ts`, una por reto; textos en `onboarding.games`) → primera
+  misión → "Tu perfil de campo" → `/api/profile` (Claude → reglas). El agente recibe `profile` (rol, modo, voz y, si
+  jugó, `level` y `review`) en cada pregunta.
 - PWA: `public/sw.js` (solo producción) guarda el shell y `/_next/static`, nunca tiles ni `/api`; el último análisis
   vive en localStorage (`src/lib/api/offline.ts`). Los e2e arrancan con la introducción ya vista (`e2e/storage-state.json`).
 - Orden de fases del plan: 0 → 1 → 2 → 2A (ubicación) → 3 → 4 → 5 → 6 → 6A (drawer de región) → 6B (radio) → 6C (chat n8n) → 7 → 8 → 9 → 10 → 11.

@@ -2,16 +2,41 @@
 
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { TermIcon } from './TermIcon';
 import { useGlossaryStore } from './terms';
 
 export { TermIcon };
 
+/** Varias partes montan la hoja (panel de la finca, radio): solo la primera montada la muestra (nunca dos a la vez). */
+const hosts: symbol[] = [];
+const subs = new Set<() => void>();
+const emit = () => subs.forEach((f) => f());
+function usePrimaryHost() {
+  const [id] = useState(() => Symbol('glossary-host'));
+  useEffect(() => {
+    hosts.push(id);
+    emit();
+    return () => {
+      hosts.splice(hosts.indexOf(id), 1);
+      emit();
+    };
+  }, [id]);
+  return useSyncExternalStore(
+    (cb) => {
+      subs.add(cb);
+      return () => subs.delete(cb);
+    },
+    () => hosts[0] === id,
+    () => false,
+  );
+}
+
 export default function GlossarySheet() {
   const t = useTranslations('glossary');
-  const term = useGlossaryStore((s) => s.open);
+  const primary = usePrimaryHost();
+  const term = useGlossaryStore((s) => (primary ? s.open : null));
   const close = useGlossaryStore((s) => s.close);
   const closeRef = useRef<HTMLButtonElement>(null);
   const opener = useRef<Element | null>(null);

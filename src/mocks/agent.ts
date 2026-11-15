@@ -138,7 +138,8 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
   const layer = LAYER_WORDS.find((w) => w.words.some((k) => text.includes(norm(k))));
   const known = PLACES.find((p) => p.keys.some((k) => text.includes(k)));
   const mine = /\b(mi zona|mi finca|aqui|donde estoy|my area|my farm|here|near me)\b/.test(text);
-  const wantsRisk = RISK_RE.test(text);
+  const wantsRadio = /\b(radio|boletin|bulletin|emisora|escuchar|listen)\b/.test(text);
+  const wantsRisk = !wantsRadio && RISK_RE.test(text);
   const wantsRotation = /(rotacion|rotation|sequia|drought|que sembrar|what to plant|cultivo me conviene|which crop)/.test(text);
   const wantsMissing = /(que (datos|te) falta|que necesitas saber|completar (el |mi )?analisis|what (data|do you need)|complete (the|my) analysis)/.test(text);
   const missing = req.view.fieldId ? (req.view.missingData ?? []) : [];
@@ -204,10 +205,19 @@ export function buildMockAgentResponse(req: AgentRequest): AgentResponse {
     null,
   );
   const card = (id: string) => region.cards.find((c) => c.id === id)!;
-  if (place) actions.push({ type: 'openRegion', lat: place.lat, lon: place.lon, name: place.name });
+  // La radio abre la región ella misma al final del boletín.
+  if (place && !wantsRadio) actions.push({ type: 'openRegion', lat: place.lat, lon: place.lon, name: place.name });
 
   let reply: string;
-  if (wantsRisk) {
+  if (wantsRadio) {
+    actions.push(place ? { type: 'playRadio', lat: place.lat, lon: place.lon, name: place.name } : { type: 'playRadio' });
+    reply = tr(
+      l,
+      `**Pongo en la radio el boletín de ${at.name}.** Vas a escuchar la lluvia, el suelo, el verdor de las plantas, los eventos cercanos y, en Colombia, el riesgo del terreno y los precios, con datos de la NASA. El mapa se mueve con lo que dice el locutor; si lo tocas, deja de moverlo.\n\nPuedes pausar cuando quieras y leer la transcripción en el reproductor.`,
+      `**Playing the ${at.name} bulletin on the radio.** You will hear the rain, the soil, crop greenness, nearby events and, in Colombia, land risk and prices, with NASA data. The map follows what the host says; if you touch it, it stops moving.\n\nYou can pause any time and read the transcript in the player.`,
+    );
+    sources.push({ dataset: 'NASA POWER', url: 'https://power.larc.nasa.gov/' });
+  } else if (wantsRisk) {
     const kind = RISK_LABEL[riskKindOf(text)];
     const outside = place && !inColombia(place.lon, place.lat);
     const opened = place && !outside ? tr(l, ` y abrí **${place.name}**`, ` and opened **${place.name}**`) : '';

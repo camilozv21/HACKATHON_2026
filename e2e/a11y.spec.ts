@@ -22,7 +22,7 @@ test('accesibilidad: inicio, introducción, panel de la finca, opciones, modo so
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && /hydrat/i.test(m.text()) && errors.push(m.text()));
 
-  // Primera visita (sin la marca de bienvenida vista): bienvenida con voz, preguntas de rol y sugerencia.
+  // Primera visita (sin la marca de bienvenida vista): bienvenida con voz, personaje, un reto, perfil y sugerencia.
   await context.clearCookies();
   await page.goto('/es');
   await page.evaluate(() => localStorage.removeItem('fieldshift:onboarded:v2'));
@@ -31,18 +31,30 @@ test('accesibilidad: inicio, introducción, panel de la finca, opciones, modo so
   const intro = page.getByRole('dialog', { name: 'Hola, te damos la bienvenida' });
   await expect(intro).toBeVisible();
   await expectNoSeriousViolations(page, 'bienvenida');
-  await intro.getByRole('button', { name: 'Empezar', exact: true }).tap();
+  await intro.getByRole('button', { name: '¡A jugar!', exact: true }).tap();
   const quiz = page.getByRole('dialog', { name: '¿Quién eres?' });
   await expect(quiz).toBeVisible();
   await expect(intro).toBeHidden();
   await expectNoSeriousViolations(page, 'pregunta de inicio');
   await quiz.getByText('Agricultor o agricultora').tap();
   await quiz.getByRole('button', { name: 'Siguiente' }).tap();
-  await page.getByRole('dialog', { name: '¿Qué quieres hacer hoy?' }).getByText('Escoger qué sembrar').tap();
-  await page.getByRole('button', { name: 'Siguiente' }).tap();
-  // "Leer todo con detalle": modo completo, para que el resto de esta prueba vea la app de siempre.
-  await page.getByText('Leer todo con detalle').tap();
-  await page.getByRole('button', { name: 'Siguiente' }).tap();
+  // "Con todos los datos": modo completo, para que el resto de esta prueba vea la app de siempre.
+  await page.getByRole('dialog', { name: '¿Cómo quieres jugar?' }).getByText('Con todos los datos').tap();
+  await page.getByRole('button', { name: '¡A jugar!', exact: true }).tap();
+  // Un reto del glosario (con la visión del satélite encendida) y luego se saltan los demás.
+  const game = page.getByRole('dialog', { name: 'Visión satélite' });
+  await expect(game).toBeVisible();
+  await game.getByRole('button', { name: 'Visión satélite' }).tap();
+  // axe mide el contraste: esperar a que termine la animación de entrada (a mitad, los colores salen mezclados).
+  await expect(page.locator('[data-quest-step="ndvi-play"]')).toHaveCSS('opacity', '1');
+  await expectNoSeriousViolations(page, 'reto del glosario');
+  await game.getByRole('button', { name: 'Saltar retos' }).tap();
+  await page.getByRole('dialog', { name: '¿Cuál es tu primera misión?' }).getByText('Escoger qué sembrar').tap();
+  await page.getByRole('button', { name: 'Siguiente', exact: true }).tap();
+  await expect(page.getByRole('dialog', { name: 'Estratega de la siembra' })).toBeVisible();
+  await expect(page.locator('[data-screen="results"]')).toHaveCSS('opacity', '1');
+  await expectNoSeriousViolations(page, 'perfil de campo');
+  await page.getByRole('button', { name: 'Ver cómo queda mi app' }).tap();
   const suggestion = page.getByRole('dialog', { name: 'Así te mostramos la app' });
   await expect(suggestion).toBeVisible();
   await expect(suggestion.getByText('Modo completo')).toBeVisible();

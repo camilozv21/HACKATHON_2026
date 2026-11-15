@@ -222,17 +222,20 @@ export async function runAgentActions(
         useEventsStore.getState().openReport({ kind: a.kind, lat: a.lat, lon: a.lon });
         break;
       case 'playRadio': {
-        const [{ radioEngine }, { useRadioStore }] = await Promise.all([
+        const [{ radioEngine }, { useRadioStore }, tune] = await Promise.all([
           import('@/features/radio/engine'),
           import('@/features/radio/store'),
+          import('@/features/radio/tune'),
         ]);
-        if (a.stationId && a.stationId !== useRadioStore.getState().tunedId) {
-          const res = await fetch(`/api/radio/stations/${encodeURIComponent(a.stationId)}/segments`).catch(() => null);
-          const j = res?.ok ? await res.json() : null;
-          if (j?.segments) useRadioStore.getState().tune(a.stationId, j.segments);
+        // Con un lugar: el boletín del día de ese lugar (su emisora fija o la de la zona).
+        if (a.lat != null && a.lon != null) {
+          await tune.playPlace(a.lat, a.lon, a.name, opts.locale === 'en' ? 'en' : 'es');
+          break;
         }
+        const station = a.stationId ? useRadioStore.getState().stations.find((s) => s.id === a.stationId) : null;
+        if (station && station.id !== useRadioStore.getState().tunedId) await tune.tuneTo(station, { resume: false });
         radioEngine.activate();
-        void radioEngine.play();
+        if (!radioEngine.isPlaying()) radioEngine.startStation();
         break;
       }
     }

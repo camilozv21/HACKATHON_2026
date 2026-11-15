@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { create } from 'zustand';
-import { OnboardingAnswers, type AgentProfile } from '@/lib/api/contract';
+import { OnboardingAnswers, QuestSummary, type AgentProfile } from '@/lib/api/contract';
 import { usePrefsStore } from '@/lib/prefs';
 
 /**
@@ -12,6 +12,8 @@ const STORAGE_KEY = 'fieldshift:profile:v1';
 export const SavedProfile = OnboardingAnswers.extend({
   suggestions: z.array(z.string().max(160)).max(3),
   source: z.enum(['claude', 'rules']),
+  /** Resultado de los retos de inicio (si los jugó). */
+  quest: QuestSummary.optional(),
 });
 export type Profile = z.infer<typeof SavedProfile>;
 
@@ -49,9 +51,17 @@ export const useProfileStore = create<ProfileState>()((set) => ({
   },
 }));
 
-/** Lo que el agente recibe para adaptar sus respuestas: rol (si respondió), modo y si se leerán en voz alta. */
+/**
+ * Lo que el agente recibe para adaptar sus respuestas: rol (si respondió), modo, si se leerán en voz alta y, si
+ * jugó los retos de inicio, su nivel y los términos que le costaron.
+ */
 export function agentProfile(): AgentProfile {
   const { mode, narrator } = usePrefsStore.getState();
-  const role = useProfileStore.getState().profile?.role;
-  return role ? { role, mode, narrator } : { mode, narrator };
+  const saved = useProfileStore.getState().profile;
+  const out: AgentProfile = saved?.role ? { role: saved.role, mode, narrator } : { mode, narrator };
+  if (saved?.quest) {
+    out.level = saved.quest.level;
+    if (saved.quest.review.length > 0) out.review = saved.quest.review;
+  }
+  return out;
 }
