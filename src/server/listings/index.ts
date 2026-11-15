@@ -12,6 +12,7 @@
 import { LISTING_DAYS, ListingInput, type Listing, type ListingPatch } from '@/lib/api/listings';
 import divipolaRaw from '@/server/events/divipola.json';
 import { inColombia, nearestMunicipio } from '@/server/events/divipola';
+import { pointsForAccounts } from '@/server/accounts/scores';
 import { redact, sha256 } from '@/server/text';
 import { matches } from './memoryRepo';
 import { listingsRepo, type ListingQuery } from './repo';
@@ -97,11 +98,20 @@ export function sampleListings(now = new Date()): ListingRecord[] {
 
 const withSamples = () => process.env.LISTINGS_SAMPLES !== 'false';
 
+/** Puntaje fijo de los ejemplos de la demo (para que se vea cómo luce en el globo y en /fincas). */
+const SAMPLE_POINTS: Record<string, number> = { 'ejemplo-cafe': 1240, 'ejemplo-aguacate': 520, 'ejemplo-tomate': 180 };
+
+/** Versión pública de las fincas, con el puntaje de la cuenta dueña de cada una. */
+async function withScores(records: ListingRecord[]): Promise<Listing[]> {
+  const points = await pointsForAccounts(records.map((r) => r.accountId));
+  return records.map((r) => toPublic(r, r.sample ? SAMPLE_POINTS[r.id] : r.accountId ? points.get(r.accountId) : null));
+}
+
 export async function listListings(q: ListingQuery): Promise<{ listings: Listing[]; total: number }> {
   const { items, total } = await listingsRepo().list(q);
   const now = (q.now ?? new Date()).toISOString();
   const samples = withSamples() && !q.offset ? sampleListings(q.now).filter((r) => matches(r, q, now)) : [];
-  const listings = [...items, ...samples].slice(0, q.limit ?? 100).map(toPublic);
+  const listings = await withScores([...items, ...samples].slice(0, q.limit ?? 100));
   return { listings, total: total + samples.length };
 }
 
@@ -116,7 +126,8 @@ export async function getListingRecord(id: string): Promise<ListingRecord | null
 export async function getListing(id: string, now = new Date()): Promise<Listing | null> {
   const r = await getListingRecord(id);
   if (!r || r.status === 'removed' || r.status === 'hidden' || r.expiresAt <= now.toISOString()) return null;
-  return toPublic(r);
+  const [listing] = await withScores([r]);
+  return listing!;
 }
 
 export type CreateResult =
@@ -183,6 +194,18 @@ export async function updateListing(id: string, token: string | null, patch: Lis
     updatedAt: now.toISOString(),
   });
   return { ok: true, listing: next ? toPublic(next) : null };
+}
+
+/**
+ * Enlaza una publicación a una cuenta (quien tiene el token de edición es el dueño). No se cambia de cuenta: si ya
+ * es de otra, no se enlaza. true = queda enlazada a esta cuenta.
+ */
+export async function claimListing(id: string, token: string, accountId: string): Promise<boolean> {
+  const o = await owned(id, token);
+  if (!o.ok) return false;
+  if (o.rec.accountId && o.rec.accountId !== accountId) return false;
+  if (!o.rec.accountId) await listingsRepo().update(id, { accountId, updatedAt: o.rec.updatedAt });
+  return true;
 }
 
 export async function removeListing(id: string, token: string | null): Promise<OwnerResult> {

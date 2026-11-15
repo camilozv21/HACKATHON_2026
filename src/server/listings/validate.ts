@@ -1,10 +1,11 @@
 import { randomBytes } from 'node:crypto';
 import type { Listing, ListingProduct } from '@/lib/api/listings';
 import type { ProductId } from '@/lib/market/catalog';
+import { levelOf } from '@/lib/points';
 import { productName, type Loc } from '@/server/market/rules';
 
 /** Registro completo (solo servidor): incluye el teléfono y el hash del token de edición. */
-export type ListingRecord = Omit<Listing, 'status'> & {
+export type ListingRecord = Omit<Listing, 'status' | 'score'> & {
   status: 'active' | 'paused' | 'removed' | 'hidden';
   tokenHash: string;
   /** +573XXXXXXXXX */
@@ -12,6 +13,8 @@ export type ListingRecord = Omit<Listing, 'status'> & {
   consentAt: string;
   ipHash: string | null;
   flags: number;
+  /** Cuenta dueña (al publicar con sesión o al enlazarla con el token de edición). */
+  accountId?: string | null;
 };
 
 /** Denuncias de IPs distintas que ocultan una publicación hasta revisarla. */
@@ -41,7 +44,7 @@ export function newListingId(): string {
 /** Token de edición (32 bytes). Solo se guarda su sha256. */
 export const newEditToken = () => randomBytes(32).toString('base64url');
 
-export function toPublic(r: ListingRecord): Listing {
+export function toPublic(r: ListingRecord, points?: number | null): Listing {
   return {
     id: r.id,
     status: r.status === 'paused' ? 'paused' : 'active',
@@ -59,6 +62,7 @@ export function toPublic(r: ListingRecord): Listing {
     updatedAt: r.updatedAt,
     expiresAt: r.expiresAt,
     ...(r.sample ? { sample: true } : {}),
+    ...(points != null ? { score: { points, level: levelOf(points).id } } : {}),
   };
 }
 

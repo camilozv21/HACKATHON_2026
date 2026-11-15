@@ -24,7 +24,10 @@ export interface ListingsRepo {
   get(id: string): Promise<ListingRecord | null>;
   /** Solo publicaciones activas y vigentes. */
   list(q: ListingQuery): Promise<{ items: ListingRecord[]; total: number }>;
-  update(id: string, patch: Partial<Pick<ListingRecord, 'status' | 'products' | 'description' | 'expiresAt' | 'updatedAt'>>): Promise<ListingRecord | null>;
+  update(
+    id: string,
+    patch: Partial<Pick<ListingRecord, 'status' | 'products' | 'description' | 'expiresAt' | 'updatedAt' | 'accountId'>>,
+  ): Promise<ListingRecord | null>;
   /** Una denuncia por IP; a las 3 la publicación queda oculta hasta revisarla. */
   flag(id: string, ipHash: string): Promise<{ flags: number; hidden: boolean } | null>;
   /** Publicaciones recientes de una IP (límite anti-abuso que sobrevive a varias instancias). */

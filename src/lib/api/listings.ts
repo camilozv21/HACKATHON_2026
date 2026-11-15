@@ -7,6 +7,7 @@
  */
 import { z } from 'zod';
 import { LISTING_UNITS, PRODUCT_IDS } from '@/lib/market/catalog';
+import { LEVEL_IDS } from '@/lib/points';
 
 export const CERTIFICATIONS = ['organico', 'bpa', 'comercio-justo', 'rainforest', 'transicion'] as const;
 export type Certification = (typeof CERTIFICATIONS)[number];
@@ -65,6 +66,8 @@ export const Listing = z.object({
   expiresAt: z.string(),
   /** Publicación de ejemplo de la demo: no tiene WhatsApp real. */
   sample: z.boolean().optional(),
+  /** Puntaje de la cuenta dueña (si la finca está enlazada a una cuenta). Nunca incluye el usuario. */
+  score: z.object({ points: z.number().int().min(0), level: z.enum(LEVEL_IDS) }).optional(),
 });
 export type Listing = z.infer<typeof Listing>;
 
